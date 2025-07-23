@@ -1121,9 +1121,9 @@ function process_targets(smart)
 	if ((pda_actor.manual_control and smart.owning_faction ~= warfare.actor_faction) or (not pda_actor.manual_control)) then
 		local targets = find_targets(smart)
 			
-		if (#targets > 0) then
-			for i=1,#targets do
-				if not (smart.target_smarts[targets[i][2]]) then
+                if (#targets > 0) then
+                        for _, target in ipairs(targets or {}) do -- added nil check
+                                if not (smart.target_smarts[target[2]]) then
 					local target_delta = target_smart_count - invading_faction_props.min_smart_targets_per_base
 					if (target_delta < 0) then
 						local other = alife_object(targets[i][2])
