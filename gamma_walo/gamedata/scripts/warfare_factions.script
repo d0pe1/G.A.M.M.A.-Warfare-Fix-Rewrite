@@ -54,8 +54,8 @@ all_factions = {
 faction_information = {}
 faction_timers = {}
 
-for i=1,#factions do
-	factions_p[factions[i]] = true
+for _, fac in ipairs(factions or {}) do -- added nil check
+        factions_p[fac] = true
 end
 
 --[[
