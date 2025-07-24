@@ -146,9 +146,7 @@ function evaluate_squads_smarts(task_id, var, squad, smart)
 					save_var( db.actor, task_id, var )
 					
 					-- reset gametime so they don't leave
-					if not _G.WARFARE then
-						squad.stay_time = game.get_game_time() 
-					end
+                                        squad.stay_time = game.get_game_time()
 					squad.force_online = true
 					--printf("- %s | squad (%s) [%s] is saved", task_id, squad.id, squad.player_id)
 					return true
@@ -199,7 +197,7 @@ function postpone_for_next_frame(task_id, squad_id)
 			news_ico = task_manager.task_ini:r_string_ex(task_id, "icon") or "ui_iconsTotal_mutant"
 		end
 
-		db.actor:give_talk_message2(news_caption, news_text, news_ico, "iconed_answer_item")
+		db.actor:give_talk_message2(news_caption, news_text, news_ico, "iconed_answer_item", task_id)
 	end
 	return true
 end
@@ -306,6 +304,10 @@ task_status_functor.assault_task_status_functor = function (tsk,task_id)
 		end
 		if (#cache_assault_func[task_id] == 0) then
 			printe("! %s | no enemy factions found",task_id)
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
 			return "fail"
 		end
 	end
@@ -426,6 +428,27 @@ xr_conditions.validate_assault_task = function(actor, npc, p)
 	
 	if is_empty(enemy_faction_list) then
 		printe("! %s | no enemy factions found", task_id)
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
+        local additionalBlacklist = {}
+        local mcm_scanMode = blacklist_helper.GetMcmDropdownValue()
+        local northernMaps = blacklist_helper.GetNorthernMaps()
+
+        if mcm_scanMode and mcm_scanMode > 0  then
+                def.scan = mcm_scanMode
+        end
+
+        if blacklist_helper.ShouldBlacklistNorth() then
+                additionalBlacklist = northernMaps
+        elseif northernMaps[level.name()] then -- Player is in the Northern region and rightfully so
+                additionalBlacklist = blacklist_helper.GetSouthernMaps()
+        end
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
 		return false
 	end
 	
