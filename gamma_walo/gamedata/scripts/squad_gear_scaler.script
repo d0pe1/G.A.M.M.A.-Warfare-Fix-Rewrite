@@ -1,0 +1,26 @@
+--[[
+    squad_gear_scaler.script
+    -----------------------
+    Provides basic loadout scaling for NPC squads based on faction resources.
+    Intended to be called when spawning new squads.
+]]
+
+local scaler = {}
+
+--- Determine gear tier for a faction.
+function scaler.get_tier(faction, pool)
+    -- resource levels scale gear quality. More scrap nodes mean better weapons.
+    local scrap = pool.get_resource(faction, 'scrap')
+    if scrap >= 6 then return 3
+    elseif scrap >= 3 then return 2
+    else return 1 end
+end
+
+--- Apply scaling to a squad table (simplified for tests).
+function scaler.apply_loadout(squad, faction, pool)
+    local tier = scaler.get_tier(faction, pool)
+    squad.tier = tier
+    printf("[gear_scaler] squad %s tier %d", tostring(squad.id), tier)
+end
+
+return scaler

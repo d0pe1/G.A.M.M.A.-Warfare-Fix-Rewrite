@@ -1,0 +1,38 @@
+--[[
+    diplomacy_core.script
+    ---------------------
+    Core diplomacy logic building on resource pools. Generates trade or alliance
+    offers when factions lack resources and records history of interactions.
+]]
+
+local diplomacy_core = {
+    offers = {},
+    history = {}
+}
+
+--- Generate trade offer if faction lacks a resource.
+function diplomacy_core.evaluate(faction, pool)
+    local p = pool.get_totals(faction)
+    local lacking, lowest = nil, math.huge
+    for r, v in pairs(p) do
+        if v < lowest then
+            lowest = v
+            lacking = r
+        end
+    end
+    -- if completely missing a resource, request trade
+    if lowest == 0 then
+        diplomacy_core.offers[faction] = {type='trade', resource=lacking}
+    end
+end
+
+--- Accept an offer and record history.
+function diplomacy_core.accept_offer(faction)
+    local offer = diplomacy_core.offers[faction]
+    if offer then
+        diplomacy_core.history[#diplomacy_core.history+1] = {faction=faction, type=offer.type, resource=offer.resource}
+        diplomacy_core.offers[faction] = nil
+    end
+end
+
+return diplomacy_core

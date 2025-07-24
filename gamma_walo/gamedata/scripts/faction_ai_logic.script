@@ -1,0 +1,47 @@
+--[[
+    faction_ai_logic.script
+    -----------------------
+    Strategic AI that automates node designation for NPC factions. Decisions are
+    based on the faction's resource levels with a simple bias table.
+]]
+
+local ai = {}
+
+-- bias table describing which resources each faction values
+local biases = {
+    monolith = {scrap=true, artifacts=true},
+    duty      = {scrap=true, herbs=true},
+    stalker   = {scrap=true, artifacts=true},
+    freedom   = {scrap=true, herbs=true},
+    default   = {scrap=true, herbs=true, electronics=true, artifacts=true}
+}
+
+--- Determine the lowest resource level for a faction respecting bias.
+local function lowest_biased_resource(faction, pool)
+    local pref = biases[faction] or biases.default
+    local choice, lowest
+    for r, _ in pairs(pref) do
+        local val = pool.get_resource(faction, r)
+        if lowest == nil or val < lowest then
+            lowest = val
+            choice = r
+        end
+    end
+    return choice
+end
+
+--- Handle a newly captured node by establishing and specializing it.
+function ai.handle_capture(node_id, node_sys, pool)
+    local node = node_sys.get_node(node_id)
+    if not node then return end
+
+    local need = lowest_biased_resource(node.owner, pool)
+    node_sys.establish_node(node_id, node_sys.STATE.resource)
+    node_sys.specialize_node(node_id, need)
+    printf("[faction_ai] designated %s as %s", node_id, need)
+    if type(_G.on_ai_decide_designation) == "function" then
+        _G.on_ai_decide_designation(node_id)
+    end
+end
+
+return ai
