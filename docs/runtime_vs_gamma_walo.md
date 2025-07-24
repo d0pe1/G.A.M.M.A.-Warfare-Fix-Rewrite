@@ -838,7 +838,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 +end
 ```
 </details>
-| warfare.script | 17 | 1 | keep |
+| warfare.script | 26 | 2 | keep |
 
 <details><summary>Diff for warfare.script</summary>
 ```diff
@@ -881,7 +881,24 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  function shuffleTable( t )
      local rand = math.random 
      local iterations = #t
-@@ -978,6 +993,7 @@
+@@ -911,7 +926,15 @@
+ end
+ 
+ function on_game_start()
+-	printd(0, "on_game_start")
++        printd(0, "on_game_start")
++
++        -- added require path for .script modules
++        if not package.path:find('gamedata/scripts/%.script', 1, true) then
++                package.path = 'gamedata/scripts/?.script;' .. package.path
++        end
++        if not package.path:find('gamedata/scripts/%.lua', 1, true) then
++                package.path = 'gamedata/scripts/?.lua;' .. package.path
++        end
+ 	--_G.WARFARE = false
+ 	warfare_options.update_settings()
+ 	
+@@ -978,6 +1001,7 @@
  	end) return tbl
  end
  
