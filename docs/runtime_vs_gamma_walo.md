@@ -960,6 +960,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | diplomacy_system.script | new file | - | new module |
 | faction_ai_logic.script | new file | - | new module |
 | faction_philosophy.script | new file | - | new module |
+| faction_state.script | new file | - | new module |
 | hq_coordinator.script | new file | - | new module |
 | legendary_squad_system.script | new file | - | new module |
 | meta_overlord.script | new file | - | new module |

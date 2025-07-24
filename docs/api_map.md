@@ -9,7 +9,7 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `base_logic.needs` (line 62)
 
 ## daily_sim_engine.script
-- `daily.run_day` (line 21)
+- `daily.run_day` (line 22)
 
 ## dialogs.script
 - `can_do_task_mysteries_of_the_zone` (line 14)
@@ -336,6 +336,12 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `philosophy.get_faction_diplomacy_level` (line 102)
 - `philosophy.is_resource_ignored` (line 110)
 
+## faction_state.script
+- `state.register_hq` (line 19)
+- `state.remove_hq` (line 28)
+- `state.is_collapsed` (line 39)
+- `state.evaluate_all` (line 44)
+
 ## game_fast_travel.script
 - `allow_local_logging` (line 44)
 - `set_debug_logging` (line 55)
@@ -479,15 +485,16 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `monolith.select_target` (line 11)
 
 ## node_system.script
-- `node_system.register_node` (line 31)
-- `node_system.capture_node` (line 38)
-- `node_system.establish_node` (line 49)
-- `node_system.specialize_node` (line 65)
-- `node_system.upgrade_node` (line 85)
-- `node_system.tick_production` (line 94)
-- `node_system.get_node` (line 109)
-- `node_system.get_node_type` (line 115)
-- `node_system.get_node_specialization` (line 123)
+- `node_system.register_node` (line 32)
+- `node_system.capture_node` (line 39)
+- `node_system.establish_node` (line 53)
+- `node_system.specialize_node` (line 69)
+- `node_system.upgrade_node` (line 92)
+- `node_system.abandon_node` (line 102)
+- `node_system.tick_production` (line 117)
+- `node_system.get_node` (line 132)
+- `node_system.get_node_type` (line 138)
+- `node_system.get_node_specialization` (line 146)
 
 ## pda_context_menu.script
 - `menu.get_options` (line 11)
