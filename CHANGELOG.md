@@ -38,3 +38,6 @@ All notable changes to this project will be documented in this file.
 
 ### Docs
 - Documented new systems in `docs/` directory.
+- Added automated diff report under `docs/runtime_vs_gamma_walo.md`.
+- Generated API index `docs/api_map.md`.
+- Updated README and agent workflow guidelines.
