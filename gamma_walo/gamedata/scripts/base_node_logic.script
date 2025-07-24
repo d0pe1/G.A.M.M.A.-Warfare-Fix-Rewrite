@@ -3,8 +3,9 @@
     ----------------------
     Maintains per-base stockpiles and consumption logic. Each base node
     stores resources up to 10 units per type. Daily consumption is
-    determined by base specialization.
-    Last edit: 2025-07-25
+    determined by base specialization. Also exposes upgrade helpers used
+    by HQ logistics to decide when to invest resources.
+    Last edit: 2025-07-30
 ]]
 
 local base_logic = {
@@ -14,7 +15,10 @@ local base_logic = {
         trader  = {scrap=1, electronics=1, artifacts=1},
         research= {electronics=1, herbs=1, artifacts=1},
         hq      = {}
-    }
+    },
+
+    -- cost to upgrade a base one level
+    UPGRADE_COST = {scrap=5, electronics=5}
 }
 
 --- Ensure a base record exists.
@@ -62,6 +66,33 @@ end
 function base_logic.needs(id, rtype)
     local b = get_base(id)
     return (b.stockpile[rtype] or 0) < 10
+end
+
+--- Calculate how many resources a base still requires to upgrade.
+-- @param id string Base identifier
+-- @return number delta Sum of missing resources
+function base_logic.stockpile_delta(id)
+    local b = get_base(id)
+    local delta = 0
+    for r, amt in pairs(base_logic.UPGRADE_COST) do
+        delta = delta + math.max(0, amt - (b.stockpile[r] or 0))
+    end
+    return delta
+end
+
+--- Determine if a base can pay for an upgrade.
+-- @param id string Base identifier
+function base_logic.can_upgrade(id)
+    return base_logic.stockpile_delta(id) == 0
+end
+
+--- Deduct upgrade resources from a base stockpile.
+-- Safe to call only after `can_upgrade`.
+function base_logic.consume_upgrade_cost(id)
+    local b = get_base(id)
+    for r, amt in pairs(base_logic.UPGRADE_COST) do
+        b.stockpile[r] = (b.stockpile[r] or 0) - amt
+    end
 end
 
 return base_logic

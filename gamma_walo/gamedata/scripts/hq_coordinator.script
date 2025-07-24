@@ -3,12 +3,15 @@
     ---------------------
     Oversees faction logistics and squad spawning. Bases register
     themselves with the coordinator which periodically checks for
-    low stockpiles and schedules transports.
-    Last edit: 2025-07-25
+    low stockpiles and schedules transports. It now also evaluates
+    potential base upgrades based on stored resources and queues
+    higher-priority supply runs when close to requirements.
+    Last edit: 2025-07-30
 ]]
 
 local node_logic = require 'base_node_logic'
 local resource = require 'resource_system'
+local node_system = require 'node_system'
 
 local coordinator = {
     tasks = {}, -- queued transport tasks
@@ -24,6 +27,8 @@ end
 --- Schedule transports for under-supplied bases.
 function coordinator.evaluate(faction)
     local bases = coordinator.bases_by_faction[faction] or {}
+    local upgrade_target
+    local upgrade_delta = math.huge
     for _, id in ipairs(bases) do
         local base = node_logic.bases[id]
         for r, _ in pairs(node_logic.CONSUMPTION[base.type] or {}) do
@@ -31,6 +36,31 @@ function coordinator.evaluate(faction)
                 local node_id = resource.find_node_with_resource(faction, r)
                 if node_id then
                     table.insert(coordinator.tasks, {from=node_id, to=id, resource=r, amount=1})
+                end
+            end
+        end
+
+        -- track base closest to upgrade requirements
+        local delta = node_logic.stockpile_delta(id)
+        if delta < upgrade_delta then
+            upgrade_target = id
+            upgrade_delta = delta
+        end
+    end
+
+    -- prioritize upgrading the base nearest completion
+    if upgrade_target and upgrade_delta <= 2 then
+        if node_logic.can_upgrade(upgrade_target) then
+            node_logic.consume_upgrade_cost(upgrade_target)
+            node_system.upgrade_node(upgrade_target)
+        else
+            for res_type, need in pairs(node_logic.UPGRADE_COST) do
+                local missing = need - (node_logic.bases[upgrade_target].stockpile[res_type] or 0)
+                if missing > 0 then
+                    local node_id = resource.find_node_with_resource(faction, res_type)
+                    if node_id then
+                        table.insert(coordinator.tasks, 1, {from=node_id, to=upgrade_target, resource=res_type, amount=missing})
+                    end
                 end
             end
         end

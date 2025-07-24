@@ -18,7 +18,7 @@ Update resource_system.script to adjust daily output based on level
 
 Add PDA interaction stub (UI to upgrade node)
 
-[ ] Enhance HQ Logistics Commands
+[x] Enhance HQ Logistics Commands
 
 Allow HQ to prioritize base upgrades based on stockpile delta
 
