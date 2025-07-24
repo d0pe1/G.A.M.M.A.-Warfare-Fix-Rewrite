@@ -13,12 +13,15 @@ function menu.get_options(node_id, faction, node_sys)
     if not node or node.owner ~= faction then return {} end
     local opts = {}
     if node.state == node_sys.STATE.territory then
-        table.insert(opts, "Establish Node")
-    elseif (node.state == node_sys.STATE.base or node.state == node_sys.STATE.resource) and not node.specialization then
-        table.insert(opts, "Specialize Node")
+        table.insert(opts, "Designate Node Type")
+    elseif node.state == node_sys.STATE.base and not node.specialization then
+        table.insert(opts, "Specialize Base")
+    elseif node.state == node_sys.STATE.resource and not node.specialization then
+        table.insert(opts, "Designate Node Type")
     else
-        table.insert(opts, "Upgrade Node")
+        table.insert(opts, "Upgrade Efficiency")
     end
+    table.insert(opts, "Request Reinforcements")
     return opts
 end
 

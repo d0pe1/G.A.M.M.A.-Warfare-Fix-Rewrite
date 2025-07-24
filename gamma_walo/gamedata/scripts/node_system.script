@@ -85,5 +85,21 @@ end
 function node_system.get_node(id)
     return node_system.nodes[id]
 end
+--- Get the current state of a node.
+-- @param id string Node identifier
+-- @return string|nil node state
+function node_system.get_node_type(id)
+    local n = node_system.nodes[id]
+    return n and n.state or nil
+end
+
+--- Get the specialization of a node if any.
+-- @param id string Node identifier
+-- @return string|nil specialization
+function node_system.get_node_specialization(id)
+    local n = node_system.nodes[id]
+    return n and n.specialization or nil
+end
+
 
 return node_system

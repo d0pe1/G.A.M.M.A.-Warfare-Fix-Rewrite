@@ -36,6 +36,10 @@ All notable changes to this project will be documented in this file.
 - Expanded coverage with additional stub specs; 32 assertions pass with 9 pending modules.
 - Added Busted unit tests covering new systems under `tests/`.
 
+### Integration
+- Added cross-module accessors and new squad_spawn_system.
+- AI, diplomacy and PDA menu now consult faction_philosophy.
+
 ### Docs
 - Documented new systems in `docs/` directory.
 - Added automated diff report under `docs/runtime_vs_gamma_walo.md`.

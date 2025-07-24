@@ -6,40 +6,33 @@
 ]]
 
 local ai = {}
+-- loaded faction philosophy for priorities
+local phil = dofile("gamma_walo/gamedata/scripts/faction_philosophy.script")
 
--- bias table describing which resources each faction values
-local biases = {
-    monolith = {scrap=true, artifacts=true},
-    duty      = {scrap=true, herbs=true},
-    stalker   = {scrap=true, artifacts=true},
-    freedom   = {scrap=true, herbs=true},
-    default   = {scrap=true, herbs=true, electronics=true, artifacts=true}
-}
 
---- Determine the lowest resource level for a faction respecting bias.
-local function lowest_biased_resource(faction, pool)
-    local pref = biases[faction] or biases.default
+--- Determine which resource a faction needs most according to philosophy.
+local function choose_needed_resource(faction, pool)
+    local priorities = phil.get_faction_priorities(faction)
     local choice, lowest
-    for r, _ in pairs(pref) do
+    for _, r in ipairs(priorities) do
         local val = pool.get_resource(faction, r)
         if lowest == nil or val < lowest then
             lowest = val
             choice = r
         end
     end
-    return choice
+    return choice or priorities[1]
 end
 
 --- Handle a newly captured node by establishing and specializing it.
 function ai.handle_capture(node_id, node_sys, pool)
     local node = node_sys.get_node(node_id)
     if not node then return end
-
-    local need = lowest_biased_resource(node.owner, pool)
+    local need = choose_needed_resource(node.owner, pool)
     node_sys.establish_node(node_id, node_sys.STATE.resource)
     node_sys.specialize_node(node_id, need)
     printf("[faction_ai] designated %s as %s", node_id, need)
-    if type(_G.on_ai_decide_designation) == "function" then
+    if type(_G.on_ai_decide_designation) == 'function' then
         _G.on_ai_decide_designation(node_id)
     end
 end

@@ -1,0 +1,36 @@
+--[[
+    squad_spawn_system.script
+    ------------------------
+    Handles simple squad spawning logic using faction resource pools.
+    Squads are spawned from HQ when enough resources are available.
+    Last edit: 2025-07-25
+]]
+
+local spawn_system = {
+    cooldown = {}
+}
+
+--- Check if a faction can currently spawn a squad.
+function spawn_system.can_spawn_squad(faction_id, pool)
+    local need = {armor=1, weapons=2}
+    for r, v in pairs(need) do
+        if pool.get_resource(faction_id, r) < v then
+            return false
+        end
+    end
+    local next_time = spawn_system.cooldown[faction_id] or 0
+    return os.time() >= next_time
+end
+
+--- Spawn a squad and deduct resources.
+function spawn_system.spawn_squad(faction_id, squad_type, pool)
+    if not spawn_system.can_spawn_squad(faction_id, pool) then
+        return nil
+    end
+    pool.consume_resource(faction_id, 'armor', 1)
+    pool.consume_resource(faction_id, 'weapons', 2)
+    spawn_system.cooldown[faction_id] = os.time() + 60
+    return {faction=faction_id, type=squad_type, spawned=os.time()}
+end
+
+return spawn_system

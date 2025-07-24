@@ -35,3 +35,23 @@ on_faction_raid_trigger(faction_id, target_node)
 
 Each hook is fired by the corresponding module at key decision points allowing
 other scripts to inject custom logic or effects.
+
+
+## 🔗 Cross Module Accessors
+
+The following helper functions allow systems to query shared state:
+
+| Module | Function | Description |
+|-------|----------|-------------|
+| faction_philosophy | `get_faction_priorities(id)` | Ordered list of desired resources |
+| faction_philosophy | `get_faction_aggression(id)` | Aggression factor 0-1 |
+| resource_system | `get_faction_resource(faction_id, res_type)` | Current resource level |
+| resource_system | `modify_faction_resource(faction_id, delta_table)` | Apply resource deltas |
+| node_system | `get_node_type(node_id)` | Returns node state |
+| node_system | `get_node_specialization(node_id)` | Returns specialization |
+| diplomacy_core | `can_trade(faction_a, faction_b, res)` | Checks diplomacy threshold |
+| diplomacy_core | `propose_trade(faction_a, faction_b)` | Records a trade offer |
+| squad_spawn_system | `can_spawn_squad(faction_id)` | Tests resource requirements |
+| squad_spawn_system | `spawn_squad(faction_id, squad_type)` | Spawns a squad table |
+
+These APIs keep modules loosely coupled while sharing essential data.

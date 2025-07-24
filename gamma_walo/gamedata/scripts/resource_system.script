@@ -69,6 +69,21 @@ end
 --- Capture a resource node for a faction and immediately collect its value.
 -- @param node_id string Unique node identifier
 -- @param faction string Faction capturing the node
+--- Convenience wrapper matching cross-module API.
+function resource_system.get_faction_resource(faction_id, res_type)
+    return resource_system.get_resource(faction_id, res_type)
+end
+
+--- Modify multiple resources at once using a delta table.
+-- @param faction_id string
+-- @param delta table {scrap=1, herbs=-1} etc
+function resource_system.modify_faction_resource(faction_id, delta)
+    local pool = get_pool(faction_id)
+    for r, d in pairs(delta or {}) do
+        pool[r] = (pool[r] or 0) + d
+        if pool[r] < 0 then pool[r] = 0 end
+    end
+end
 -- @param rtype string Resource type produced by the node
 -- @param amount number Base amount gathered when captured
 function resource_system.capture_node(node_id, faction, rtype, amount)
