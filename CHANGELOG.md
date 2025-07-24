@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 ### Added
 - `CHANGELOG.md` to track repository progress.
 - Verbose debug logging via `verbose_logs` setting.
+- Modular logistics system:
+  - `base_node_logic.script` for base stockpiles
+  - `hq_coordinator.script` to queue transports
+  - `squad_transport.script` implementing cargo squads
+  - Extended `resource_system.script` with production and node lookup
+  - `diplomacy_integration.lua` for trade offers
 
 ### Improved
 - `sim_offline_combat.script` hardening:

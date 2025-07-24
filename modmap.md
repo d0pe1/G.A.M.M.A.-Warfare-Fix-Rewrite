@@ -23,3 +23,8 @@ This document maps each Lua script to its core role in the AI warfare system.
 | `ui_mm_faction_select.script` | Manages faction selection UI logic at new game. |
 | `ui_options.script` | Initializes and renders warfare settings in UI. |
 | `ui_pda_warfare_tab.script` | Controls PDA Warfare tab rendering and interaction. |
+| `resource_system.script` | Handles node production and faction resource pools. |
+| `base_node_logic.script` | Tracks base stockpiles and consumption. |
+| `hq_coordinator.script` | Creates logistics tasks between nodes and bases. |
+| `squad_transport.script` | Manages transport squad cargo states. |
+| `diplomacy_integration.lua` | Provides trade proposals between factions. |
