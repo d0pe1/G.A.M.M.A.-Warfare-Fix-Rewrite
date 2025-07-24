@@ -2,8 +2,13 @@
 
 This index lists public functions defined in the `gamma_walo/gamedata/scripts` directory.
 
-## dialogs.script
+## base_node_logic.script
+- `base_logic.register_base` (line 33)
+- `base_logic.add_resource` (line 41)
+- `base_logic.consume` (line 47)
+- `base_logic.needs` (line 62)
 
+## dialogs.script
 - `can_do_task_mysteries_of_the_zone` (line 14)
 - `give_task_mysteries_of_the_zone` (line 31)
 - `warfare_disabled` (line 36)
@@ -300,23 +305,21 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `st_lifestyle_answer` (line 2688)
 
 ## diplomacy_core.script
-
 - `diplomacy_core.evaluate` (line 14)
 - `diplomacy_core.accept_offer` (line 30)
+- `diplomacy_core.can_trade` (line 43)
+- `diplomacy_core.propose_trade` (line 51)
 
 ## diplomacy_system.script
-
 - `diplomacy.set_relation` (line 21)
 - `diplomacy.get_relation` (line 32)
 - `diplomacy.add_request` (line 39)
 - `diplomacy.pop_requests` (line 47)
 
 ## faction_ai_logic.script
-
-- `ai.handle_capture` (line 34)
+- `ai.handle_capture` (line 28)
 
 ## faction_expansions.script
-
 - `get_advanced_chance` (line 137)
 - `get_veteran_chance` (line 143)
 - `get_spawn_section` (line 148)
@@ -325,14 +328,12 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `on_game_start` (line 206)
 
 ## faction_philosophy.script
-
 - `philosophy.get_faction_priorities` (line 88)
 - `philosophy.get_faction_aggression` (line 95)
 - `philosophy.get_faction_diplomacy_level` (line 102)
 - `philosophy.is_resource_ignored` (line 110)
 
 ## game_fast_travel.script
-
 - `allow_local_logging` (line 44)
 - `set_debug_logging` (line 55)
 - `scorcher_travel_check` (line 195)
@@ -411,7 +412,6 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `on_game_start` (line 1887)
 
 ## game_relations.script
-
 - `safe_ini_r_float` (line 29)
 - `safe_ini_r_s32` (line 37)
 - `is_faction_unaffected` (line 143)
@@ -459,54 +459,57 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `get_rank_relation` (line 921)
 - `get_reputation_relation` (line 943)
 
-## legendary_squad_system.script
+## hq_coordinator.script
+- `coordinator.register_base` (line 19)
+- `coordinator.evaluate` (line 25)
 
+## legendary_squad_system.script
 - `legendary.add_experience` (line 25)
 - `legendary.get_rank` (line 37)
+- `legendary.evaluate_promotion` (line 44)
 
 ## meta_overlord.script
-
 - `meta_overlord.schedule_event` (line 18)
 - `meta_overlord.next_event` (line 24)
 
 ## monolith_ai.script
-
 - `monolith.select_target` (line 11)
 
 ## node_system.script
-
-- `node_system.register_node` (line 28)
-- `node_system.capture_node` (line 35)
-- `node_system.establish_node` (line 46)
-- `node_system.specialize_node` (line 57)
-- `node_system.upgrade_node` (line 68)
-- `node_system.tick_production` (line 77)
-- `node_system.get_node` (line 85)
+- `node_system.register_node` (line 31)
+- `node_system.capture_node` (line 38)
+- `node_system.establish_node` (line 49)
+- `node_system.specialize_node` (line 65)
+- `node_system.upgrade_node` (line 85)
+- `node_system.tick_production` (line 94)
+- `node_system.get_node` (line 109)
+- `node_system.get_node_type` (line 115)
+- `node_system.get_node_specialization` (line 123)
 
 ## pda_context_menu.script
-
 - `menu.get_options` (line 11)
 
 ## placeable_system.script
-
 - `placeable_system.build` (line 28)
 
 ## resource_pool.script
-
 - `resource_pool.update_from_nodes` (line 23)
 - `resource_pool.get_resource` (line 43)
 - `resource_pool.get_totals` (line 49)
 
 ## resource_system.script
-
-- `resource_system.init_faction` (line 23)
-- `resource_system.add_resource` (line 41)
-- `resource_system.consume_resource` (line 51)
-- `resource_system.get_resource` (line 64)
-- `resource_system.capture_node` (line 74)
+- `resource_system.init_faction` (line 26)
+- `resource_system.tick_daily` (line 49)
+- `resource_system.add_resource` (line 61)
+- `resource_system.withdraw_from_node` (line 70)
+- `resource_system.consume_resource` (line 82)
+- `resource_system.get_resource` (line 95)
+- `resource_system.find_node_with_resource` (line 102)
+- `resource_system.get_faction_resource` (line 115)
+- `resource_system.modify_faction_resource` (line 122)
+- `resource_system.capture_node` (line 131)
 
 ## sim_offline_combat.script
-
 - `validate_enemy` (line 379)
 - `simulate_battle` (line 476)
 - `set_battle_outcome` (line 566)
@@ -522,7 +525,6 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `on_game_start` (line 771)
 
 ## sim_squad_scripted.script
-
 - `sim_squad_scripted` (line 34)
 - `sim_squad_scripted` (line 49)
 - `sim_squad_scripted` (line 89)
@@ -575,7 +577,6 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `sim_squad_scripted` (line 1437)
 
 ## sim_squad_warfare.script
-
 - `refresh_strings` (line 45)
 - `translate_smart_name` (line 67)
 - `squad_on_update` (line 71)
@@ -592,13 +593,11 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `get_warfare_info` (line 654)
 - `find_random_patrol_target` (line 790)
 - `find_target` (line 837)
-- `target_sort` (line 897)
 - `set_target` (line 914)
 - `set_target_trader` (line 967)
 - `on_game_start` (line 998)
 
 ## smart_terrain_warfare.script
-
 - `refresh_strings` (line 252)
 - `translate_smart_name` (line 274)
 - `set_max_population` (line 278)
@@ -650,26 +649,31 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `on_game_start` (line 4907)
 
 ## squad_gear_scaler.script
-
 - `scaler.get_tier` (line 11)
 - `scaler.apply_loadout` (line 20)
 
-## tasks_assault.script
+## squad_spawn_system.script
+- `spawn_system.can_spawn_squad` (line 15)
+- `spawn_system.can_spawn_from_base` (line 27)
+- `spawn_system.spawn_squad` (line 40)
 
+## squad_transport.script
+- `transport.create` (line 12)
+- `transport.drop_cargo` (line 21)
+
+## tasks_assault.script
 - `is_legit_mutant_squad` (line 79)
 - `evaluate_smarts_squads` (line 84)
 - `evaluate_squads_smarts` (line 132)
 - `postpone_for_next_frame` (line 161)
 
 ## tasks_smart_control.script
-
 - `is_legit_mutant_squad` (line 56)
 - `evaluate_smarts_squads` (line 61)
 - `evaluate_squads_smarts` (line 103)
 - `postpone_for_next_frame` (line 137)
 
 ## ui_mm_faction_select.script
-
 - `on_game_start` (line 433)
 - `UINewGame` (line 444)
 - `UINewGame` (line 560)
@@ -783,7 +787,6 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `UINewGame` (line 1685)
 
 ## ui_options.script
-
 - `cc` (line 46)
 - `print_dbg` (line 66)
 - `init_opt_base` (line 90)
@@ -877,25 +880,20 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `trader_cond` (line 2521)
 
 ## ui_pda_diplomacy.script
-
 - `ui_pda_diplomacy.generate_status_list` (line 15)
 
 ## ui_pda_warfare_tab.script
-
 - `get_ui` (line 21)
 - `pda_warfare_tab` (line 29)
 - `pda_warfare_tab` (line 47)
 - `pda_warfare_tab` (line 50)
 - `pda_warfare_tab` (line 79)
-- `compare` (line 164)
 - `pda_warfare_tab` (line 273)
 - `pda_warfare_tab` (line 326)
 
 ## verbose_logger.script
 
-
 ## warfare.script
-
 - `axr_keybind.action.warfare_hide_smarts` (line 37)
 - `axr_keybind.action.warfare_debug_info` (line 44)
 - `apply_all_out_war` (line 86)
@@ -923,19 +921,16 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `resetter` (line 1096)
 
 ## warfare_factions.script
-
 - `update` (line 78)
 - `update_faction` (line 87)
 
 ## warfare_monkeypatches.script
-
 - `xr_conditions.has_task_target_anomaly` (line 5)
 - `xr_effects.setup_task_target_anomaly` (line 16)
 - `dialogs_jupiter.ecolog_companion_task_2_complete_task` (line 45)
 - `dialogs.st_trade_important_documents` (line 64)
 
 ## warfare_options.script
-
 - `update_settings` (line 25)
 - `override_functions` (line 225)
 - `get_random_start_location` (line 233)
@@ -943,7 +938,6 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `on_game_start` (line 304)
 
 ## xr_logic.script
-
 - `spawn_items` (line 40)
 - `configure_schemes` (line 70)
 - `determine_section_to_activate` (line 152)
@@ -988,4 +982,3 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `restore_scheme_and_logic` (line 1336)
 - `reset_logic` (line 1345)
 - `str_from_condlist` (line 1353)
-

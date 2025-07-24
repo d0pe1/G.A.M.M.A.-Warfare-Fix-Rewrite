@@ -51,3 +51,4 @@ All notable changes to this project will be documented in this file.
 - Added automated diff report under `docs/runtime_vs_gamma_walo.md`.
 - Generated API index `docs/api_map.md`.
 - Updated README and agent workflow guidelines.
+- Integrated resource nodes with base and spawn logic; added daily production tick.
