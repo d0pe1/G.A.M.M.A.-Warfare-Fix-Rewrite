@@ -26,7 +26,8 @@
 	2020/11/07 - Vintar - added resurgence chance as option
 	2021/02/13 - Vintar - added 'overflow overrides manual control' and 'extra loner fog of war' toggle, min smart targets per base
 	2021/11/09 - Vintar - added goodwill on kill options, added back "hide all smarts" option, added 'old autocapture' option
-	2022/02/26 - Vintar - added main base attack deprioritization option
+        2022/02/26 - Vintar - added main base attack deprioritization option
+        2025/07/24 - d0pe - minor formatting cleanup
 	
 --]]
 

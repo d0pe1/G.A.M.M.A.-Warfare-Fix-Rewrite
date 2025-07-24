@@ -6,7 +6,8 @@
 	2020/09/22 - Vintar - loners no longer see other loner squads outside of fog of war (without PDA v2 or v3)
 	2021/02/13 - Vintar - added toggle capability for loner fog of war
 	2021/02/18 - Vintar - friendly random patrol squads are now labeled
-	2021/11/09 - Vintar - added goodwill on kill functionality
+        2021/11/09 - Vintar - added goodwill on kill functionality
+        2025/07/24 - d0pe - synced with modular warfare system
 
 	This file contains mostly retired functions, but still handles some squad-level stuff 
 	such as PDA squad spots and Warfare squad registration

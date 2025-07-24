@@ -26,7 +26,8 @@
 	2022/03/06 - Vintar - monster spawn numbers based on level lair capacity
 	2022/04/15 - Ace - Fix for crash when dead allied defenders try to send a message after invasion force is defeated
 	2022/04/22 - Vintar - Mutants from X8 and Pripyat Underpass can no longer transition out
-	2022/04/30 - Vintar - Main base attack prevention also applies to mutants
+        2022/04/30 - Vintar - Main base attack prevention also applies to mutants
+        2025/07/24 - d0pe - added nil checks for target selection
 	
 	This file handles the majority of warfare-related script tasks, such as squad behavior,
 	targeting, smart terrain updates, ownership checks, patrol behavior, etc.

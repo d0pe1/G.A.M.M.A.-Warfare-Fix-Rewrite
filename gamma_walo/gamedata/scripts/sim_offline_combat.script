@@ -10,7 +10,8 @@
 	2021/02/04 - Vintar - removed Hybrid mode, re-enabled slider support for offline combat distance, changed ignore_list handling
 	2021/02/13 - Vintar - fixed warfare exclusions and missing monster factions related to call of pripyat allspawn mutants
 	2022/05/01 - Vintar - remove exemptions for `task_squads` and `task_giver_squads` to eliminate exempt squad buildup over time
-	2022/05/21 - Vintar - remove squad cap limitation, which wasn't correctly implemented for Warfare anyway
+        2022/05/21 - Vintar - remove squad cap limitation, which wasn't correctly implemented for Warfare anyway
+        2025/07/24 - d0pe - hardened offline combat loops
 
 	Offline Combat Simulator
 	Full simulation: When 2 enemy squads get close to each other, a battle will be simulated

@@ -7,7 +7,8 @@
 	2020/05/25 - Vintar
 	2020/05/31 - Vintar - lowered loner veteran chance
 	2021/02/27 - Vintar - lowered loner advanced/veteran chance again, removed rats from spawn
-	2021/03/02 - Vintar - removed black smoke poltergeist
+        2021/03/02 - Vintar - removed black smoke poltergeist
+        2025/07/24 - d0pe - documented spawn chance formulas
 
 	This file provides the chance for advanced/veteran squads to spawn instead of novice
 	squads, or picks a normal/rare mutant spawn section.
