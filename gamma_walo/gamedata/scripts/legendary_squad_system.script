@@ -1,0 +1,42 @@
+--[[
+    legendary_squad_system.script
+    ------------------------------
+    Tracks squad experience and promotes squads to legendary status. Each squad
+    accumulates experience points and levels up through predefined ranks.
+]]
+
+local legendary = {
+    ranks = {"rookie", "seasoned", "veteran", "legendary"},
+    squads = {}
+}
+
+--- Ensure a squad entry exists in the table.
+-- @param id string Unique squad identifier
+local function ensure_squad(id)
+    if not legendary.squads[id] then
+        legendary.squads[id] = {exp = 0, rank = 1}
+    end
+    return legendary.squads[id]
+end
+
+--- Add experience to a squad and handle promotion.
+-- @param id string Squad identifier
+-- @param amount number Experience amount
+function legendary.add_experience(id, amount)
+    local squad = ensure_squad(id)
+    squad.exp = squad.exp + amount
+    if squad.exp >= 100 and squad.rank < #legendary.ranks then
+        squad.exp = squad.exp - 100
+        squad.rank = squad.rank + 1
+    end
+end
+
+--- Get the current rank name of a squad.
+-- @param id string Squad identifier
+-- @return string rank name
+function legendary.get_rank(id)
+    local squad = ensure_squad(id)
+    return legendary.ranks[squad.rank]
+end
+
+return legendary

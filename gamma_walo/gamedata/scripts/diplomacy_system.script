@@ -1,0 +1,53 @@
+--[[
+    diplomacy_system.script
+    -----------------------
+    Handles dynamic faction relations and diplomacy requests. Relations are
+    symmetric and stored in a simple lookup table. Incoming requests can be
+    queued for each faction and later processed by UI or gameplay scripts.
+]]
+
+local diplomacy = {
+    STATUS = {ally = "ally", neutral = "neutral", enemy = "enemy"},
+    -- relations[f1][f2] = STATUS
+    relations = {},
+    -- requests[target] = { {from = "duty", text = "Assist attack"}, ... }
+    requests = {}
+}
+
+--- Set relation status between two factions.
+-- @param f1 string Faction A
+-- @param f2 string Faction B
+-- @param status string Relation status
+function diplomacy.set_relation(f1, f2, status)
+    diplomacy.relations[f1] = diplomacy.relations[f1] or {}
+    diplomacy.relations[f2] = diplomacy.relations[f2] or {}
+    diplomacy.relations[f1][f2] = status
+    diplomacy.relations[f2][f1] = status
+end
+
+--- Get relation status between two factions.
+-- @param f1 string Faction A
+-- @param f2 string Faction B
+-- @return string status
+function diplomacy.get_relation(f1, f2)
+    return (diplomacy.relations[f1] or {})[f2] or diplomacy.STATUS.neutral
+end
+
+--- Add a diplomacy request to a target faction.
+-- @param target string Target faction
+-- @param request table Data describing the request
+function diplomacy.add_request(target, request)
+    diplomacy.requests[target] = diplomacy.requests[target] or {}
+    table.insert(diplomacy.requests[target], request)
+end
+
+--- Retrieve and clear all requests for a faction.
+-- @param target string Target faction
+-- @return table list of requests
+function diplomacy.pop_requests(target)
+    local list = diplomacy.requests[target] or {}
+    diplomacy.requests[target] = {}
+    return list
+end
+
+return diplomacy
