@@ -5,7 +5,8 @@
 	DoctorX Dynamic Faction Relations 1.8
 
 	Modified by: DoctorX, av661194
-	Last revised: February 16, 2016
+        Last revised: February 16, 2016
+        2025/07/25 - Codex Fixer - corrected Windows path escape sequences
 
  ============================================================
 
@@ -43,14 +44,14 @@ function safe_ini_r_s32(ini, section, key, fallback)
 end
 --========================================< Controls >========================================--
 local ini_r
-if system_ini():section_exist("plugins\dynamic_faction_relations") then
-        ini_r = ini_file("plugins\dynamic_faction_relations.ltx")
+if system_ini():section_exist("plugins\\dynamic_faction_relations") then -- added escape fix
+        ini_r = ini_file("plugins\\dynamic_faction_relations.ltx")
 else
         printf("[game_relations.script] WARNING: Missing dynamic_faction_relations.ltx")
 end
 local ini_g
-if system_ini():section_exist("creatures\game_relations") then
-        ini_g = ini_file("creatures\game_relations.ltx")
+if system_ini():section_exist("creatures\\game_relations") then -- added escape fix
+        ini_g = ini_file("creatures\\game_relations.ltx")
 else
         printf("[game_relations.script] WARNING: Missing game_relations.ltx")
 end

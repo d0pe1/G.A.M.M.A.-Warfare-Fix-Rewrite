@@ -58,3 +58,4 @@ All notable changes to this project will be documented in this file.
 - Added daily_sim_engine with daily cycle logic and new tests.
 - Added faction_state system tracking HQs and collapse.
 \n- Added HQ logistics upgrade prioritization logic and base upgrade tests.
+- Fixed Windows path escapes in `game_relations.script` preventing Lua load error.

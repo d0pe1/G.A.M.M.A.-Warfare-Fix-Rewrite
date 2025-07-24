@@ -75,13 +75,13 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 ```diff
 ```
 </details>
-| game_relations.script | 93 | 95 | keep |
+| game_relations.script | 91 | 93 | keep |
 
 <details><summary>Diff for game_relations.script</summary>
 ```diff
 --- runtime files/gamedata/scripts/game_relations.script
 +++ gamma_walo/gamedata/scripts/game_relations.script
-@@ -24,36 +24,35 @@
+@@ -25,36 +25,35 @@
  	-- rank_goodwill 								- the relation of rank of the character to the rank of the actor from [rank_relations]
  
  --]]
@@ -118,24 +118,22 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 +end
  --========================================< Controls >========================================--
  local ini_r
- if system_ini():section_exist("plugins\dynamic_faction_relations") then
--	ini_r = ini_file("plugins\dynamic_faction_relations.ltx")
-+        ini_r = ini_file("plugins\dynamic_faction_relations.ltx")
+ if system_ini():section_exist("plugins\\dynamic_faction_relations") then -- added escape fix
+         ini_r = ini_file("plugins\\dynamic_faction_relations.ltx")
  else
 -	printf("[game_relations.script] WARNING: Missing dynamic_faction_relations.ltx")
 +        printf("[game_relations.script] WARNING: Missing dynamic_faction_relations.ltx")
  end
  local ini_g
- if system_ini():section_exist("creatures\game_relations") then
--	ini_g = ini_file("creatures\game_relations.ltx")
-+        ini_g = ini_file("creatures\game_relations.ltx")
+ if system_ini():section_exist("creatures\\game_relations") then -- added escape fix
+         ini_g = ini_file("creatures\\game_relations.ltx")
  else
 -	printf("[game_relations.script] WARNING: Missing game_relations.ltx")
 +        printf("[game_relations.script] WARNING: Missing game_relations.ltx")
  end
  factions_table = {"stalker","bandit","csky","dolg","freedom","killer","army","ecolog","monolith","renegade","greh","isg"}
  factions_table_all = {"actor","bandit","dolg","ecolog","freedom","killer","army","monolith","monster","stalker","zombied","csky","renegade","greh","isg","trader","actor_stalker","actor_bandit","actor_dolg","actor_freedom","actor_csky","actor_ecolog","actor_killer","actor_army","actor_monolith","actor_renegade","actor_greh","actor_isg","actor_zombied","arena_enemy"}
-@@ -153,13 +152,13 @@
+@@ -154,13 +153,13 @@
  		return false
  	end
  	
@@ -156,7 +154,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	return false
  end
  
-@@ -188,13 +187,13 @@
+@@ -189,13 +188,13 @@
  	end
  	
  	-- Check blacklisted pairs 
@@ -177,7 +175,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	return true
  end
-@@ -307,17 +306,17 @@
+@@ -308,17 +307,17 @@
  
  function reset_all_relations()
  	local tbl = {}
@@ -206,7 +204,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  
  function calculate_relation_change( victim_tbl, killer_tbl)
-@@ -355,18 +354,18 @@
+@@ -356,18 +355,18 @@
  	local enemy_num = 0
  	local natural_num = 0
  	local friend_num = 0
@@ -237,7 +235,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	-- return if killer and victim are from the same faction
  	if (killer_faction == victim_faction) then
-@@ -375,9 +374,9 @@
+@@ -376,9 +375,9 @@
  
  	-- If killed NPC was enemy of faction, raise relation toward killer faction:
  	if ( math.random( 100 ) > 50 ) then
@@ -250,7 +248,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  						
  						-- Relation calculation:
-@@ -396,8 +395,8 @@
+@@ -397,8 +396,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_bad + ( k_rep_good / 10 ) ) )
  						
@@ -261,7 +259,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations positive change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. value)
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -414,9 +413,9 @@
+@@ -415,9 +414,9 @@
  
  	-- If killed NPC was friend or neutral to faction, lower relation toward killer faction:
  	else
@@ -274,7 +272,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  					
  						-- Relation calculation:
-@@ -435,8 +434,8 @@
+@@ -436,8 +435,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_good + ( k_rep_bad / 10 ) ) )
  
@@ -285,7 +283,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations negative change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. -(value))
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -455,24 +454,24 @@
+@@ -456,24 +455,24 @@
  
  local rnd_enemy = {}
  function get_random_enemy_faction(comm)
@@ -324,7 +322,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  
  
-@@ -559,10 +558,9 @@
+@@ -560,10 +559,9 @@
  	if (USE_MARSHAL) then
  		if 	(alife_storage_manager.get_state().new_game_relations) then
  			-- Restore relations for each faction:
@@ -338,7 +336,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					
  					load_relation ( faction_1 , faction_2 ) -- load and set overall faction relations:
  					load_relation ( "actor_" .. faction_1 , faction_2 ) -- load and set actor faction 1 / faction 2 relations:
-@@ -924,12 +922,12 @@
+@@ -925,12 +923,12 @@
  	if (not rank_relation) then
  		rank_relation = {}
  		
@@ -357,7 +355,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  				--printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
  			end
  		end
-@@ -946,12 +944,12 @@
+@@ -947,12 +945,12 @@
  	if (not reputation_relation) then
  		reputation_relation = {}
  		
