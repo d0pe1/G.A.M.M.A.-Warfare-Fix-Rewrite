@@ -5,3 +5,6 @@ package.path = table.concat({
     root .. 'gamma_walo/gamedata/scripts/?.lua',
     package.path
 }, ';')
+
+-- Provide stub printf used by scripts when running under Busted
+_G.printf = _G.printf or function() end

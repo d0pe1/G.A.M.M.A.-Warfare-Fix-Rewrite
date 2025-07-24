@@ -19,6 +19,16 @@ All notable changes to this project will be documented in this file.
 - Created `legendary_squad_system.script` to track squad experience and rank progression.
 - Added `meta_overlord.script` for scheduling antagonist events.
 - New `ui_pda_diplomacy.script` generates diplomacy status lists for the PDA.
+- Implemented node designation framework under `node_system.script` with hooks.
+- Added `resource_pool.script` now tracking per-faction resource levels instead of consumable totals.
+- Created `faction_ai_logic.script` automating NPC node specialisation.
+- Updated `faction_ai_logic.script` to use faction bias tables and lowest-resource logic.
+- Added `squad_gear_scaler.script` for loadout scaling based on resources.
+- Gear scaling thresholds now use resource node counts rather than currency.
+- Added `pda_context_menu.script` exposing Establish/Specialize/Upgrade actions.
+- Implemented `monolith_ai.script` to raid dominant factions.
+- Implemented `diplomacy_core.script` generating trade offers from shortages.
+- Trade offers now trigger when a faction completely lacks a resource type.
 
 ### Testing
 - Added Busted unit tests covering new systems under `tests/`.

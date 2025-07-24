@@ -1,0 +1,89 @@
+--[[
+    node_system.script
+    -------------------
+    Handles smart terrain node ownership, designation and specialization. Nodes
+    can be captured then established as base or resource nodes. Specialized nodes
+    report resource production capabilities through the resource_pool module.
+    Verbose logging and hooks allow other mods to react to changes.
+]]
+
+local node_system = {
+    STATE = {territory = "territory", base = "base", resource = "resource", artifact = "artifact"},
+    BASE_SPEC = {trader=true, research=true, militia=true, hq=true},
+    RESOURCE_SPEC = {scrap=true, electronics=true, herbs=true},
+    nodes = {}
+}
+
+-- internal helper to fire global hooks safely
+local function call_hook(name, ...)
+    local fn = _G[name]
+    if type(fn) == "function" then
+        fn(...)
+    end
+end
+
+--- Register a new node in the system.
+-- @param id string Unique node identifier
+-- @param state string Initial state (territory/resource/base/artifact)
+function node_system.register_node(id, state)
+    node_system.nodes[id] = {state = state or node_system.STATE.territory, level = 1}
+end
+
+--- Capture a node for a faction.
+-- @param id string Node identifier
+-- @param faction string New owner faction
+function node_system.capture_node(id, faction)
+    local node = node_system.nodes[id]
+    if not node then return end
+    node.owner = faction
+    printf("[node_system] %s captured by %s", id, faction)
+    call_hook("on_node_captured", id, faction)
+end
+
+--- Establish a territory node as a base or resource.
+-- @param id string Node identifier
+-- @param state string Desired new state
+function node_system.establish_node(id, state)
+    local node = node_system.nodes[id]
+    if not node or node.state ~= node_system.STATE.territory then return false end
+    node.state = state
+    printf("[node_system] %s established as %s", id, state)
+    return true
+end
+
+--- Specialize a base or resource node.
+-- @param id string Node identifier
+-- @param spec string Specialization type
+function node_system.specialize_node(id, spec)
+    local node = node_system.nodes[id]
+    if not node then return false end
+    node.specialization = spec
+    printf("[node_system] %s specialized as %s", id, spec)
+    call_hook("on_node_specialized", id, spec)
+    return true
+end
+
+--- Upgrade a node, increasing its level.
+-- @param id string Node identifier
+function node_system.upgrade_node(id)
+    local node = node_system.nodes[id]
+    if not node then return end
+    node.level = (node.level or 1) + 1
+    printf("[node_system] %s upgraded to %d", id, node.level)
+end
+
+--- Produce resources for all specialized nodes.
+-- @param pool table resource_pool module
+function node_system.tick_production(pool)
+    pool.update_from_nodes(node_system)
+    call_hook("on_tick_resource_production")
+end
+
+--- Retrieve node data.
+-- @param id string Node identifier
+-- @return table|nil node data
+function node_system.get_node(id)
+    return node_system.nodes[id]
+end
+
+return node_system
