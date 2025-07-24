@@ -35,4 +35,23 @@ function diplomacy_core.accept_offer(faction)
     end
 end
 
+
+--- Determine if two factions can trade a resource.
+-- @param f1 string
+-- @param f2 string
+-- @param rtype string
+function diplomacy_core.can_trade(f1, f2, rtype)
+    local phil = dofile('gamma_walo/gamedata/scripts/faction_philosophy.script')
+    local d1 = phil.get_faction_diplomacy_level(f1)
+    local d2 = phil.get_faction_diplomacy_level(f2)
+    return ((d1 + d2) * 0.5) > 0.4 and rtype ~= nil
+end
+
+--- Create a trade offer and log it.
+function diplomacy_core.propose_trade(f1, f2)
+    if not diplomacy_core.can_trade(f1, f2, 'scrap') then return nil end
+    local offer = {from=f1, to=f2, type='trade'}
+    diplomacy_core.history[#diplomacy_core.history+1] = offer
+    return offer
+end
 return diplomacy_core

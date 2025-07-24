@@ -39,4 +39,12 @@ function legendary.get_rank(id)
     return legendary.ranks[squad.rank]
 end
 
+
+--- Check promotion conditions using combat statistics.
+function legendary.evaluate_promotion(id, survival, captures, efficiency)
+    if survival > 10 and captures > 0 and efficiency >= 1 then
+        legendary.add_experience(id, 100)
+    end
+end
+
 return legendary
