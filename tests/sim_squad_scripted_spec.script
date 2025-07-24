@@ -1,0 +1,2 @@
+dofile("tests/spec_helper.lua")
+pending('sim_squad_scripted requires engine classes')

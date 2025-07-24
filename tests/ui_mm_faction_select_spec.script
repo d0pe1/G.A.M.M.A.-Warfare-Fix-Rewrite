@@ -1,0 +1,3 @@
+dofile("tests/spec_helper.lua")
+_pending = pending
+_pending('ui_mm_faction_select depends on UI classes')

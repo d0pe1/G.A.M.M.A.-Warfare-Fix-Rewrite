@@ -1,0 +1,30 @@
+-- verbose_logger.script
+-- Enables detailed debug output for all Warfare scripts when verbose_logs == 1.
+-- Uses debug hooks to trace function calls and returns.
+
+if _G._verbose_logger_initialized then
+    return
+end
+_G._verbose_logger_initialized = true
+
+local function hook(event)
+    local info = debug.getinfo(2, "nSl")
+    if not info or not info.short_src then
+        return
+    end
+    -- Only log calls within the gamma_walo script set
+    if not string.find(info.short_src, "gamma_walo") then
+        return
+    end
+    local name = info.name or "<anonymous>"
+    local line = info.currentline or info.linedefined or 0
+    if event == "call" then
+        printf("[VERBOSE CALL] %s:%d -> %s", info.short_src, line, name)
+    elseif event == "return" then
+        printf("[VERBOSE RET] %s:%d <- %s", info.short_src, line, name)
+    end
+end
+
+debug.sethook(hook, "cr")
+printf("[VERBOSE] Debug hooks enabled")
+

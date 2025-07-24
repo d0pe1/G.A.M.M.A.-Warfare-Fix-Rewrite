@@ -75,6 +75,7 @@ local blacklisted_maps = { -- List of maps to skip in scans
 
 
 ---------------------------< Utility >---------------------------
+-- Verify squad section name is not a low-tier mutant used for tasks
 function is_legit_mutant_squad(squad)
 	local section = squad and squad:section_name()
 	return squad and (not sfind(section,"tushkano")) and (not sfind(section,"rat")) and true or false

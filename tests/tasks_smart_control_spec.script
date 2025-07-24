@@ -1,0 +1,15 @@
+dofile("tests/spec_helper.lua")
+_dofile = dofile
+task_functor = {}
+task_status_functor = {}
+xr_conditions={}; xr_effects={}
+assert(loadfile('gamma_walo/gamedata/scripts/tasks_smart_control.script','t',_ENV))()
+
+describe('tasks_smart_control', function()
+    it('validates mutant squad names', function()
+        local squad = {section_name=function() return 'sim_default_boar_squad' end}
+        assert.is_true(is_legit_mutant_squad(squad))
+        local sq2 = {section_name=function() return 'sim_default_rat_squad' end}
+        assert.is_false(is_legit_mutant_squad(sq2))
+    end)
+end)

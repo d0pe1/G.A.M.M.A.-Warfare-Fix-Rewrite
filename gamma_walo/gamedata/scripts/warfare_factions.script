@@ -82,6 +82,7 @@ function update()
 	end
 end
 
+-- Update timers and patrol logic for a single faction
 function update_faction(faction)
 	if (not faction or faction == "none") then
 		return

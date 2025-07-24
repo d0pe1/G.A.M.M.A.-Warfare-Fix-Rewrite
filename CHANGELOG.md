@@ -5,12 +5,14 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - `CHANGELOG.md` to track repository progress.
+- Verbose debug logging via `verbose_logs` setting.
 
 ### Improved
 - `sim_offline_combat.script` hardening:
   - Added nil check when retrieving smart terrain data.
   - Replaced `pairs` with `ipairs` for sequential tables.
   - Recalculated `lid_1` per squad to avoid cross-level mismatches.
+- Verbose logger now loaded relative to `warfare.script` for proper runtime path.
 
 ### Gameplay Expansion
 - Introduced `resource_system.script` providing faction resource pools and node capture logic.
@@ -31,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Trade offers now trigger when a faction completely lacks a resource type.
 
 ### Testing
+- Expanded coverage with additional stub specs; 32 assertions pass with 9 pending modules.
 - Added Busted unit tests covering new systems under `tests/`.
 
 ### Docs
