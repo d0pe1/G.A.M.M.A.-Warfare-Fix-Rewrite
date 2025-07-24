@@ -14,6 +14,9 @@ local node_system = {
     nodes = {}
 }
 
+local base_logic = require("base_node_logic")
+local resource_sys = require("resource_system")
+
 -- internal helper to fire global hooks safely
 local function call_hook(name, ...)
     local fn = _G[name]
@@ -45,7 +48,12 @@ end
 -- @param state string Desired new state
 function node_system.establish_node(id, state)
     local node = node_system.nodes[id]
-    if not node or node.state ~= node_system.STATE.territory then return false end
+    if not node or node.state ~= node_system.STATE.territory then
+        return false
+    end
+    if state ~= node_system.STATE.base and state ~= node_system.STATE.resource then
+        return false
+    end
     node.state = state
     printf("[node_system] %s established as %s", id, state)
     return true
@@ -56,8 +64,17 @@ end
 -- @param spec string Specialization type
 function node_system.specialize_node(id, spec)
     local node = node_system.nodes[id]
-    if not node then return false end
+    if not node or not spec then return false end
     node.specialization = spec
+    if node.state == node_system.STATE.base then
+        if base_logic and type(base_logic.register_base) == "function" then
+            base_logic.register_base(id, node.owner, spec)
+        end
+    elseif node.state == node_system.STATE.resource then
+        if resource_sys and type(resource_sys.capture_node) == "function" then
+            resource_sys.capture_node(id, node.owner, spec, 0)
+        end
+    end
     printf("[node_system] %s specialized as %s", id, spec)
     call_hook("on_node_specialized", id, spec)
     return true
@@ -74,8 +91,15 @@ end
 
 --- Produce resources for all specialized nodes.
 -- @param pool table resource_pool module
-function node_system.tick_production(pool)
-    pool.update_from_nodes(node_system)
+function node_system.tick_production(pool, res_sys)
+    local p = pool or require("resource_pool")
+    if p and type(p.update_from_nodes) == "function" then
+        p.update_from_nodes(node_system)
+    end
+    local r = res_sys or resource_sys
+    if r and type(r.tick_daily) == "function" then
+        r.tick_daily()
+    end
     call_hook("on_tick_resource_production")
 end
 
