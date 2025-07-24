@@ -79,7 +79,7 @@ function node_system.specialize_node(id, spec)
         end
     elseif node.state == node_system.STATE.resource then
         if resource_sys and type(resource_sys.capture_node) == "function" then
-            resource_sys.capture_node(id, node.owner, spec, 0)
+            resource_sys.capture_node(id, node.owner, spec, 0, node.level)
         end
     end
     printf("[node_system] %s specialized as %s", id, spec)
@@ -93,6 +93,9 @@ function node_system.upgrade_node(id)
     local node = node_system.nodes[id]
     if not node then return end
     node.level = (node.level or 1) + 1
+    if node.state == node_system.STATE.resource and resource_sys and type(resource_sys.apply_node_upgrade) == "function" then
+        resource_sys.apply_node_upgrade(id, node.level)
+    end
     printf("[node_system] %s upgraded to %d", id, node.level)
 end
 
@@ -110,6 +113,18 @@ function node_system.abandon_node(id)
     node.state = node_system.STATE.territory
     node.level = 1
     printf("[node_system] %s abandoned", id)
+end
+
+--- Mark a resource node as depleted, reverting it to territory.
+-- @param id string Node identifier
+function node_system.deplete_node(id)
+    local node = node_system.nodes[id]
+    if not node then return end
+    node.state = node_system.STATE.territory
+    node.specialization = nil
+    node.level = 1
+    printf("[node_system] %s resource depleted", id)
+    call_hook("on_node_depleted", id)
 end
 
 --- Produce resources for all specialized nodes.

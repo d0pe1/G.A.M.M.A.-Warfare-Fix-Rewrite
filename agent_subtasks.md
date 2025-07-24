@@ -10,7 +10,7 @@ Create a Pull Request for review
 
 ✅ Resource Infrastructure System
 
-[ ] Implement Resource Node Upgrades
+[x] Implement Resource Node Upgrades
 
 Add .ltx config values to define upgrade levels
 
@@ -18,7 +18,7 @@ Update resource_system.script to adjust daily output based on level
 
 Add PDA interaction stub (UI to upgrade node)
 
-[ ] Add Resource Node Depletion Mechanic
+[x] Add Resource Node Depletion Mechanic
 
 Add counters for resource exhaustion
 
