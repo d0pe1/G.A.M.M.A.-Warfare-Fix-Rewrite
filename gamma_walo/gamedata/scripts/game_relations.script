@@ -26,9 +26,34 @@
 --]]
 
 
+function safe_ini_r_float(ini, section, key, fallback)
+        if ini and ini:section_exist(section) and ini:line_exist(section, key) then
+                return ini:r_float(section, key)
+        else
+                return fallback
+        end
+end
+
+function safe_ini_r_s32(ini, section, key, fallback)
+        if ini and ini:section_exist(section) and ini:line_exist(section, key) then
+                return ini:r_s32(section, key)
+        else
+                return fallback
+        end
+end
 --========================================< Controls >========================================--
-local ini_r = ini_file("plugins\\dynamic_faction_relations.ltx")
-local ini_g = ini_file("creatures\\game_relations.ltx")
+local ini_r
+if system_ini():section_exist("plugins\dynamic_faction_relations") then
+        ini_r = ini_file("plugins\dynamic_faction_relations.ltx")
+else
+        printf("[game_relations.script] WARNING: Missing dynamic_faction_relations.ltx")
+end
+local ini_g
+if system_ini():section_exist("creatures\game_relations") then
+        ini_g = ini_file("creatures\game_relations.ltx")
+else
+        printf("[game_relations.script] WARNING: Missing game_relations.ltx")
+end
 factions_table = {"stalker","bandit","csky","dolg","freedom","killer","army","ecolog","monolith","renegade","greh","isg"}
 factions_table_all = {"actor","bandit","dolg","ecolog","freedom","killer","army","monolith","monster","stalker","zombied","csky","renegade","greh","isg","trader","actor_stalker","actor_bandit","actor_dolg","actor_freedom","actor_csky","actor_ecolog","actor_killer","actor_army","actor_monolith","actor_renegade","actor_greh","actor_isg","actor_zombied","arena_enemy"}
 -- ATTENTION! (factions_table_all) table must follow the same order of [communities_relations] section in game_relations.ltx file

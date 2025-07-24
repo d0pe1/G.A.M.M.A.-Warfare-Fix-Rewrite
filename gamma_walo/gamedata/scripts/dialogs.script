@@ -2468,13 +2468,6 @@ end
 -- Trade important documents
 -----------------------------------------------------------------------------------
 local important_docs = {
-	["main_story_1_quest_case"] = 10000,
-	["main_story_2_lab_x18_documents"] = 13000,
-	["main_story_3_lab_x16_documents"] = 16000,
-	["main_story_4_lab_x10_documents"] = 20000,
-	["main_story_5_lab_x8_documents"] = 13000,
-	["main_story_6_jup_ug_documents"] = 14000,
-	["main_story_7_mon_con_documents"] = 25000,
 }
 
 local important_docs_warfare_names = {
@@ -2554,8 +2547,6 @@ end
 
 function trade_important_documents_reward(a,b)
 	local sweets_1 = {
-		"af_aac",
-		"af_iam",
 		"af_plates",
 		"af_camelbak",
 		"af_surge_up",

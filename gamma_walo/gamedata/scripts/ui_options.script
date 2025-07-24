@@ -100,7 +100,7 @@ options = {
 		{ id= "gamma"  		           ,type= "track"    ,val= 2	,cmd= "rs_c_gamma"					,min= 0.5  ,max= 1.5  ,step= 0.1 ,precondition= {for_renderer,"renderer_r1"}	},
 		{ id= "contrast"  	           ,type= "track"    ,val= 2	,cmd= "rs_c_contrast"				,min= 0.5  ,max= 1.5  ,step= 0.1 ,precondition= {for_renderer,"renderer_r1"}	},
 		{ id= "brightness"             ,type= "track"    ,val= 2	,cmd= "rs_c_brightness"				,min= 0.5  ,max= 1.5  ,step= 0.1 ,precondition= {for_renderer,"renderer_r1"}	},
-		{ id= "fov"  		           ,type= "track"    ,val= 2	,cmd= "fov"							,min= 5    ,max= 140  ,step= 1 },
+		{ id= "fov"  		           ,type= "track"    ,val= 2	,cmd= "fov"							,min= 5    ,max= 180  ,step= 1 },
 		{ id= "hud_fov"  	           ,type= "track"    ,val= 2	,cmd= "hud_fov"						,min= 0.1  ,max= 1    ,step= 0.01 },
 		{ id= "screen_mode"            ,type= "radio_h"  ,val= 2	,curr= {curr_screen_mode} 			,content= {{1,"fullscreen"} , {2,"borderless"} , {3,"windowed"}} 	,functor = {func_screen_mode}		},
 		{ id= "lighting"  		       ,type= "button"   ,functor_ui= {start_lighting_ui}  				,precondition= {level_present}		,precondition_1= {for_renderer,"renderer_r2a","renderer_r2","renderer_r2.5","renderer_r3","renderer_r4"}    },
@@ -124,7 +124,7 @@ options = {
 		{ id= "texture_lod"            ,type= "track"    ,val= 2	,cmd= "texture_lod"	                ,min= 0     ,max= 4     ,step= 1 	,no_str= true	  ,invert= true     ,vid= true	,restart= true	},
 		{ id= "geometry_lod"           ,type= "track"    ,val= 2	,cmd= "r__geometry_lod"	            ,min= 0.1   ,max= 1.5   ,step= 0.1 },
 		{ id= "mipbias"           	   ,type= "track"    ,val= 2	,cmd= "r__tf_mipbias"	            ,min= -0.5  ,max= 0.5   ,step= 0.1 	,no_str= true 	  ,invert= true },
-		{ id= "tf_aniso"               ,type= "list"     ,val= 0	,cmd= "r__tf_aniso"	                ,content={ {"1","st_opt_off"},{"4","x4"},{"8","x8"},{"16","x16"} }    ,vid= true, no_str= true	},
+                { id= "tf_aniso"               ,type= "track"    ,val= 2       ,cmd= "r__tf_aniso"                      ,min= 1     ,max= 16    ,step= 4    ,vid= true  },
 		{ id= "ssample"                ,type= "track"    ,val= 2	,cmd= "r__supersample"	            ,min= 1     ,max= 8     ,step= 1       ,vid= true      ,precondition= {for_renderer,"renderer_r1","renderer_r2a","renderer_r2","renderer_r2.5"} },
 		{ id= "ssample_list"           ,type= "list"     ,val= 0	,cmd= "r3_msaa"	                    ,content={ {"st_opt_off","st_opt_off"},{"2x","x2"},{"4x","x4"},{"8x","x8"} }	    ,vid= true          ,precondition= {for_renderer,"renderer_r3","renderer_r4"} , no_str= true  },
 		{ id= "smaa"           		   ,type= "list"     ,val= 0	,cmd= "r2_smaa"	                    ,content={ {"off","st_opt_off"},{"low","st_opt_low"},{"medium","st_opt_medium"},{"high","st_opt_high"},{"ultra","st_opt_ultra"} } ,precondition= {for_renderer,"renderer_r2a","renderer_r2","renderer_r2.5","renderer_r3","renderer_r4"}, no_str= true  },
@@ -361,8 +361,6 @@ options = {
 		{ id= "dispersion_factor"    	 ,type= "track"    ,val= 2	,curr= {curr_gameplay,"dispersion_factor"}	 ,functor= {func_gameplay_diff,"dispersion_factor"}	,min= 1       ,max= 5     ,step= 0.1  	    },
 		{ id= "power_loss_bias"    	     ,type= "track"    ,val= 2	,curr= {curr_gameplay,"power_loss_bias"}	 ,functor= {func_gameplay_diff,"power_loss_bias"}	,min= 0.0     ,max= 1     ,step= 0.05  		},
 		{ id= "weight"    	     		 ,type= "track"    ,val= 2	,curr= {curr_gameplay,"weight"}	     		 ,functor= {func_gameplay_diff,"weight"}	 		,min= 10      ,max= 50    ,step= 1  	    },
-		{ id= "thirst"    	     		 ,type= "check"    ,val= 1	,curr= {curr_gameplay,"thirst"}	         	 ,functor= {func_gameplay_diff,"thirst"}	                           	 						},
-		{ id= "sleep"    	     		 ,type= "check"    ,val= 1	,curr= {curr_gameplay,"sleep"}	         	 ,functor= {func_gameplay_diff,"sleep"}	                           	 							},
 		{ id= "radiation_day"    	     ,type= "check"    ,val= 1	,curr= {curr_gameplay,"radiation_day"}	     ,functor= {func_gameplay_diff,"radiation_day"}	     	                   	 					},
 		{ id= "notify_geiger"    	     ,type= "check"    ,val= 1	,curr= {curr_gameplay,"notify_geiger"}	     ,functor= {func_gameplay_diff,"notify_geiger"}	     	                   	 					},
 		{ id= "notify_anomaly"    	     ,type= "check"    ,val= 1	,curr= {curr_gameplay,"notify_anomaly"}	     ,functor= {func_gameplay_diff,"notify_anomaly"}	     	                   	 				},
@@ -431,8 +429,8 @@ options = {
 	{ id= "general"      	,sh=true ,gr={
 		{ id= "slide_alife"		,type= "slide"	  ,link= "ui_options_slider_alife"	 ,text= "ui_mm_title_alife"		,size= {512,50}		},
 
-		{ id= "alife_mutant_pop"  		,type= "list"    ,val= 2  ,def= 1.5 	 ,content= {{0.25} , {0.5} , {0.75} , {1}, {1.5}, {2}, {3}}		,no_str= true  },
-		{ id= "alife_stalker_pop"  		,type= "list"    ,val= 2  ,def= 1 	 ,content= {{0.25} , {0.5} , {0.75} , {1}, {1.5}, {2}}		,no_str= true  },
+                { id= "alife_mutant_pop"                ,type= "list"    ,val= 2  ,def= 0.75     ,content= {{0.25} , {0.5} , {0.75} , {1}}              ,no_str= true  },
+                { id= "alife_stalker_pop"               ,type= "list"    ,val= 2  ,def= 0.5      ,content= {{0.25} , {0.5} , {0.75} , {1}}              ,no_str= true  },
 		{ id= "offline_combat"  		,type= "list"    ,val= 0  ,def= "full" 	 ,content= {{"full","full"}, {"on_smarts_only","on_smarts_only"}, {"off","off"}} },
 		{ id= "excl_dist"  				,type= "list"    ,val= 2  ,def= 75 	 	 ,content= {{0} , {25} , {50} , {75} , {100}}	,no_str= true  },
 		{ id= "dynamic_anomalies"        ,type= "check"    ,val= 1	,def= true	 },
@@ -1712,7 +1710,7 @@ function UIOptions:Callback_Input(ctrl, path, opt, v)
 		return
 	end
 	
-	if (v.val == 2) then
+	if (v.val == 1) then
 		value = tonumber(value)
 		if (not value) then
 			ctrl:SetText( self:GetCurrentValue(path, opt, v) or self:GetDefaultValue(path, opt, v) )
