@@ -3,10 +3,13 @@
 This index lists public functions defined in the `gamma_walo/gamedata/scripts` directory.
 
 ## base_node_logic.script
-- `base_logic.register_base` (line 33)
-- `base_logic.add_resource` (line 41)
-- `base_logic.consume` (line 47)
-- `base_logic.needs` (line 62)
+- `base_logic.register_base` (line 37)
+- `base_logic.add_resource` (line 45)
+- `base_logic.consume` (line 51)
+- `base_logic.needs` (line 66)
+- `base_logic.stockpile_delta` (line 74)
+- `base_logic.can_upgrade` (line 85)
+- `base_logic.consume_upgrade_cost` (line 91)
 
 ## daily_sim_engine.script
 - `daily.run_day` (line 22)
@@ -469,8 +472,8 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `get_reputation_relation` (line 943)
 
 ## hq_coordinator.script
-- `coordinator.register_base` (line 19)
-- `coordinator.evaluate` (line 25)
+- `coordinator.register_base` (line 22)
+- `coordinator.evaluate` (line 28)
 
 ## legendary_squad_system.script
 - `legendary.add_experience` (line 25)
