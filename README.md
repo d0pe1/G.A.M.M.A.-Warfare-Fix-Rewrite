@@ -20,12 +20,12 @@ So we’re fixing that.
 ---
 
 ## 📁 Project Structure
-old_walo/ # Original Warfare ALife Overhaul base scripts
-gamma_patch/ # G.A.M.M.A. patch layer overrides
-gamma_walo/ # Output: merged + hardened scripts
-runtime/ # Files loaded at runtime via MO2 (for auditing)
-tools/ # Lua/LTX helpers and Codex agents
-docs/ # Generated API maps, diff logs, and trace reports
+`old walo/`  – original Warfare ALife Overhaul base scripts
+`gammas patch/` – G.A.M.M.A. patch overrides
+`gamma_walo/` – merged & hardened output
+`runtime files/` – files loaded at runtime for testing
+`modmap.md` – overview of script roles
+`warfare_scripts_documentation.md` – generated function list
 
 ---
 
@@ -56,7 +56,7 @@ See [`agents.md`](./agents.md) for task presets like:
 
 | Phase              | Description                          | Progress |
 |-------------------|--------------------------------------|----------|
-| Patch merge        | Merge gamma_patch into old_walo      | ✅ Done  |
+| Patch merge        | Merge gammas patch into old walo      | ✅ Done  |
 | Script hardening   | Apply Lua safety patterns            | 🟡 Ongoing |
 | Debug tracing      | Inject log points into sim/task AI   | 🔜 Next |
 | LTX pass           | Review + merge `.ltx` configs        | 🔜 Next |
