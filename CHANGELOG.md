@@ -11,7 +11,9 @@ All notable changes to this project will be documented in this file.
   - `hq_coordinator.script` to queue transports
   - `squad_transport.script` implementing cargo squads
   - Extended `resource_system.script` with production and node lookup
-  - `diplomacy_integration.lua` for trade offers
+- `diplomacy_integration.lua` for trade offers
+- Resource node upgrade levels configurable via `resource_upgrades.ltx`
+- Added `upgrade_selected_node` stub in `ui_pda_warfare_tab.script`
 
 ### Improved
 - `sim_offline_combat.script` hardening:

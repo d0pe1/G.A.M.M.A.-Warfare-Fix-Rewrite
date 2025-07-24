@@ -17,7 +17,10 @@ local resource_system = {
     --   owner = "duty", type = "scrap", stock = 3,
     --   output = 1, capacity = 5
     -- }
-    nodes = {}
+    nodes = {},
+
+    -- Upgrade configuration loaded from LTX
+    upgrades = {}
 }
 
 --- Initialize resource pool for a faction.
@@ -37,12 +40,48 @@ local function get_node(id)
     return resource_system.nodes[id]
 end
 
+--- Load upgrade configuration from misc/resource_upgrades.ltx.
+local function load_upgrades()
+    local ini = ini_file and ini_file("misc\\resource_upgrades.ltx")
+    if not ini or not ini.section_exist or not ini:section_exist("upgrades") then
+        -- fallback defaults if config missing
+        resource_system.upgrades = {
+            [1] = {output=1, capacity=10},
+            [2] = {output=2, capacity=20},
+            [3] = {output=3, capacity=30}
+        }
+        return
+    end
+    local cfg = {}
+    local level = 1
+    while ini:line_exist("upgrades", string.format("level%d_output", level)) do
+        local out = tonumber(ini:r_float("upgrades", string.format("level%d_output", level))) or 1
+        local cap = tonumber(ini:r_s32("upgrades", string.format("level%d_capacity", level))) or 10
+        cfg[level] = {output=out, capacity=cap}
+        level = level + 1
+    end
+    resource_system.upgrades = cfg
+end
+
+load_upgrades()
+
 --- Internal helper to fetch a faction resource pool.
 -- Creates the pool if missing.
 -- @param faction string Faction identifier
 -- @return table Resource pool
 local function get_pool(faction)
     return resource_system.factions[faction] or resource_system.init_faction(faction)
+end
+
+--- Apply upgrade values to a node.
+-- @param id string Node identifier
+-- @param level number Upgrade level
+function resource_system.apply_node_upgrade(id, level)
+    local node = get_node(id)
+    node.level = level
+    local cfg = resource_system.upgrades[level] or resource_system.upgrades[1]
+    node.output = cfg.output
+    node.capacity = cfg.capacity
 end
 
 --- Produce resources for all nodes once per in-game day.
@@ -126,15 +165,13 @@ function resource_system.modify_faction_resource(faction_id, delta)
         if pool[r] < 0 then pool[r] = 0 end
     end
 end
--- @param rtype string Resource type produced by the node
--- @param amount number Base amount gathered when captured
-function resource_system.capture_node(node_id, faction, rtype, amount)
+-- @param level number Initial upgrade level
+function resource_system.capture_node(node_id, faction, rtype, amount, level)
     local node = get_node(node_id)
     node.owner = faction
     node.type = rtype
     node.stock = (node.stock or 0) + (amount or 0)
-    node.output = node.output or 1
-    node.capacity = node.capacity or 10
+    resource_system.apply_node_upgrade(node_id, level or 1)
     resource_system.add_resource(faction, rtype, amount or 0)
 end
 

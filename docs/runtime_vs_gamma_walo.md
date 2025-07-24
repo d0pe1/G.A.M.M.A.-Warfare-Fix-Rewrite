@@ -798,7 +798,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  		{ id= "dynamic_relations"        ,type= "check"    ,val= 1	,def= false	 },
 ```
 </details>
-| ui_pda_warfare_tab.script | 2 | 1 | keep |
+| ui_pda_warfare_tab.script | 13 | 3 | keep |
 
 <details><summary>Diff for ui_pda_warfare_tab.script</summary>
 ```diff
@@ -814,6 +814,30 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  
  	New PDA tab for Warfare mode: faction war
  	This file converts the 'contacts' tab into a faction ranking info tab. Faction squad
+@@ -17,6 +18,7 @@
+ local clr_w,clr_gr
+ 
+ local SINGLETON = nil
++local node_system = require 'node_system'
+ function get_ui()
+ 	SINGLETON = SINGLETON or pda_warfare_tab()
+ 	SINGLETON:Reset()
+@@ -330,5 +332,13 @@
+ 		self.btn:TextControl():SetText(game.translate_string("pda_all_levels"))
+ 	end
+ 	
+-	self:Reset()
+-end
++        self:Reset()
++end
++
++--- Placeholder callback to upgrade a selected node.
++-- UI integration pending.
++function pda_warfare_tab:upgrade_selected_node(node_id)
++        printf("[PDA] request upgrade for %s", tostring(node_id))
++        -- actual upgrade logic handled in node_system
++        node_system.upgrade_node(node_id)
++end
 ```
 </details>
 | warfare.script | 17 | 1 | keep |

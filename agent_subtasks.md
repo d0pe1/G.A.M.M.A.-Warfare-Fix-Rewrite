@@ -10,7 +10,7 @@ Create a Pull Request for review
 
 ✅ Resource Infrastructure System
 
-[ ] Implement Resource Node Upgrades
+[x] Implement Resource Node Upgrades
 
 Add .ltx config values to define upgrade levels
 
