@@ -1,0 +1,40 @@
+--[[
+    hq_coordinator.script
+    ---------------------
+    Oversees faction logistics and squad spawning. Bases register
+    themselves with the coordinator which periodically checks for
+    low stockpiles and schedules transports.
+    Last edit: 2025-07-25
+]]
+
+local node_logic = require 'base_node_logic'
+local resource = require 'resource_system'
+
+local coordinator = {
+    tasks = {}, -- queued transport tasks
+    bases_by_faction = {}
+}
+
+--- Register a base with the HQ.
+function coordinator.register_base(faction, base_id)
+    coordinator.bases_by_faction[faction] = coordinator.bases_by_faction[faction] or {}
+    table.insert(coordinator.bases_by_faction[faction], base_id)
+end
+
+--- Schedule transports for under-supplied bases.
+function coordinator.evaluate(faction)
+    local bases = coordinator.bases_by_faction[faction] or {}
+    for _, id in ipairs(bases) do
+        local base = node_logic.bases[id]
+        for r, _ in pairs(node_logic.CONSUMPTION[base.type] or {}) do
+            if node_logic.needs(id, r) then
+                local node_id = resource.find_node_with_resource(faction, r)
+                if node_id then
+                    table.insert(coordinator.tasks, {from=node_id, to=id, resource=r, amount=1})
+                end
+            end
+        end
+    end
+end
+
+return coordinator

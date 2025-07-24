@@ -13,7 +13,10 @@ local resource_system = {
     factions = {},
 
     -- Tracks resource nodes currently controlled in the world.
-    -- Example: nodes["jupiter_factory"] = {owner = "duty", type = "scrap", amount = 3}
+    -- Example: nodes["jupiter_factory"] = {
+    --   owner = "duty", type = "scrap", stock = 3,
+    --   output = 1, capacity = 5
+    -- }
     nodes = {}
 }
 
@@ -26,12 +29,29 @@ function resource_system.init_faction(faction)
     return pool
 end
 
+--- Internal helper: ensure node entry exists
+local function get_node(id)
+    if not resource_system.nodes[id] then
+        resource_system.nodes[id] = {owner=nil, type=nil, stock=0, output=1, capacity=10}
+    end
+    return resource_system.nodes[id]
+end
+
 --- Internal helper to fetch a faction resource pool.
 -- Creates the pool if missing.
 -- @param faction string Faction identifier
 -- @return table Resource pool
 local function get_pool(faction)
     return resource_system.factions[faction] or resource_system.init_faction(faction)
+end
+
+--- Produce resources for all nodes once per in-game day.
+function resource_system.tick_daily()
+    for id, node in pairs(resource_system.nodes) do
+        if node.owner and node.type then
+            node.stock = math.min((node.stock or 0) + (node.output or 1), node.capacity or 10)
+        end
+    end
 end
 
 --- Add resources to a faction.
@@ -41,6 +61,17 @@ end
 function resource_system.add_resource(faction, rtype, amount)
     local pool = get_pool(faction)
     pool[rtype] = (pool[rtype] or 0) + (amount or 0)
+end
+
+--- Withdraw resources from a node stockpile.
+-- @param node_id string
+-- @param amount number
+-- @return number withdrawn
+function resource_system.withdraw_from_node(node_id, amount)
+    local node = get_node(node_id)
+    local take = math.min(node.stock or 0, amount or 0)
+    node.stock = (node.stock or 0) - take
+    return take
 end
 
 --- Consume resources from a faction pool.
@@ -66,6 +97,17 @@ function resource_system.get_resource(faction, rtype)
     return pool[rtype] or 0
 end
 
+--- Return id of a node owned by faction that stores a resource type.
+-- Simply returns the first matching node with stock > 0.
+function resource_system.find_node_with_resource(faction, rtype)
+    for id, node in pairs(resource_system.nodes) do
+        if node.owner == faction and node.type == rtype and (node.stock or 0) > 0 then
+            return id
+        end
+    end
+    return nil
+end
+
 --- Capture a resource node for a faction and immediately collect its value.
 -- @param node_id string Unique node identifier
 -- @param faction string Faction capturing the node
@@ -87,8 +129,13 @@ end
 -- @param rtype string Resource type produced by the node
 -- @param amount number Base amount gathered when captured
 function resource_system.capture_node(node_id, faction, rtype, amount)
-    resource_system.nodes[node_id] = {owner = faction, type = rtype, amount = amount or 1}
-    resource_system.add_resource(faction, rtype, amount or 1)
+    local node = get_node(node_id)
+    node.owner = faction
+    node.type = rtype
+    node.stock = (node.stock or 0) + (amount or 0)
+    node.output = node.output or 1
+    node.capacity = node.capacity or 10
+    resource_system.add_resource(faction, rtype, amount or 0)
 end
 
 return resource_system
