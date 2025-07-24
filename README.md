@@ -39,3 +39,17 @@ Established resource nodes must be designated manually:
   - `Specialize Node`
   - `Upgrade Node` (future)
 - Actions available only on player-owned smart terrains.
+
+---
+
+## Development Workflow
+
+This repository maintains two script sets:
+
+- `runtime files/` – original Warfare scripts shipped with Anomaly.
+- `gamma_walo/` – our cleaned and extended version.
+
+Run the **Analyzer** profile to review differences between these directories. After any script update execute the **DocGen** profile to refresh `docs/runtime_vs_gamma_walo.md` and `docs/api_map.md`.
+
+> **Changelog:** every iteration must append a summary entry to `CHANGELOG.md`.
+> Each script should begin with a comment block header describing its purpose and recent changes.

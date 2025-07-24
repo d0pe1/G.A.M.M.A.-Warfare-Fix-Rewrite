@@ -103,3 +103,12 @@ This section defines key agent behavior presets. Activate these by referencing t
 - Add `printf` or `SendScriptCallback` on entry/exit
 - Log important data structures
 - Mark `TODO:` flags for potential fail points
+
+---
+
+## 🗒 Workflow Guidelines
+
+- After modifying any script, run the **Analyzer** and **DocGen** profiles.
+- Commit the regenerated `docs/runtime_vs_gamma_walo.md` and `docs/api_map.md`.
+- Append a brief note to `CHANGELOG.md` for every iteration.
+- Ensure each `.script` file begins with a comment block header stating its intent and last edit date.
