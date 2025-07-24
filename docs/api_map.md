@@ -490,11 +490,11 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `node_system.establish_node` (line 53)
 - `node_system.specialize_node` (line 69)
 - `node_system.upgrade_node` (line 92)
-- `node_system.abandon_node` (line 102)
-- `node_system.tick_production` (line 117)
-- `node_system.get_node` (line 132)
-- `node_system.get_node_type` (line 138)
-- `node_system.get_node_specialization` (line 146)
+- `node_system.abandon_node` (line 105)
+- `node_system.tick_production` (line 120)
+- `node_system.get_node` (line 135)
+- `node_system.get_node_type` (line 141)
+- `node_system.get_node_specialization` (line 149)
 
 ## pda_context_menu.script
 - `menu.get_options` (line 11)
@@ -508,16 +508,17 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `resource_pool.get_totals` (line 49)
 
 ## resource_system.script
-- `resource_system.init_faction` (line 26)
-- `resource_system.tick_daily` (line 49)
-- `resource_system.add_resource` (line 61)
-- `resource_system.withdraw_from_node` (line 70)
-- `resource_system.consume_resource` (line 82)
-- `resource_system.get_resource` (line 95)
-- `resource_system.find_node_with_resource` (line 102)
-- `resource_system.get_faction_resource` (line 115)
-- `resource_system.modify_faction_resource` (line 122)
-- `resource_system.capture_node` (line 131)
+- `resource_system.init_faction` (line 29)
+- `resource_system.apply_node_upgrade` (line 79)
+- `resource_system.tick_daily` (line 88)
+- `resource_system.add_resource` (line 100)
+- `resource_system.withdraw_from_node` (line 109)
+- `resource_system.consume_resource` (line 121)
+- `resource_system.get_resource` (line 134)
+- `resource_system.find_node_with_resource` (line 141)
+- `resource_system.get_faction_resource` (line 154)
+- `resource_system.modify_faction_resource` (line 161)
+- `resource_system.capture_node` (line 169)
 
 ## sim_offline_combat.script
 - `validate_enemy` (line 379)
@@ -893,13 +894,14 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `ui_pda_diplomacy.generate_status_list` (line 15)
 
 ## ui_pda_warfare_tab.script
-- `get_ui` (line 21)
-- `pda_warfare_tab` (line 29)
-- `pda_warfare_tab` (line 47)
-- `pda_warfare_tab` (line 50)
-- `pda_warfare_tab` (line 79)
-- `pda_warfare_tab` (line 273)
-- `pda_warfare_tab` (line 326)
+- `get_ui` (line 22)
+- `pda_warfare_tab` (line 30)
+- `pda_warfare_tab` (line 48)
+- `pda_warfare_tab` (line 51)
+- `pda_warfare_tab` (line 80)
+- `pda_warfare_tab` (line 274)
+- `pda_warfare_tab` (line 327)
+- `pda_warfare_tab` (line 340)
 
 ## verbose_logger.script
 
