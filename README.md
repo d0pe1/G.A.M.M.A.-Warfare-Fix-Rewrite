@@ -6,7 +6,7 @@
 
 ## 🎯 "Warfare Evolved" – Gameplay Expansion Concept
 
-(See full design notes in `docs/diplomacyconcept.md`)
+(See full design notes in `docs`)
 
 ---
 
