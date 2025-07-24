@@ -54,3 +54,4 @@ All notable changes to this project will be documented in this file.
 - Integrated resource nodes with base and spawn logic; added daily production tick.
 
 - Added daily_sim_engine with daily cycle logic and new tests.
+- Added faction_state system tracking HQs and collapse.

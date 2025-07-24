@@ -16,6 +16,7 @@ local node_system = {
 
 local base_logic = require("base_node_logic")
 local resource_sys = require("resource_system")
+local faction_state = require("faction_state")
 
 -- internal helper to fire global hooks safely
 local function call_hook(name, ...)
@@ -38,6 +39,9 @@ end
 function node_system.capture_node(id, faction)
     local node = node_system.nodes[id]
     if not node then return end
+    if node.specialization == 'hq' and node.owner and node.owner ~= faction then
+        faction_state.remove_hq(id, node.owner)
+    end
     node.owner = faction
     printf("[node_system] %s captured by %s", id, faction)
     call_hook("on_node_captured", id, faction)
@@ -70,6 +74,9 @@ function node_system.specialize_node(id, spec)
         if base_logic and type(base_logic.register_base) == "function" then
             base_logic.register_base(id, node.owner, spec)
         end
+        if spec == 'hq' then
+            faction_state.register_hq(id, node.owner)
+        end
     elseif node.state == node_system.STATE.resource then
         if resource_sys and type(resource_sys.capture_node) == "function" then
             resource_sys.capture_node(id, node.owner, spec, 0)
@@ -87,6 +94,22 @@ function node_system.upgrade_node(id)
     if not node then return end
     node.level = (node.level or 1) + 1
     printf("[node_system] %s upgraded to %d", id, node.level)
+end
+
+--- Abandon a node, clearing owner and specialization.
+--  Removes HQ tracking when needed.
+-- @param id string Node identifier
+function node_system.abandon_node(id)
+    local node = node_system.nodes[id]
+    if not node then return end
+    if node.specialization == 'hq' and node.owner then
+        faction_state.remove_hq(id, node.owner)
+    end
+    node.owner = nil
+    node.specialization = nil
+    node.state = node_system.STATE.territory
+    node.level = 1
+    printf("[node_system] %s abandoned", id)
 end
 
 --- Produce resources for all specialized nodes.

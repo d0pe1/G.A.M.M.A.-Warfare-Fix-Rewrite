@@ -1,0 +1,52 @@
+--[[
+    faction_state.script
+    --------------------
+    Tracks faction HQ presence and collapse state. HQ nodes must exist for a
+    faction to remain stable. Called by node_system when HQ nodes are
+    specialized, captured or destroyed. Collapse flags are consulted by
+    diplomacy and AI layers.
+    Last edit: 2025-07-26
+]]
+
+local state = {
+    hqs = {},        -- [faction] = { [node_id]=true }
+    collapsed = {}   -- [faction] = true if faction has no HQs
+}
+
+--- Register an HQ node for a faction.
+-- @param node_id string
+-- @param faction string
+function state.register_hq(node_id, faction)
+    state.hqs[faction] = state.hqs[faction] or {}
+    state.hqs[faction][node_id] = true
+    state.collapsed[faction] = nil
+end
+
+--- Remove an HQ node from tracking.
+-- @param node_id string
+-- @param faction string
+function state.remove_hq(node_id, faction)
+    local tbl = state.hqs[faction]
+    if tbl then
+        tbl[node_id] = nil
+        if next(tbl) == nil then
+            state.collapsed[faction] = true
+        end
+    end
+end
+
+--- Check if a faction has collapsed.
+function state.is_collapsed(faction)
+    return state.collapsed[faction] == true
+end
+
+--- Validate all factions, marking collapsed ones without HQs.
+function state.evaluate_all()
+    for f, nodes in pairs(state.hqs) do
+        if not nodes or next(nodes) == nil then
+            state.collapsed[f] = true
+        end
+    end
+end
+
+return state
