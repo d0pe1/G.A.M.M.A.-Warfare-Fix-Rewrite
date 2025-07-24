@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   - Replaced `pairs` with `ipairs` for sequential tables.
   - Recalculated `lid_1` per squad to avoid cross-level mismatches.
 - Verbose logger now loaded relative to `warfare.script` for proper runtime path.
+- Added package path initialization in `warfare.script` to load custom modules.
 
 ### Gameplay Expansion
 - Introduced `resource_system.script` providing faction resource pools and node capture logic.

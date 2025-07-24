@@ -926,7 +926,15 @@ function squad_on_unregister(squad,type_name)
 end
 
 function on_game_start()
-	printd(0, "on_game_start")
+        printd(0, "on_game_start")
+
+        -- added require path for .script modules
+        if not package.path:find('gamedata/scripts/%.script', 1, true) then
+                package.path = 'gamedata/scripts/?.script;' .. package.path
+        end
+        if not package.path:find('gamedata/scripts/%.lua', 1, true) then
+                package.path = 'gamedata/scripts/?.lua;' .. package.path
+        end
 	--_G.WARFARE = false
 	warfare_options.update_settings()
 	
