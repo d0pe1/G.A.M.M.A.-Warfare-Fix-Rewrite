@@ -1,0 +1,79 @@
+--[[
+    resource_system.script
+    ----------------------
+    Implements dynamic resource collection and pooling per faction. Resources are
+    gathered from nodes and consumed by infrastructure buildings or upgrades.
+    This module is intentionally lightweight and can be extended by other
+    scripts. All functions are documented for clarity.
+]]
+
+local resource_system = {
+    -- Tracks resource amounts per faction.
+    -- Example: factions["duty"] = {scrap = 10, herbs = 5}
+    factions = {},
+
+    -- Tracks resource nodes currently controlled in the world.
+    -- Example: nodes["jupiter_factory"] = {owner = "duty", type = "scrap", amount = 3}
+    nodes = {}
+}
+
+--- Initialize resource pool for a faction.
+-- @param faction string Faction identifier
+-- @return table Newly created resource pool
+function resource_system.init_faction(faction)
+    local pool = {scrap = 0, herbs = 0, electronics = 0, artifacts = 0}
+    resource_system.factions[faction] = pool
+    return pool
+end
+
+--- Internal helper to fetch a faction resource pool.
+-- Creates the pool if missing.
+-- @param faction string Faction identifier
+-- @return table Resource pool
+local function get_pool(faction)
+    return resource_system.factions[faction] or resource_system.init_faction(faction)
+end
+
+--- Add resources to a faction.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type (scrap/herbs/electronics/artifacts)
+-- @param amount number Quantity to add
+function resource_system.add_resource(faction, rtype, amount)
+    local pool = get_pool(faction)
+    pool[rtype] = (pool[rtype] or 0) + (amount or 0)
+end
+
+--- Consume resources from a faction pool.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type
+-- @param amount number Quantity to consume
+-- @return boolean success True if enough resources were available
+function resource_system.consume_resource(faction, rtype, amount)
+    local pool = get_pool(faction)
+    if (pool[rtype] or 0) < amount then
+        return false
+    end
+    pool[rtype] = pool[rtype] - amount
+    return true
+end
+
+--- Retrieve current amount of a resource for a faction.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type
+-- @return number amount
+function resource_system.get_resource(faction, rtype)
+    local pool = get_pool(faction)
+    return pool[rtype] or 0
+end
+
+--- Capture a resource node for a faction and immediately collect its value.
+-- @param node_id string Unique node identifier
+-- @param faction string Faction capturing the node
+-- @param rtype string Resource type produced by the node
+-- @param amount number Base amount gathered when captured
+function resource_system.capture_node(node_id, faction, rtype, amount)
+    resource_system.nodes[node_id] = {owner = faction, type = rtype, amount = amount or 1}
+    resource_system.add_resource(faction, rtype, amount or 1)
+end
+
+return resource_system
