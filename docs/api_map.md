@@ -8,6 +8,9 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `base_logic.consume` (line 47)
 - `base_logic.needs` (line 62)
 
+## daily_sim_engine.script
+- `daily.run_day` (line 21)
+
 ## dialogs.script
 - `can_do_task_mysteries_of_the_zone` (line 14)
 - `give_task_mysteries_of_the_zone` (line 31)
