@@ -257,3 +257,38 @@ Continuous, evolving emergent warfare sandbox.
 "Using the Lua-based G.A.M.M.A. Warfare repo, implement the comprehensive gameplay expansion detailed above. Clearly modularize each gameplay feature.
 Start with Phase 1 (Resource & Infrastructure).
 Ensure tests (Busted) validate resource, placement logic, and faction scaling clearly. Document all changes in the repo’s CHANGELOG.md and generate clear Markdown docs."
+
+### 🛠 Gameplay Logic & Node Designation System
+
+#### Territory → Infrastructure Conversion
+- Captured **territory nodes** are neutral until designated.
+- Player must **invest resources** to convert a captured territory into:
+  - A **Resource Node**
+  - A **Base Node**
+- NPC factions auto-convert territory based on their strategic needs.
+
+#### Base Node Specializations
+Once a base node is established, the player can designate it as:
+- **Trader Outpost** — Unlocks advanced merchant functions.
+- **Research Facility** — Enables resource efficiency and tech scaling.
+- **Militia Post** — Gradually trains and gears stationed squads.
+- **HQ** — Combines all three roles. Only one per faction.
+
+#### Resource Node Specializations
+Established resource nodes must be designated manually:
+- **Scrap Metal Site**
+- **Electronics Site**
+- **Medicinal Herb Site**
+- **Anomalous Artifact Site** (Predefined, tied to anomaly zones)
+
+Nodes **do nothing until designated**. Anomalous nodes are **fixed** and extremely valuable.
+
+#### PDA Integration
+- New right-click menu on map allows:
+  - Node conversion (Territory → Base/Resource)
+  - Specialization investment
+  - Upgrade interaction (increase output/training speed)
+
+#### Future Expansions
+- Node upgrades (tiered investment)
+- Visual PDA indicators (type, level, status)
