@@ -18,14 +18,6 @@ Update resource_system.script to adjust daily output based on level
 
 Add PDA interaction stub (UI to upgrade node)
 
-[ ] Add Resource Node Depletion Mechanic
-
-Add counters for resource exhaustion
-
-Trigger state change in node_system.script
-
-Visual feedback through PDA overlay or logging
-
 [ ] Enhance HQ Logistics Commands
 
 Allow HQ to prioritize base upgrades based on stockpile delta
