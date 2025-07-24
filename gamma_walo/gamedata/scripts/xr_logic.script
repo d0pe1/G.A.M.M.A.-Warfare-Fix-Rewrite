@@ -36,6 +36,7 @@ local function create_items(npc, section, number)
 	end
 end
 
+-- Spawn configured items into an NPCs inventory during initialization
 function spawn_items(npc, st)
 	--utils_data.debug_write("spawner:spawn_items")
 	if not (st.ini and st.section_logic) then 

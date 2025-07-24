@@ -15,6 +15,19 @@
 
 --]]
 
+-- Enable verbose debug tracing when requested
+if _G.verbose_logs == 1 then
+    -- Load logger from the same directory as this script so it works both
+    -- when installed under gamedata/ and when running from the repo.
+    local dir = debug.getinfo(1, "S").source
+    dir = dir and dir:gsub("@", ""):match("^(.*[\\/])") or ""
+    local path = dir .. "verbose_logger.script"
+    local ok, err = pcall(dofile, path)
+    if not ok then
+        printf("[VERBOSE] Failed to load logger: %s", tostring(err))
+    end
+end
+
 --_G.DEACTIVATE_SIM_ON_NON_LINKED_LEVELS = false
 --_G.ProcessEventQueueState = function() return end
 
@@ -478,6 +491,7 @@ warfare_positions_filled = false
 
 FACTION_TERRITORY_RADIUS = 100
 
+-- Fisher-Yates shuffle used for randomizing squad lists
 function shuffleTable( t )
     local rand = math.random 
     local iterations = #t
@@ -978,6 +992,7 @@ function sort_priority_table(tbl)
 	end) return tbl
 end
 
+-- 2D squared distance ignoring Y axis used by AI distance checks
 function distance_to_xz_sqr(a, b)
 	return math.pow(b.x - a.x, 2) + math.pow(b.z - a.z, 2)
 end

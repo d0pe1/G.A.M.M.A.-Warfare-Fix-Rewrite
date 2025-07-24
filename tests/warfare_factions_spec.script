@@ -1,0 +1,11 @@
+dofile("tests/spec_helper.lua")
+_dofile = dofile
+warfare_options = {options={factions={}}}
+warfare = {lerp=function(a,b,c) return b end}
+assert(loadfile('gamma_walo/gamedata/scripts/warfare_factions.script','t',_ENV))()
+
+describe('warfare_factions', function()
+    it('handles invalid faction safely', function()
+        assert.is_nil(update_faction(nil))
+    end)
+end)

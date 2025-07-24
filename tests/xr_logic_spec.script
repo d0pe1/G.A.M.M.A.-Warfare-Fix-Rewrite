@@ -1,0 +1,15 @@
+dofile("tests/spec_helper.lua")
+_dofile = dofile
+_G.db = {storage={}}
+alife = function() return {} end
+alife_create_item = function(section,npc) _G.created = (_G.created or 0) + 1 end
+local npc = {inventory_for_each=function(fn) end, object=function(id) return nil end}
+local st = {ini={r_string_ex=function() return 'items' end, line_count=function() return 1 end, r_line=function() return true,'itm','2' end}, section_logic='sect'}
+assert(loadfile('gamma_walo/gamedata/scripts/xr_logic.script','t',_ENV))()
+
+describe('xr_logic', function()
+    it('spawns missing items', function()
+        spawn_items(npc, st)
+        assert.equals(2, _G.created)
+    end)
+end)

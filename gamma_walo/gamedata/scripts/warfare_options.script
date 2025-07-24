@@ -228,6 +228,7 @@ function override_functions()
 	sim_squad_scripted.sim_squad_scripted.specific_update = function(self, script_target_id) end
 end
 
+-- Pick a random start location from faction lists
 function get_random_start_location()
 	warfare.printd(0, "get_random_start_location")
 
