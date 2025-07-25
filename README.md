@@ -44,7 +44,7 @@ Established resource nodes must be designated manually:
 
 ## Development Workflow
 
-This repository maintains two script sets:
+This repository maintains 4 script sets:
 
 - `runtime files/` – script files as the engine would currently (in the default gamma modpack) would load at runtime = is status of gamefiles pre our modding attempt under gamma_walo.
 - `gamma_walo/` – our cleaned and extended version we are trying to build for the GAMMA Modpack, should hook up new system we describe while not breaking compatibility to all the non modified gamma baseline files as found under "runtime files".
