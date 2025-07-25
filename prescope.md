@@ -135,3 +135,28 @@ Capture transport squad cargo when members die and allow patrol squads to retrie
 - Documentation regenerated and diff summary updated.
 - Checklist updated in `agent_subtasks.md`.
 
+## Task: Add Dynamic Rerouting Logic
+
+### Objective
+Allow transport squads to dynamically reroute to a different base when squad members die or when an external danger flag is raised.
+
+### Steps
+1. Extend `squad_transport.script` with a new `reroute(squad)` function that selects a fallback base using `hq_coordinator.bases_by_faction`.
+2. Update `transport.create` to store `faction` on the squad and reference the squad in each member table for callback usage.
+3. Expose `mark_danger(squad)` which simply calls `reroute`.
+4. Modify `squad_loot_recovery.on_npc_death` to reroute the victim's squad when available.
+5. Add helper `get_fallback_base(faction, exclude)` to `hq_coordinator.script`.
+6. Write new unit tests in `squad_transport_spec.lua` validating reroute behaviour.
+7. Regenerate documentation via `tools/gen_docs.py` and `tools/generate_diff_summary.py`.
+8. Run `busted tests` to ensure suite passes.
+9. Update `CHANGELOG.md` and mark subtask complete in `agent_subtasks.md`.
+
+### Integration Points
+- Rerouting relies on HQ coordinator base lists from existing logistics system.
+- Loot death callback in `squad_loot_recovery` triggers reroute using new API.
+
+### Completion Criteria
+- Reroute logic implemented with tests.
+- Documentation and diff summary updated.
+- Subtask checkbox ticked in `agent_subtasks.md`.
+

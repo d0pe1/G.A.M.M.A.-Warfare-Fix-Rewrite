@@ -758,10 +758,30 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | hf_version.script | - | - | missing in gamma |
 | hidden_threat.script | - | - | missing in gamma |
 | house_of_horrors_configs.script | - | - | missing in gamma |
-| hq_coordinator.script | 0 | 0 | keep |
+| hq_coordinator.script | 11 | 0 | keep |
 
 <details><summary>Diff for hq_coordinator.script</summary>
 ```diff
+--- runtime files/gamedata/scripts/hq_coordinator.script
++++ gamma_walo/gamedata/scripts/hq_coordinator.script
+@@ -22,6 +22,17 @@
+ function coordinator.register_base(faction, base_id)
+     coordinator.bases_by_faction[faction] = coordinator.bases_by_faction[faction] or {}
+     table.insert(coordinator.bases_by_faction[faction], base_id)
++end
++
++--- Return an alternate base for fallback logistics.
++function coordinator.get_fallback_base(faction, exclude)
++    local bases = coordinator.bases_by_faction[faction] or {}
++    for _, id in ipairs(bases) do
++        if id ~= exclude then
++            return id
++        end
++    end
++    return nil
+ end
+ 
+ --- Schedule transports for under-supplied bases.
 ```
 </details>
 | hxf_tough_important_npcs.script | - | - | missing in gamma |
@@ -1324,13 +1344,13 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 ```diff
 ```
 </details>
-| squad_transport.script | 3 | 1 | keep |
+| squad_transport.script | 40 | 3 | keep |
 
 <details><summary>Diff for squad_transport.script</summary>
 ```diff
 --- runtime files/gamedata/scripts/squad_transport.script
 +++ gamma_walo/gamedata/scripts/squad_transport.script
-@@ -3,7 +3,8 @@
+@@ -3,16 +3,22 @@
      ----------------------
      Assigns resource cargo to squad members and handles transfers or
      losses. Each stalker carries one unit of the requested resource.
@@ -1340,14 +1360,58 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  ]]
  
  local transport = {}
-@@ -12,6 +13,7 @@
++local hq_module = require 'hq_coordinator'
++transport.hq = hq_module
+ 
+ --- Create a transport descriptor from a HQ task.
  function transport.create(task)
-     local squad = {from=task.from, to=task.to, resource=task.resource, cargo=task.amount, members={}}
+-    local squad = {from=task.from, to=task.to, resource=task.resource, cargo=task.amount, members={}}
++    local squad = {from=task.from, to=task.to, faction=task.faction, resource=task.resource, cargo=task.amount, members={}}
      for i=1, task.amount do
+-        table.insert(squad.members, {carrying=task.resource})
 +        -- each member stores carried resource for loot recovery
-         table.insert(squad.members, {carrying=task.resource})
++        local mem = {carrying=task.resource}
++        mem.squad = squad
++        table.insert(squad.members, mem)
      end
      return squad
+ end
+@@ -25,4 +31,35 @@
+     return dropped
+ end
+ 
++--- Choose an alternate base destination for the squad.
++local function pick_fallback_base(faction, exclude)
++    local hq = transport.hq or hq_module
++    if hq.get_fallback_base then
++        return hq.get_fallback_base(faction, exclude)
++    end
++    local bases = hq.bases_by_faction[faction] or {}
++    for _, id in ipairs(bases) do
++        if id ~= exclude then
++            return id
++        end
++    end
++    return nil
++end
++
++--- Reroute a transport squad to a safe base.
++function transport.reroute(squad)
++    if not squad or not squad.faction then return end
++    local new_to = pick_fallback_base(squad.faction, squad.to)
++    if new_to then
++        squad.to = new_to
++        return true
++    end
++    return false
++end
++
++--- Mark squad in danger and trigger reroute.
++function transport.mark_danger(squad)
++    return transport.reroute(squad)
++end
++
+ return transport
 ```
 </details>
 | sr_camp.script | - | - | missing in gamma |

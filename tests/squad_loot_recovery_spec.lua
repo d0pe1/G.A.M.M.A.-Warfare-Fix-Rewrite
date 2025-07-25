@@ -1,6 +1,7 @@
 package.path = 'gamma_walo/gamedata/scripts/?.script;' .. package.path
 local recovery = require('squad_loot_recovery')
 local resource = require('resource_system')
+local transport = require('squad_transport')
 
 describe('squad_loot_recovery', function()
     before_each(function()
@@ -25,5 +26,13 @@ describe('squad_loot_recovery', function()
 
         assert.equals(1, resource.get_resource('duty', 'electronics'))
         assert.equals(0, #recovery.dropped)
+    end)
+
+    it('reroutes transport on member death', function()
+        transport.hq = {bases_by_faction={duty={'b1','b2'}}}
+        local sq = transport.create{from='n1', to='b1', faction='duty', resource='scrap', amount=1}
+        local npc = sq.members[1]
+        recovery.on_npc_death(npc, nil)
+        assert.equals('b2', sq.to)
     end)
 end)

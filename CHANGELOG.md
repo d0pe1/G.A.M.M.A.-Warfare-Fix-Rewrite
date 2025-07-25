@@ -69,3 +69,4 @@ All notable changes to this project will be documented in this file.
 
 - Final integration verification completed. Generated docs/final_integration_report.md for Pass 5.
 - Implemented transport squad loot recovery system and tests.
+- Added dynamic transport rerouting when members die or danger detected.

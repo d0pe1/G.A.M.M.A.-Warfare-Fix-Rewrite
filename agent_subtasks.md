@@ -75,7 +75,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
   - Patrol squads that pass the body should collect dropped resources.  
   - 🔗 Must tie into **existing death and loot callbacks** in GAMMA.  
 
-- [ ] **Add Dynamic Rerouting Logic**  
+- [x] **Add Dynamic Rerouting Logic**
   - Reroute transports on death or danger.  
   - Integrate reroute logic into `squad_transport.script`.  
   - Ensure reroutes respect GAMMA faction and AI task systems.  

@@ -14,4 +14,11 @@ describe('squad_transport', function()
         assert.equals(2, drop)
         assert.equals(0, sq.cargo)
     end)
+
+    it('reroutes to alternate base on danger', function()
+        transport.hq = {bases_by_faction = {duty={'b1','b2'}}}
+        local sq = transport.create{from='n1', to='b1', faction='duty', resource='scrap', amount=2}
+        transport.mark_danger(sq)
+        assert.equals('b2', sq.to)
+    end)
 end)
