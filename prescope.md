@@ -110,3 +110,28 @@ Generate final integration report consolidating diff, signature, and behavior ch
 - Documentation regenerated.
 - Tests pass.
 - `agent_subtasks.md` Pass 5 checkbox marked as done.
+
+## Task: Implement Squad Loot Recovery
+
+### Objective
+Capture transport squad cargo when members die and allow patrol squads to retrieve these resources.
+
+### Steps
+1. Create new module `squad_loot_recovery.script` managing dropped resources.
+2. Register `npc_on_death_callback` within this module and store `carrying` items from fallen transport members.
+3. Provide `collect_nearby_loot(squad)` for patrol squads to gather nearby drops and transfer to `resource_system`.
+4. Update `squad_transport.create` to tag members with `carrying` for callback lookup.
+5. Add unit tests covering death capture and recovery.
+6. Run `python tools/gen_docs.py` and `python tools/generate_diff_summary.py`.
+7. Execute `busted` tests.
+8. Update `CHANGELOG.md` and mark subtask complete in `agent_subtasks.md`.
+
+### Integration Points
+- Uses existing `npc_on_death_callback` from callbacks_gameobject.script.
+- Utilizes `resource_system.add_resource` to deposit recovered items.
+
+### Completion Criteria
+- New script and modified transport logic present with tests.
+- Documentation regenerated and diff summary updated.
+- Checklist updated in `agent_subtasks.md`.
+

@@ -3,7 +3,8 @@
     ----------------------
     Assigns resource cargo to squad members and handles transfers or
     losses. Each stalker carries one unit of the requested resource.
-    Last edit: 2025-07-25
+    Last edit: 2025-08-30
+    -- Modified by Codex: Implement Squad Loot Recovery
 ]]
 
 local transport = {}
@@ -12,6 +13,7 @@ local transport = {}
 function transport.create(task)
     local squad = {from=task.from, to=task.to, resource=task.resource, cargo=task.amount, members={}}
     for i=1, task.amount do
+        -- each member stores carried resource for loot recovery
         table.insert(squad.members, {carrying=task.resource})
     end
     return squad

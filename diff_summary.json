@@ -200,6 +200,14 @@
     "removed": [],
     "modified": []
   },
+  "squad_loot_recovery.script": {
+    "added": [
+      "recovery.on_npc_death",
+      "recovery.collect_nearby_loot"
+    ],
+    "removed": [],
+    "modified": []
+  },
   "squad_spawn_system.script": {
     "added": [],
     "removed": [],
@@ -208,7 +216,12 @@
   "squad_transport.script": {
     "added": [],
     "removed": [],
-    "modified": []
+    "modified": [
+      {
+        "name": "transport.create",
+        "diff_lines": 10
+      }
+    ]
   },
   "tasks_assault.script": {
     "added": [],

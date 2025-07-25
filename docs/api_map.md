@@ -12,7 +12,7 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `base_logic.consume_upgrade_cost` (line 91)
 
 ## daily_sim_engine.script
-- `daily.run_day` (line 22)
+- `daily.run_day` (line 24)
 
 ## dialogs.script
 - `can_do_task_mysteries_of_the_zone` (line 14)
@@ -666,14 +666,18 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `scaler.get_tier` (line 11)
 - `scaler.apply_loadout` (line 20)
 
+## squad_loot_recovery.script
+- `recovery.on_npc_death` (line 19)
+- `recovery.collect_nearby_loot` (line 27)
+
 ## squad_spawn_system.script
 - `spawn_system.can_spawn_squad` (line 15)
 - `spawn_system.can_spawn_from_base` (line 27)
 - `spawn_system.spawn_squad` (line 40)
 
 ## squad_transport.script
-- `transport.create` (line 12)
-- `transport.drop_cargo` (line 21)
+- `transport.create` (line 13)
+- `transport.drop_cargo` (line 23)
 
 ## tasks_assault.script
 - `is_legit_mutant_squad` (line 79)
