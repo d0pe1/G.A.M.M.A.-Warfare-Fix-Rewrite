@@ -1,0 +1,43 @@
+--[[
+    squad_loot_recovery.script
+    -------------------------
+    Tracks resource cargo dropped when transport squad members die and
+    allows patrol squads to collect that loot. Hooks npc_on_death_callback
+    for integration with Anomaly.
+    -- Modified by Codex: Implement Squad Loot Recovery (2025-08-30)
+]]
+
+local recovery = { dropped = {} }
+local resource_sys = require 'resource_system'
+
+local function distance(a,b)
+    local dx=a.x-b.x; local dy=a.y-b.y; local dz=a.z-b.z
+    return math.sqrt(dx*dx + dy*dy + dz*dz)
+end
+
+--- Callback for NPC deaths. Stores carried resource as loot.
+function recovery.on_npc_death(victim, killer)
+    if not victim or not victim.carrying then return end
+    local pos = victim.position or {x=0,y=0,z=0}
+    table.insert(recovery.dropped, {resource=victim.carrying, position=pos})
+    victim.carrying = nil
+end
+
+--- Patrol squads call to collect nearby loot.
+function recovery.collect_nearby_loot(squad)
+    if not squad or not squad.position or not squad.faction then return end
+    for i=#recovery.dropped,1,-1 do
+        local drop = recovery.dropped[i]
+        if distance(drop.position, squad.position) <= 10 then
+            resource_sys.add_resource(squad.faction, drop.resource, 1)
+            table.remove(recovery.dropped, i)
+        end
+    end
+end
+
+if RegisterScriptCallback then
+    RegisterScriptCallback('npc_on_death_callback', recovery.on_npc_death)
+end
+
+return recovery
+

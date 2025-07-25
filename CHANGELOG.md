@@ -68,3 +68,4 @@ All notable changes to this project will be documented in this file.
 - Generated behavior change review via `behavior_consistency_review.py` producing docs/behavior_change_log.md for Pass 4.
 
 - Final integration verification completed. Generated docs/final_integration_report.md for Pass 5.
+- Implemented transport squad loot recovery system and tests.

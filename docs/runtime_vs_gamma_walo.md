@@ -132,10 +132,30 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | craft_use_low_cond.script | - | - | missing in gamma |
 | custom_companion_squad_size.script | - | - | missing in gamma |
 | custom_functor_autoinject.script | - | - | missing in gamma |
-| daily_sim_engine.script | 0 | 0 | keep |
+| daily_sim_engine.script | 3 | 1 | keep |
 
 <details><summary>Diff for daily_sim_engine.script</summary>
 ```diff
+--- runtime files/gamedata/scripts/daily_sim_engine.script
++++ gamma_walo/gamedata/scripts/daily_sim_engine.script
+@@ -4,7 +4,8 @@
+     Runs the daily simulation cycle for Warfare overhaul. This ties together
+     resource production, base consumption, transport task generation and squad
+     spawning. Called once per in-game day by an external scheduler.
+-    Last edit: 2025-07-26
++    Last edit: 2025-08-30
++    -- Modified by Codex: Implement Squad Loot Recovery integration
+ ]]
+ 
+ local node_system  = require 'node_system'
+@@ -13,6 +14,7 @@
+ local base_logic    = require 'base_node_logic'
+ local coordinator   = require 'hq_coordinator'
+ local spawn_system  = require 'squad_spawn_system'
++local loot_recovery = require 'squad_loot_recovery'
+ local diplomacy     = require 'diplomacy_core'
+ local faction_state = require 'faction_state'
+ 
 ```
 </details>
 | dar_rf_noise.script | - | - | missing in gamma |
@@ -1304,10 +1324,30 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 ```diff
 ```
 </details>
-| squad_transport.script | 0 | 0 | keep |
+| squad_transport.script | 3 | 1 | keep |
 
 <details><summary>Diff for squad_transport.script</summary>
 ```diff
+--- runtime files/gamedata/scripts/squad_transport.script
++++ gamma_walo/gamedata/scripts/squad_transport.script
+@@ -3,7 +3,8 @@
+     ----------------------
+     Assigns resource cargo to squad members and handles transfers or
+     losses. Each stalker carries one unit of the requested resource.
+-    Last edit: 2025-07-25
++    Last edit: 2025-08-30
++    -- Modified by Codex: Implement Squad Loot Recovery
+ ]]
+ 
+ local transport = {}
+@@ -12,6 +13,7 @@
+ function transport.create(task)
+     local squad = {from=task.from, to=task.to, resource=task.resource, cargo=task.amount, members={}}
+     for i=1, task.amount do
++        -- each member stores carried resource for loot recovery
+         table.insert(squad.members, {carrying=task.resource})
+     end
+     return squad
 ```
 </details>
 | sr_camp.script | - | - | missing in gamma |
@@ -2148,3 +2188,4 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | zzzzz_ui_workshop_repair_patch.script | - | - | missing in gamma |
 | zzzzzz_ui_pda_npc_tab_mpdaprogressive.script | - | - | missing in gamma |
 | zzzzzzz_repair_modifiers.script | - | - | missing in gamma |
+| squad_loot_recovery.script | new file | - | new module |

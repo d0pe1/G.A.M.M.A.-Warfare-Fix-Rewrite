@@ -70,7 +70,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 
 ## 🚚 Squad Logistics Simulation
 
-- [ ] **Implement Squad Loot Recovery**  
+- [x] **Implement Squad Loot Recovery**
   - When a transport squad dies, dropped items should be lootable.  
   - Patrol squads that pass the body should collect dropped resources.  
   - 🔗 Must tie into **existing death and loot callbacks** in GAMMA.  
