@@ -473,7 +473,8 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 
 ## hq_coordinator.script
 - `coordinator.register_base` (line 22)
-- `coordinator.evaluate` (line 28)
+- `coordinator.get_fallback_base` (line 28)
+- `coordinator.evaluate` (line 39)
 
 ## legendary_squad_system.script
 - `legendary.add_experience` (line 25)
@@ -667,8 +668,8 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `scaler.apply_loadout` (line 20)
 
 ## squad_loot_recovery.script
-- `recovery.on_npc_death` (line 19)
-- `recovery.collect_nearby_loot` (line 27)
+- `recovery.on_npc_death` (line 20)
+- `recovery.collect_nearby_loot` (line 31)
 
 ## squad_spawn_system.script
 - `spawn_system.can_spawn_squad` (line 15)
@@ -676,8 +677,10 @@ This index lists public functions defined in the `gamma_walo/gamedata/scripts` d
 - `spawn_system.spawn_squad` (line 40)
 
 ## squad_transport.script
-- `transport.create` (line 13)
-- `transport.drop_cargo` (line 23)
+- `transport.create` (line 15)
+- `transport.drop_cargo` (line 27)
+- `transport.reroute` (line 50)
+- `transport.mark_danger` (line 61)
 
 ## tasks_assault.script
 - `is_legit_mutant_squad` (line 79)

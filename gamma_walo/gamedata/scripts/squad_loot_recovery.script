@@ -9,6 +9,7 @@
 
 local recovery = { dropped = {} }
 local resource_sys = require 'resource_system'
+local transport = require 'squad_transport'
 
 local function distance(a,b)
     local dx=a.x-b.x; local dy=a.y-b.y; local dz=a.z-b.z
@@ -21,6 +22,9 @@ function recovery.on_npc_death(victim, killer)
     local pos = victim.position or {x=0,y=0,z=0}
     table.insert(recovery.dropped, {resource=victim.carrying, position=pos})
     victim.carrying = nil
+    if victim.squad then
+        transport.mark_danger(victim.squad)
+    end
 end
 
 --- Patrol squads call to collect nearby loot.
