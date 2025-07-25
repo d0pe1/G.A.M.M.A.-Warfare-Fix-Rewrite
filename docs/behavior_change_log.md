@@ -12,7 +12,7 @@ This report flags potential behavioral differences between `runtime files` and `
 
 ## game_relations.script
 - `safe_ini_r_float`: 15 line diff (major)
-- `safe_ini_r_s32`: 35 line diff (major)
+- `safe_ini_r_s32`: 95 line diff (major)
 - `is_faction_pair_unaffected`: 23 line diff (major)
 - `is_relation_allowed`: 24 line diff (major)
 - `reset_all_relations`: 31 line diff (major)
@@ -23,10 +23,17 @@ This report flags potential behavioral differences between `runtime files` and `
 - `get_rank_relation`: 28 line diff (major)
 - `get_reputation_relation`: 28 line diff (major)
 
+## hq_coordinator.script
+- `coordinator.register_base`: 8 line diff (minor - return logic changed)
+
 ## smart_terrain_warfare.script
 - `process_targets`: 16 line diff (major)
 - `find_targets`: 15 line diff (major)
 - `find_targets_for_overflow`: 15 line diff (major)
+
+## squad_transport.script
+- `transport.create`: 15 line diff (major - return logic changed)
+- `transport.drop_cargo`: 23 line diff (major - return logic changed)
 
 ## tasks_assault.script
 - `evaluate_smarts_squads`: 22 line diff (major)

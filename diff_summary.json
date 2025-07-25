@@ -77,7 +77,7 @@
       },
       {
         "name": "safe_ini_r_s32",
-        "diff_lines": 35
+        "diff_lines": 95
       },
       {
         "name": "is_faction_pair_unaffected",
@@ -254,6 +254,11 @@
         "diff_lines": 153
       }
     ]
+  },
+  "tasks_defense.script": {
+    "added": [],
+    "removed": [],
+    "modified": []
   },
   "tasks_smart_control.script": {
     "added": [],
@@ -4532,12 +4537,6 @@
     "missing_in_gamma": true
   },
   "tasks_dead_night.script": {
-    "added": [],
-    "removed": [],
-    "modified": [],
-    "missing_in_gamma": true
-  },
-  "tasks_defense.script": {
     "added": [],
     "removed": [],
     "modified": [],

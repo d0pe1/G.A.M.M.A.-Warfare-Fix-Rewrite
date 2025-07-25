@@ -160,3 +160,19 @@ Allow transport squads to dynamically reroute to a different base when squad mem
 - Documentation and diff summary updated.
 - Subtask checkbox ticked in `agent_subtasks.md`.
 
+
+
+## Task: Crashlog Follow-up
+### Objective
+Initial fix replacing `game_relations.is_factions_enemies` with global call failed. Root cause was `game_relations.script` error when `dynamic_faction_relations.ltx` is missing. Adjust script to handle missing ini gracefully and restore original calls in `tasks_defense.script`.
+### Steps
+1. Restore `game_relations.is_factions_enemies` usage in `tasks_defense.script`.
+2. Modify `game_relations.script` to use safe ini reads and skip loops when ini is absent.
+3. Add modification headers to both scripts.
+4. Regenerate docs and diff summary.
+5. Run verification tools and tests.
+### Integration Points
+- `game_relations.script` loaded on game start; fallback ensures functions exist.
+### Completion Criteria
+- No crash when `dynamic_faction_relations.ltx` missing.
+- Documentation updated and checklist ticked.

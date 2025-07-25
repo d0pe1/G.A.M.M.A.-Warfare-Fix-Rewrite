@@ -22,7 +22,8 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 **Goal:** Statically verify that all modifications in `gamma_walo` are compatible with the original files in `runtime files`. Ensure no regressions or invalid behavior changes were introduced without justification. **No runtime execution is required.**  
 
 ### Crashlog.log
-- [ ] LUA Error at Marking ! [20:36:14.836] in crashlog.log
+- [x] Fix dynamic_faction_relations.ltx absence leading to game_relations load failure
+- [x] LUA Error at Marking ! [20:36:14.836] in crashlog.log
 - rewrite whatever needs to be, so it doesn even try to field thats empty... and find out why it might have been empty here at runtime.
 - Note: I was trying to run the game, started new game selected warfare mode, clicked to launch new savegame, it started loading, crashed before being in game.
 - if you need to patch only under 'runtime files" make sure to copy it from there into gamma_walo to its corresponding location

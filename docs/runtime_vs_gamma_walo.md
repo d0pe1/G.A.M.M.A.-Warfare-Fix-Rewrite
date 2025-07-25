@@ -344,13 +344,19 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 ```diff
 ```
 </details>
-| game_relations.script | 113 | 102 | keep |
+| game_relations.script | 138 | 121 | keep |
 
 <details><summary>Diff for game_relations.script</summary>
 ```diff
 --- runtime files/gamedata/scripts/game_relations.script
 +++ gamma_walo/gamedata/scripts/game_relations.script
-@@ -25,36 +25,35 @@
+@@ -1,3 +1,5 @@
++-- Modified by Codex: Crashlog Follow-up - handle missing dynamic_faction_relations ini (2025-07-26)
++
+ --[[
+  ============================================================
+ 
+@@ -25,36 +27,35 @@
  	-- rank_goodwill 								- the relation of rank of the character to the rank of the actor from [rank_relations]
  
  --]]
@@ -402,7 +408,67 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  factions_table = {"stalker","bandit","csky","dolg","freedom","killer","army","ecolog","monolith","renegade","greh","isg"}
  factions_table_all = {"actor","bandit","dolg","ecolog","freedom","killer","army","monolith","monster","stalker","zombied","csky","renegade","greh","isg","trader","actor_stalker","actor_bandit","actor_dolg","actor_freedom","actor_csky","actor_ecolog","actor_killer","actor_army","actor_monolith","actor_renegade","actor_greh","actor_isg","actor_zombied","arena_enemy"}
-@@ -154,13 +153,14 @@
+@@ -62,11 +63,11 @@
+  FRIENDS = 1000
+  NEUTRALS = 0
+  ENEMIES = -1000
+- friend_limit = ini_r:r_float_ex ("controls" ,"friend_limit") or 4100
+- enemy_limit = ini_r:r_float_ex ("controls" ,"enemy_limit") or -5000
+- local death_value = ini_r:r_float_ex ("controls" ,"death_value") or 150
+- local friend_count_limit = ini_r:r_float_ex ("controls" ,"friend_count_limit") or 3
+- local enemy_count_limit = ini_r:r_float_ex ("controls" ,"enemy_count_limit") or 3
++friend_limit = safe_ini_r_float(ini_r, "controls" ,"friend_limit", 4100)
++enemy_limit = safe_ini_r_float(ini_r, "controls" ,"enemy_limit", -5000)
++local death_value = safe_ini_r_float(ini_r, "controls" ,"death_value", 150)
++local friend_count_limit = safe_ini_r_float(ini_r, "controls" ,"friend_count_limit", 3)
++local enemy_count_limit = safe_ini_r_float(ini_r, "controls" ,"enemy_count_limit", 3)
+  
+ default_sympathy = 0.01
+ game_relations_by_num = {	[0] = "friend",
+@@ -82,24 +83,28 @@
+ 
+ -- Table of factions of unaffected relations
+ local blacklist = {}
+-local n = ini_r:line_count("unaffected_factions") or 0
+-for i=0, n-1 do
+-	local result, id, value = ini_r:r_line("unaffected_factions", i , "", "")
+-	blacklist[id] = true
+-	--printf("Relations: blacklist[" .. id .. "] = true")
++local n = (ini_r and ini_r:line_count("unaffected_factions")) or 0
++if ini_r then
++        for i=0, n-1 do
++                local result, id, value = ini_r:r_line("unaffected_factions", i , "", "")
++                blacklist[id] = true
++                --printf("Relations: blacklist[" .. id .. "] = true")
++        end
+ end
+ 
+ -- Table of faction pairs of unaffected relations
+ local blacklist_pair = {}
+-n = ini_r:line_count("unaffected_pairs") or 0
+-for i=0, n-1 do
+-	local result, id, value = ini_r:r_line("unaffected_pairs", i , "", "")
+-	local val = tostring(value)
+-	local tbl = str_explode(val,",")
+-	if tbl[1] and tbl[2] then
+-		blacklist_pair[#blacklist_pair+1] = {tbl[1],tbl[2]}
+-		--printf("Relations: blacklist_pair[" .. #blacklist_pair .. "] = {" .. tbl[1] .. "," .. tbl[2] .. "}")
+-	end
++n = (ini_r and ini_r:line_count("unaffected_pairs")) or 0
++if ini_r then
++        for i=0, n-1 do
++                local result, id, value = ini_r:r_line("unaffected_pairs", i , "", "")
++                local val = tostring(value)
++                local tbl = str_explode(val,",")
++                if tbl[1] and tbl[2] then
++                        blacklist_pair[#blacklist_pair+1] = {tbl[1],tbl[2]}
++                        --printf("Relations: blacklist_pair[" .. #blacklist_pair .. "] = {" .. tbl[1] .. "," .. tbl[2] .. "}")
++                end
++        end
+ end
+ 
+ -- Bad reputation table, only critically bad rep have impact
+@@ -154,13 +159,14 @@
  		return false
  	end
  	
@@ -424,7 +490,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	return false
  end
  
-@@ -189,13 +189,14 @@
+@@ -189,13 +195,14 @@
  	end
  	
  	-- Check blacklisted pairs 
@@ -446,7 +512,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	return true
  end
-@@ -308,17 +309,20 @@
+@@ -308,17 +315,20 @@
  
  function reset_all_relations()
  	local tbl = {}
@@ -478,7 +544,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  
  function calculate_relation_change( victim_tbl, killer_tbl)
-@@ -356,18 +360,19 @@
+@@ -356,18 +366,19 @@
  	local enemy_num = 0
  	local natural_num = 0
  	local friend_num = 0
@@ -510,7 +576,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	-- return if killer and victim are from the same faction
  	if (killer_faction == victim_faction) then
-@@ -376,9 +381,10 @@
+@@ -376,9 +387,10 @@
  
  	-- If killed NPC was enemy of faction, raise relation toward killer faction:
  	if ( math.random( 100 ) > 50 ) then
@@ -524,7 +590,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  						
  						-- Relation calculation:
-@@ -397,8 +403,8 @@
+@@ -397,8 +409,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_bad + ( k_rep_good / 10 ) ) )
  						
@@ -535,7 +601,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations positive change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. value)
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -415,9 +421,10 @@
+@@ -415,9 +427,10 @@
  
  	-- If killed NPC was friend or neutral to faction, lower relation toward killer faction:
  	else
@@ -549,7 +615,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  					
  						-- Relation calculation:
-@@ -436,8 +443,8 @@
+@@ -436,8 +449,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_good + ( k_rep_bad / 10 ) ) )
  
@@ -560,7 +626,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations negative change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. -(value))
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -456,24 +463,26 @@
+@@ -456,24 +469,26 @@
  
  local rnd_enemy = {}
  function get_random_enemy_faction(comm)
@@ -601,7 +667,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  
  
-@@ -560,16 +569,16 @@
+@@ -560,16 +575,16 @@
  	if (USE_MARSHAL) then
  		if 	(alife_storage_manager.get_state().new_game_relations) then
  			-- Restore relations for each faction:
@@ -625,7 +691,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  		else
  			reset_all_relations()
  			alife_storage_manager.get_state().new_game_relations = true
-@@ -925,15 +934,16 @@
+@@ -925,15 +940,16 @@
  	if (not rank_relation) then
  		rank_relation = {}
  		
@@ -651,7 +717,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	end
  	
  	local rank_1 = ranks.get_obj_rank_name(obj_1)
-@@ -947,15 +957,16 @@
+@@ -947,15 +963,16 @@
  	if (not reputation_relation) then
  		reputation_relation = {}
  		
@@ -1731,7 +1797,20 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | tasks_brain_game.script | - | - | missing in gamma |
 | tasks_chimera_scan.script | - | - | missing in gamma |
 | tasks_dead_night.script | - | - | missing in gamma |
-| tasks_defense.script | - | - | missing in gamma |
+| tasks_defense.script | 2 | 0 | keep |
+
+<details><summary>Diff for tasks_defense.script</summary>
+```diff
+--- runtime files/gamedata/scripts/tasks_defense.script
++++ gamma_walo/gamedata/scripts/tasks_defense.script
+@@ -1,3 +1,5 @@
++-- Modified by Codex: Crashlog Follow-up - ensure game_relations functions available (2025-07-26)
++-- Restored original calls to game_relations.is_factions_enemies
+ 
+ -- =======================================================================================
+ -- Created by tdef
+```
+</details>
 | tasks_delivery.script | - | - | missing in gamma |
 | tasks_dominance.script | - | - | missing in gamma |
 | tasks_fate.script | - | - | missing in gamma |

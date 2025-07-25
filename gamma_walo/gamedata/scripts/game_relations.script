@@ -1,3 +1,5 @@
+-- Modified by Codex: Crashlog Follow-up - handle missing dynamic_faction_relations ini (2025-07-26)
+
 --[[
  ============================================================
 
@@ -61,11 +63,11 @@ factions_table_all = {"actor","bandit","dolg","ecolog","freedom","killer","army"
  FRIENDS = 1000
  NEUTRALS = 0
  ENEMIES = -1000
- friend_limit = ini_r:r_float_ex ("controls" ,"friend_limit") or 4100
- enemy_limit = ini_r:r_float_ex ("controls" ,"enemy_limit") or -5000
- local death_value = ini_r:r_float_ex ("controls" ,"death_value") or 150
- local friend_count_limit = ini_r:r_float_ex ("controls" ,"friend_count_limit") or 3
- local enemy_count_limit = ini_r:r_float_ex ("controls" ,"enemy_count_limit") or 3
+friend_limit = safe_ini_r_float(ini_r, "controls" ,"friend_limit", 4100)
+enemy_limit = safe_ini_r_float(ini_r, "controls" ,"enemy_limit", -5000)
+local death_value = safe_ini_r_float(ini_r, "controls" ,"death_value", 150)
+local friend_count_limit = safe_ini_r_float(ini_r, "controls" ,"friend_count_limit", 3)
+local enemy_count_limit = safe_ini_r_float(ini_r, "controls" ,"enemy_count_limit", 3)
  
 default_sympathy = 0.01
 game_relations_by_num = {	[0] = "friend",
@@ -81,24 +83,28 @@ local ignore = {
 
 -- Table of factions of unaffected relations
 local blacklist = {}
-local n = ini_r:line_count("unaffected_factions") or 0
-for i=0, n-1 do
-	local result, id, value = ini_r:r_line("unaffected_factions", i , "", "")
-	blacklist[id] = true
-	--printf("Relations: blacklist[" .. id .. "] = true")
+local n = (ini_r and ini_r:line_count("unaffected_factions")) or 0
+if ini_r then
+        for i=0, n-1 do
+                local result, id, value = ini_r:r_line("unaffected_factions", i , "", "")
+                blacklist[id] = true
+                --printf("Relations: blacklist[" .. id .. "] = true")
+        end
 end
 
 -- Table of faction pairs of unaffected relations
 local blacklist_pair = {}
-n = ini_r:line_count("unaffected_pairs") or 0
-for i=0, n-1 do
-	local result, id, value = ini_r:r_line("unaffected_pairs", i , "", "")
-	local val = tostring(value)
-	local tbl = str_explode(val,",")
-	if tbl[1] and tbl[2] then
-		blacklist_pair[#blacklist_pair+1] = {tbl[1],tbl[2]}
-		--printf("Relations: blacklist_pair[" .. #blacklist_pair .. "] = {" .. tbl[1] .. "," .. tbl[2] .. "}")
-	end
+n = (ini_r and ini_r:line_count("unaffected_pairs")) or 0
+if ini_r then
+        for i=0, n-1 do
+                local result, id, value = ini_r:r_line("unaffected_pairs", i , "", "")
+                local val = tostring(value)
+                local tbl = str_explode(val,",")
+                if tbl[1] and tbl[2] then
+                        blacklist_pair[#blacklist_pair+1] = {tbl[1],tbl[2]}
+                        --printf("Relations: blacklist_pair[" .. #blacklist_pair .. "] = {" .. tbl[1] .. "," .. tbl[2] .. "}")
+                end
+        end
 end
 
 -- Bad reputation table, only critically bad rep have impact
