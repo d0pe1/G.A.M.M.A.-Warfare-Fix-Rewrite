@@ -8,6 +8,60 @@ Mark the subtask as done (in-code or in a tracking file)
 
 Create a Pull Request for review
 
+🀄 Overall Stability and Integration Checks (Static Analysis – 5-Pass Method)
+Goal:
+Statically verify that all modifications in gamma_walo are compatible with the original files in runtime files. Ensure no regressions or invalid behavior changes were introduced without justification. No runtime execution is required.
+
+✅ Task Outline (5-Pass Static Validation)
+[ ] Pass 1: Baseline Diff Mapping
+For each file in gamma_walo, locate the corresponding file in runtime files.
+
+Produce a side-by-side diff summary: function additions, deletions, modifications.
+
+Output: diff_summary.json (or Markdown list).
+
+[ ] Pass 2: Signature & Callsite Audit
+For each modified function:
+
+Extract its parameters, return structure, and globals used.
+
+Grep all other scripts (in both gamma_walo and runtime files) for references to this function.
+
+Validate that all callsites are still compatible with the updated version.
+
+Output: function_compat_report.md
+
+[ ] Pass 3: Nil Defense Elimination & Root Tracing
+Find functions where nil checks were added or altered.
+
+Trace backwards to determine how nil could originate.
+
+Replace band-aid nil defenses with actual root-cause fixes.
+
+Output: root_cause_fixes.md
+
+[ ] Pass 4: Behavior Consistency Review
+Compare logic and outputs of changed functions to their originals.
+
+Identify any output behavior changes and determine if they were intentional.
+
+If changed unintentionally, revert to baseline behavior.
+
+Output: behavior_change_log.md
+
+[ ] Pass 5: Final Verification + Structured Report
+Rerun diff map, callsite audit, and output consistency checks after applied changes.
+
+Final pass ensures everything still integrates post-fix.
+
+Output: final_integration_report.md, list of confirmed compatible modules.
+
+Constraints
+🚫 No runtime execution: purely static source analysis.
+
+🧠 Behavioral parity is mandatory unless changes are explicitly justified.
+
+🧽 No "just hide nil" fixes – always address the source of the invalid state.
 ✅ Resource Infrastructure System
 
 [x] Implement Resource Node Upgrades
