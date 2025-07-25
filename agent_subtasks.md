@@ -43,7 +43,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
   - Identify intentional vs unintentional changes.
   - Output: `behavior_change_log.md`.
 
-- [ ] **Pass 5: Final Verification + Structured Report**  
+- [x] **Pass 5: Final Verification + Structured Report**  
   - Rerun diff, callsite, and consistency checks after fixes.  
   - Output: `final_integration_report.md` and list of confirmed compatible modules.  
 

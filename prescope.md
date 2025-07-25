@@ -86,3 +86,27 @@ Analyze modified functions for behavioral deviations between `runtime files` and
 - Documentation regenerated.
 - Tests pass.
 - `agent_subtasks.md` Pass 4 checkbox marked as done.
+
+## Task: Pass 5: Final Verification + Structured Report
+
+### Objective
+Generate final integration report consolidating diff, signature, and behavior checks.
+
+### Steps
+1. Rerun `generate_diff_summary.py`, `function_signature_audit.py`, and `behavior_consistency_review.py` to refresh docs.
+2. Create new script `tools/final_verification.py` to compile `docs/final_integration_report.md`.
+   - Summarize changed files with counts of added/removed/modified functions.
+   - Include behavior change classification from `behavior_change_log.md`.
+   - Mark each file as `compatible` if no major changes or callsite mismatches.
+3. Run `python tools/final_verification.py`.
+4. Execute `python tools/gen_docs.py` for consistency.
+5. Run `busted tests` to ensure suite still passes.
+
+### Integration Points
+- Static analysis only; ensures final documentation aligns with current state.
+
+### Completion Criteria
+- `docs/final_integration_report.md` generated summarizing module status.
+- Documentation regenerated.
+- Tests pass.
+- `agent_subtasks.md` Pass 5 checkbox marked as done.
