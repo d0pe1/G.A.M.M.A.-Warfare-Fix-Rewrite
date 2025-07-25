@@ -27,7 +27,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
   - Produce a side-by-side diff summary (function additions, deletions, modifications).  
   - Output: `diff_summary.json` or Markdown list.  
 
- - [ ] **Pass 2: Signature & Callsite Audit**
+ - [x] **Pass 2: Signature & Callsite Audit**
   - For each modified function: extract parameters, return structure, and globals used.  
   - Grep all other scripts for references to this function.  
   - Validate that all callsites remain compatible.  

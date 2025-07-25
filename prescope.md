@@ -18,3 +18,22 @@ Generate a diff summary comparing files in `gamma_walo/gamedata/scripts` against
 - `docs/runtime_vs_gamma_walo.md` and `docs/api_map.md` regenerated.
 - Tests run successfully.
 - `agent_subtasks.md` Pass 1 checkbox marked as done.
+
+## Task: Pass 2: Signature & Callsite Audit
+
+### Objective
+Generate updated function signature and callsite analysis for modified functions. Output to `docs/function_compat_report.md`.
+
+### Steps
+1. Run new `tools/function_signature_audit.py` to parse `diff_summary.json` and scan callsites.
+2. Review generated `docs/function_compat_report.md`.
+3. Run `busted` tests.
+4. Commit updated report and tasks.
+
+### Integration Points
+- Static analysis only; no runtime code changes.
+
+### Completion Criteria
+- `docs/function_compat_report.md` refreshed with current signatures and callsites.
+- Tests pass.
+- `agent_subtasks.md` Pass 2 checkbox marked as done.
