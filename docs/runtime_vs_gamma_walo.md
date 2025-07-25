@@ -1731,7 +1731,38 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | tasks_brain_game.script | - | - | missing in gamma |
 | tasks_chimera_scan.script | - | - | missing in gamma |
 | tasks_dead_night.script | - | - | missing in gamma |
-| tasks_defense.script | - | - | missing in gamma |
+| tasks_defense.script | 4 | 2 | keep |
+
+<details><summary>Diff for tasks_defense.script</summary>
+```diff
+--- runtime files/gamedata/scripts/tasks_defense.script
++++ gamma_walo/gamedata/scripts/tasks_defense.script
+@@ -1,3 +1,5 @@
++-- Modified by Codex: Crashlog Fix - tasks_defense.script (2025-07-25)
++-- Replaced game_relations.is_factions_enemies with global is_factions_enemies to avoid nil call
+ 
+ -- =======================================================================================
+ -- Created by tdef
+@@ -169,7 +171,7 @@
+ 				se_obj and 
+ 				IsStalker(nil, se_obj:clsid()) and 
+ 				se_obj:alive() and 
+-				not game_relations.is_factions_enemies(se_obj:community(),"freedom") and 
++				not is_factions_enemies(se_obj:community(),"freedom") and 
+ 				string.find(se_obj:name(),'default') and
+ 				not (se_obj:community() == 'bandit') and
+ 				not (se_obj:community() == 'trader')
+@@ -239,7 +241,7 @@
+ 	-- printl('barrier_defense_available(%s) AAA',tid)
+ 	-- dont trigger if hostile to freedom
+ 	-- should check vs default_comm in gameplay_disguise but what if disguise is disabled? it it nil? or what?
+-	if game_relations.is_factions_enemies(character_community(db.actor),"freedom") then return false end
++	if is_factions_enemies(character_community(db.actor),"freedom") then return false end
+ 	
+ 	if not MDATA then return false end
+ 	-- printl('barrier_defense_available(%s) BBB',tid)
+```
+</details>
 | tasks_delivery.script | - | - | missing in gamma |
 | tasks_dominance.script | - | - | missing in gamma |
 | tasks_fate.script | - | - | missing in gamma |
