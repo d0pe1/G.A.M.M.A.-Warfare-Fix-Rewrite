@@ -160,3 +160,19 @@ Allow transport squads to dynamically reroute to a different base when squad mem
 - Documentation and diff summary updated.
 - Subtask checkbox ticked in `agent_subtasks.md`.
 
+
+
+## Task: Crashlog Fix - tasks_defense.script
+### Objective
+Resolve LUA error at tasks_defense.script line 241 when calling `game_relations.is_factions_enemies` which was nil. Use global `is_factions_enemies` instead and ensure script is copied into gamma_walo.
+### Steps
+1. Copy `runtime files/gamedata/scripts/tasks_defense.script` to `gamma_walo/gamedata/scripts/` if not present.
+2. Replace calls to `game_relations.is_factions_enemies` with `is_factions_enemies`.
+3. Add header comment noting modification.
+4. Regenerate docs via `python tools/gen_docs.py` and `python tools/generate_diff_summary.py`.
+5. Run pass verification scripts (`function_signature_audit.py`, `behavior_consistency_review.py`, `final_verification.py`).
+6. Run `busted` tests.
+### Integration Points
+- Uses global relation functions; maintains compatibility.
+### Completion Criteria
+- Crash lines fixed; documentation and reports updated; tests executed; checklist updated.

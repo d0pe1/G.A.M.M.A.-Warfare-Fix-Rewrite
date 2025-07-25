@@ -23,15 +23,26 @@ This report flags potential behavioral differences between `runtime files` and `
 - `get_rank_relation`: 28 line diff (major)
 - `get_reputation_relation`: 28 line diff (major)
 
+## hq_coordinator.script
+- `coordinator.register_base`: 8 line diff (minor - return logic changed)
+
 ## smart_terrain_warfare.script
 - `process_targets`: 16 line diff (major)
 - `find_targets`: 15 line diff (major)
 - `find_targets_for_overflow`: 15 line diff (major)
 
+## squad_transport.script
+- `transport.create`: 15 line diff (major - return logic changed)
+- `transport.drop_cargo`: 23 line diff (major - return logic changed)
+
 ## tasks_assault.script
 - `evaluate_smarts_squads`: 22 line diff (major)
 - `evaluate_squads_smarts`: 22 line diff (major)
 - `postpone_for_next_frame`: 153 line diff (major)
+
+## tasks_defense.script
+- `get_random_stalker_chatter`: 11 line diff (major)
+- `barrier_defense_available`: 11 line diff (major)
 
 ## ui_options.script
 - `init_opt_base`: 24 line diff (major)

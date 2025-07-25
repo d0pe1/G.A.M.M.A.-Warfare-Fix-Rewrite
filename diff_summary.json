@@ -255,6 +255,20 @@
       }
     ]
   },
+  "tasks_defense.script": {
+    "added": [],
+    "removed": [],
+    "modified": [
+      {
+        "name": "get_random_stalker_chatter",
+        "diff_lines": 11
+      },
+      {
+        "name": "barrier_defense_available",
+        "diff_lines": 11
+      }
+    ]
+  },
   "tasks_smart_control.script": {
     "added": [],
     "removed": [],
@@ -4532,12 +4546,6 @@
     "missing_in_gamma": true
   },
   "tasks_dead_night.script": {
-    "added": [],
-    "removed": [],
-    "modified": [],
-    "missing_in_gamma": true
-  },
-  "tasks_defense.script": {
     "added": [],
     "removed": [],
     "modified": [],
