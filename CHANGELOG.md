@@ -65,3 +65,4 @@ All notable changes to this project will be documented in this file.
 - Pass 3 root cause fixes removing unnecessary nil guards.
 - Refreshed function signature audit via new script `function_signature_audit.py`
 - Verified nil defense status; no new guards needed. Updated root_cause_fixes.md.
+- Generated behavior change review via `behavior_consistency_review.py` producing docs/behavior_change_log.md for Pass 4.
