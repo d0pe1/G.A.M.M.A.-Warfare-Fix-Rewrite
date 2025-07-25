@@ -140,8 +140,9 @@ function evaluate_squads_smarts(task_id, var, squad, smart)
 		and (squad.current_target_id and squad.current_target_id == smart.id and squad.current_action == 1) 
 		then
 			--printf("- %s | squad (%s) [%s] is targeting smart (%s)", task_id, squad.id, squad.player_id, smart.id)
-                        for _, fac in ipairs(cache_assault_func[task_id] or {}) do -- added nil check
-				if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
+                       for i = 1, #cache_assault_func[task_id] do
+                               local fac = cache_assault_func[task_id][i]
+                               if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
 					-- updating data
 					var.squad_id = squad.id
 					save_var( db.actor, task_id, var )
@@ -279,22 +280,24 @@ task_status_functor.assault_task_status_functor = function (tsk,task_id)
 	if (not cache_assault_func[task_id]) then
 		cache_assault_func[task_id] = {}
 		local params = parse_list(task_manager.task_ini,task_id,"status_functor_params")
-		if var.is_enemy then
-                        for _, param in ipairs(params or {}) do -- added nil check
-                                if is_squad_monster[param] or factions_list[param] then
-                                        local idx = #cache_assault_func[task_id] + 1
-                                        cache_assault_func[task_id][idx] = param
+               if var.is_enemy then
+                       for i=1,#params do
+                               local param = params[i]
+                               if is_squad_monster[param] or factions_list[param] then
+                                       local idx = #cache_assault_func[task_id] + 1
+                                       cache_assault_func[task_id][idx] = param
                                         printf("/ %s | Faction [%s] is re-added to cache_assault_func table", task_id, param)
                                 end
                         end
 		elseif (not is_squad_monster[params[1]]) then
-			for fac,_ in pairs(factions_list) do
-				local cnt = 0
-				local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
-                                for _, param in ipairs(params or {}) do -- added nil check
-                                        if (fac ~= param) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, param) then
-                                                cnt = cnt + 1
-                                        end
+                       for fac,_ in pairs(factions_list) do
+                               local cnt = 0
+                               local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
+                               for i=1,#params do
+                                       local param = params[i]
+                                       if (fac ~= param) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, param) then
+                                               cnt = cnt + 1
+                                       end
                                 end
 				if (cnt == #params) then
 					local idx = #cache_assault_func[task_id] + 1
@@ -404,22 +407,24 @@ xr_conditions.validate_assault_task = function(actor, npc, p)
 	
 	--// Collect enemy factions
 	if def.is_enemy then -- if faction parameters are enemies
-                for _, status in ipairs(p_status or {}) do -- added nil check
-                        if is_squad_monster[status] or factions_list[status] then
-                                --printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, status)
-                                enemy_faction_list[status] = true
-                        end
-                end
+               for i=1,#p_status do
+                       local status = p_status[i]
+                       if is_squad_monster[status] or factions_list[status] then
+                               --printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, status)
+                               enemy_faction_list[status] = true
+                       end
+               end
 		
 	elseif (not is_squad_monster[p_status[1]]) then -- if faction parameters are matutal factions
 		for fac,_ in pairs(factions_list) do
 			local cnt = 0
 			local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
-                for _, status in ipairs(p_status or {}) do -- added nil check
-                                if (fac ~= status) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, status) then
-                                        cnt = cnt + 1
-                                end
-                        end
+               for i=1,#p_status do
+                       local status = p_status[i]
+                               if (fac ~= status) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, status) then
+                                       cnt = cnt + 1
+                               end
+                       end
                         if (cnt == #p_status) then
 				enemy_faction_list[fac] = true
 				--printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, fac)

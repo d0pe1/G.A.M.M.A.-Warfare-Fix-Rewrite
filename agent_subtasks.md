@@ -31,7 +31,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
   - Validate that all callsites remain compatible.  
   - Output: `function_compat_report.md`.  
 
-- [ ] **Pass 3: Nil Defense Elimination & Root Tracing**  
+- [x] **Pass 3: Nil Defense Elimination & Root Tracing**
   - Identify functions where nil checks were added/altered.  
   - Trace the source of the nil state and fix upstream rather than band-aiding.  
   - Output: `root_cause_fixes.md`.  

@@ -324,7 +324,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 ```diff
 ```
 </details>
-| game_relations.script | 91 | 93 | keep |
+| game_relations.script | 113 | 102 | keep |
 
 <details><summary>Diff for game_relations.script</summary>
 ```diff
@@ -382,7 +382,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
  factions_table = {"stalker","bandit","csky","dolg","freedom","killer","army","ecolog","monolith","renegade","greh","isg"}
  factions_table_all = {"actor","bandit","dolg","ecolog","freedom","killer","army","monolith","monster","stalker","zombied","csky","renegade","greh","isg","trader","actor_stalker","actor_bandit","actor_dolg","actor_freedom","actor_csky","actor_ecolog","actor_killer","actor_army","actor_monolith","actor_renegade","actor_greh","actor_isg","actor_zombied","arena_enemy"}
-@@ -154,13 +153,13 @@
+@@ -154,13 +153,14 @@
  		return false
  	end
  	
@@ -393,7 +393,8 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			return true
 -		end
 -	end
-+        for _, pair in ipairs(blacklist_pair or {}) do -- added nil check
++       for i=1,#blacklist_pair do
++               local pair = blacklist_pair[i]
 +                if (pair[1] == fac1) and (pair[2] == fac2) then
 +                        return true
 +                elseif (pair[2] == fac1) and (pair[1] == fac2) then
@@ -403,7 +404,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	return false
  end
  
-@@ -189,13 +188,13 @@
+@@ -189,13 +189,14 @@
  	end
  	
  	-- Check blacklisted pairs 
@@ -414,7 +415,8 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			return false
 -		end
 -	end
-+        for _, pair in ipairs(blacklist_pair or {}) do -- added nil check
++       for i = 1, #blacklist_pair do
++               local pair = blacklist_pair[i]
 +                if (pair[1] == faction_1) and (pair[2] == faction_2) then
 +                        return false
 +                elseif (pair[2] == faction_1) and (pair[1] == faction_2) then
@@ -424,7 +426,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	return true
  end
-@@ -308,17 +307,17 @@
+@@ -308,17 +309,20 @@
  
  function reset_all_relations()
  	local tbl = {}
@@ -439,21 +441,24 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			--printf("TRX - " .. factions_table_all[i] .. " + " .. factions_table_all[j] .. " = " .. tonumber(tbl[factions_table_all[i]][j]))
 -		end
 -	end
-+        for _, faction in ipairs(factions_table_all or {}) do -- added nil check
-+                local value = ini_g:r_string_ex("communities_relations" , faction)
-+                tbl[faction] = str_explode(value,",")
-+        end
++       for i=1, #factions_table_all do
++               local faction = factions_table_all[i]
++               local value = ini_g:r_string_ex("communities_relations" , faction)
++               tbl[faction] = str_explode(value,",")
++       end
 +
-+        for _, faction_i in ipairs(factions_table_all or {}) do -- added nil check
-+                for index_j, faction_j in ipairs(factions_table_all or {}) do
-+                        set_factions_community_num( faction_i , faction_j , tonumber(tbl[faction_i][index_j]) )
-+                        --printf("TRX - " .. faction_i .. " + " .. faction_j .. " = " .. tonumber(tbl[faction_i][index_j]))
-+                end
-+        end
++       for i=1,#factions_table_all do
++               local faction_i = factions_table_all[i]
++               for j=1,#factions_table_all do
++                       local faction_j = factions_table_all[j]
++                       set_factions_community_num( faction_i , faction_j , tonumber(tbl[faction_i][j]) )
++                       --printf("TRX - " .. faction_i .. " + " .. faction_j .. " = " .. tonumber(tbl[faction_i][j]))
++               end
++       end
  end
  
  function calculate_relation_change( victim_tbl, killer_tbl)
-@@ -356,18 +355,18 @@
+@@ -356,18 +360,19 @@
  	local enemy_num = 0
  	local natural_num = 0
  	local friend_num = 0
@@ -469,12 +474,13 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			end
 -		end
 -	end
-+        for _, faction in ipairs(factions_table or {}) do -- added nil check
-+                if (victim_faction ~= faction) then
-+                        local rel = get_factions_community( victim_faction , faction )
-+                        if (rel <= -1000) then
-+                                enemy_num = enemy_num + 1
-+                        elseif (rel > -1000) and (rel < 1000) then
++       for i=1,#factions_table do
++               local faction = factions_table[i]
++               if (victim_faction ~= faction) then
++                       local rel = get_factions_community( victim_faction , faction )
++                       if (rel <= -1000) then
++                               enemy_num = enemy_num + 1
++                       elseif (rel > -1000) and (rel < 1000) then
 +                                natural_num = natural_num + 1
 +                        elseif (rel >= 1000) then -- fixed logic irrationality
 +                                friend_num = friend_num + 1
@@ -484,20 +490,21 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	-- return if killer and victim are from the same faction
  	if (killer_faction == victim_faction) then
-@@ -376,9 +375,9 @@
+@@ -376,9 +381,10 @@
  
  	-- If killed NPC was enemy of faction, raise relation toward killer faction:
  	if ( math.random( 100 ) > 50 ) then
 -		for i = 1, #factions_table do
 -			if ( factions_table[i] ~= killer_faction ) then
 -				if ( is_factions_enemies( factions_table[i], victim_faction ) ) then
-+                for _, faction in ipairs(factions_table or {}) do -- added nil check
-+                        if ( faction ~= killer_faction ) then
++               for i = 1, #factions_table do
++                       local faction = factions_table[i]
++                       if ( faction ~= killer_faction ) then
 +                                if ( is_factions_enemies( faction, victim_faction ) ) then
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  						
  						-- Relation calculation:
-@@ -397,8 +396,8 @@
+@@ -397,8 +403,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_bad + ( k_rep_good / 10 ) ) )
  						
@@ -508,20 +515,21 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations positive change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. value)
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -415,9 +414,9 @@
+@@ -415,9 +421,10 @@
  
  	-- If killed NPC was friend or neutral to faction, lower relation toward killer faction:
  	else
 -		for i = 1, #factions_table do
 -			if ( factions_table[i] ~= killer_faction ) then
 -				if ( not is_factions_enemies( factions_table[i], victim_faction ) ) then
-+                for _, faction in ipairs(factions_table or {}) do -- added nil check
-+                        if ( faction ~= killer_faction ) then
++               for i = 1, #factions_table do
++                       local faction = factions_table[i]
++                       if ( faction ~= killer_faction ) then
 +                                if ( not is_factions_enemies( faction, victim_faction ) ) then
  					if ( math.random( 100 ) > 50 ) then -- random faction picker
  					
  						-- Relation calculation:
-@@ -436,8 +435,8 @@
+@@ -436,8 +443,8 @@
  						
  						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_good + ( k_rep_bad / 10 ) ) )
  
@@ -532,7 +540,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							--printf("- Relations: Relations negative change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. -(value))
  						else
  							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
-@@ -456,24 +455,24 @@
+@@ -456,24 +463,26 @@
  
  local rnd_enemy = {}
  function get_random_enemy_faction(comm)
@@ -543,13 +551,14 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -		end
 -	end
 -	return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
-+        empty_table(rnd_enemy)
-+        for _, faction in ipairs(factions_table or {}) do -- added nil check
-+                if (comm ~= faction) and is_factions_enemies(faction, comm) and is_relation_allowed(faction , comm) then
-+                        rnd_enemy[#rnd_enemy + 1] = faction
-+                end
-+        end
-+        return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
++       empty_table(rnd_enemy)
++       for i = 1, #factions_table do
++               local faction = factions_table[i]
++               if (comm ~= faction) and is_factions_enemies(faction, comm) and is_relation_allowed(faction , comm) then
++                       rnd_enemy[#rnd_enemy + 1] = faction
++               end
++       end
++       return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
  end
  
  local rnd_natural = {}
@@ -561,17 +570,18 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -		end
 -	end
 -	return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
-+        empty_table(rnd_natural)
-+        for _, faction in ipairs(factions_table or {}) do -- added nil check
-+                if (comm ~= faction) and (not is_factions_enemies(faction, comm)) and is_relation_allowed(faction , comm) then
-+                        rnd_natural[#rnd_natural + 1] = faction
-+                end
-+        end
-+        return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
++       empty_table(rnd_natural)
++       for i = 1, #factions_table do
++               local faction = factions_table[i]
++               if (comm ~= faction) and (not is_factions_enemies(faction, comm)) and is_relation_allowed(faction , comm) then
++                       rnd_natural[#rnd_natural + 1] = faction
++               end
++       end
++       return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
  end
  
  
-@@ -560,10 +559,9 @@
+@@ -560,16 +569,16 @@
  	if (USE_MARSHAL) then
  		if 	(alife_storage_manager.get_state().new_game_relations) then
  			-- Restore relations for each faction:
@@ -579,13 +589,23 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -				for j = (i + 1), #factions_table do
 -					local faction_1 = factions_table[i]
 -					local faction_2 = factions_table[j]
-+                        for index_i, faction_1 in ipairs(factions_table or {}) do -- added nil check
-+                                for j = (index_i + 1), #factions_table do
-+                                        local faction_2 = factions_table[j]
++                       for i = 1, #factions_table do
++                               local faction_1 = factions_table[i]
++                               for j = (i + 1), #factions_table do
++                                       local faction_2 = factions_table[j]
  					
  					load_relation ( faction_1 , faction_2 ) -- load and set overall faction relations:
  					load_relation ( "actor_" .. faction_1 , faction_2 ) -- load and set actor faction 1 / faction 2 relations:
-@@ -925,12 +923,12 @@
+-					load_relation ( faction_1 , "actor_" .. faction_2 ) -- load and set actor faction 2 / faction 1 relations:
+-				end
+-			end
++                                       load_relation ( faction_1 , "actor_" .. faction_2 ) -- load and set actor faction 2 / faction 1 relations:
++                               end
++                       end
+ 		else
+ 			reset_all_relations()
+ 			alife_storage_manager.get_state().new_game_relations = true
+@@ -925,15 +934,16 @@
  	if (not rank_relation) then
  		rank_relation = {}
  		
@@ -595,16 +615,23 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			local t = parse_list(ini_sys,"rank_relations",rn[i])
 -			for j,num in ipairs(t) do
 -				rank_relation[rn[i]][rn[j]] = tonumber(num)
-+                local rn = utils_obj.get_rank_list()
-+                for _, rank in ipairs(rn or {}) do -- added nil check
-+                        rank_relation[rank] = {}
-+                        local t = parse_list(ini_sys,"rank_relations",rank)
-+                        for j,num in ipairs(t) do
-+                                rank_relation[rank][rn[j]] = tonumber(num)
- 				--printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
- 			end
- 		end
-@@ -947,12 +945,12 @@
+-				--printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
+-			end
+-		end
++               local rn = utils_obj.get_rank_list()
++               for i=1,#rn do
++                       local rank = rn[i]
++                       rank_relation[rank] = {}
++                       local t = parse_list(ini_sys,"rank_relations",rank)
++                       for j,num in ipairs(t) do
++                               rank_relation[rank][rn[j]] = tonumber(num)
++                                --printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
++                       end
++               end
+ 	end
+ 	
+ 	local rank_1 = ranks.get_obj_rank_name(obj_1)
+@@ -947,15 +957,16 @@
  	if (not reputation_relation) then
  		reputation_relation = {}
  		
@@ -614,15 +641,22 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -			local t = parse_list(ini_sys,"reputation_relations",rn[i])
 -			for j,num in ipairs(t) do
 -				reputation_relation[rn[i]][rn[j]] = tonumber(num)
-+                local rn = utils_obj.get_reputation_list()
-+                for _, rep in ipairs(rn or {}) do -- added nil check
-+                        reputation_relation[rep] = {}
-+                        local t = parse_list(ini_sys,"reputation_relations",rep)
-+                        for j,num in ipairs(t) do
-+                                reputation_relation[rep][rn[j]] = tonumber(num)
- 				--printf("-rep [%s][%s] = %s", rn[i], rn[j], tonumber(num))
- 			end
- 		end
+-				--printf("-rep [%s][%s] = %s", rn[i], rn[j], tonumber(num))
+-			end
+-		end
++               local rn = utils_obj.get_reputation_list()
++               for i=1,#rn do
++                       local rep = rn[i]
++                       reputation_relation[rep] = {}
++                       local t = parse_list(ini_sys,"reputation_relations",rep)
++                       for j,num in ipairs(t) do
++                               reputation_relation[rep][rn[j]] = tonumber(num)
++                               --printf("-rep [%s][%s] = %s", rn[i], rn[j], tonumber(num))
++                       end
++               end
+ 	end
+ 	
+ 	local rep_1 = utils_obj.get_reputation_name(obj_1:character_reputation())
 ```
 </details>
 | game_setup.script | - | - | missing in gamma |
@@ -1045,7 +1079,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | shotgun_reload_fix.script | - | - | missing in gamma |
 | shotgun_unjam_fix.script | - | - | missing in gamma |
 | sim_board.script | - | - | missing in gamma |
-| sim_offline_combat.script | 24 | 19 | keep |
+| sim_offline_combat.script | 24 | 20 | keep |
 
 <details><summary>Diff for sim_offline_combat.script</summary>
 ```diff
@@ -1061,7 +1095,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  
  	Offline Combat Simulator
  	Full simulation: When 2 enemy squads get close to each other, a battle will be simulated
-@@ -104,24 +105,28 @@
+@@ -104,24 +105,23 @@
  -------------------------------
  local function smart_terrain_on_update(smart)
  
@@ -1072,14 +1106,9 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -	end
 +        empty_table(tbl_smart)
 +
-+        local smart_data = SIMBOARD.smarts[smart.id]
-+        if not (smart_data and smart_data.squads) then
-+                return -- added nil check
-+        end
-+
-+        for id,_ in pairs(smart_data.squads) do
-+                tbl_smart[#tbl_smart+1] = id
-+        end
++       for id,_ in pairs(SIMBOARD.smarts[smart.id].squads) do
++               tbl_smart[#tbl_smart+1] = id
++       end
  	
  	if (#tbl_smart == 0) then
  		return
@@ -1103,7 +1132,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  		
  		if squad_1 and (not squad_1.online) and SIMBOARD.squads[squad_1.id] and (squad_1:npc_count() > 0)
  		then
-@@ -130,8 +135,8 @@
+@@ -130,8 +130,8 @@
  				return
  			end
  	
@@ -1114,7 +1143,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  				
  --				if (not task_squads[id_1]) and (not task_giver_squads[id_1]) then
  					-- disable offline combat for ignore list when Warfare is active
-@@ -150,9 +155,9 @@
+@@ -150,9 +150,9 @@
  							end
  						end
  				
@@ -1127,6 +1156,19 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  							if in_combat then
  								if enable_debug then
  									printf("% OCS | Battle in smart [%s]", smart:name())
+@@ -241,7 +241,11 @@
+ end
+ 
+ local function coordinator()
+-	ResetTimeEvent("cycle","ocs", UPDATE_TIME)
++       ResetTimeEvent("cycle","ocs", UPDATE_TIME)
++
++       if not (SIMBOARD and SIMBOARD.smarts) then
++               return true -- wait until SIMBOARD initialized
++       end
+ 	
+ 	-- Toggle feature
+ 	
 ```
 </details>
 | sim_squad_scripted.script | 1 | 1 | keep |
@@ -1167,7 +1209,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | simulation_objects.script | - | - | missing in gamma |
 | slaxml.script | - | - | missing in gamma |
 | smart_terrain.script | - | - | missing in gamma |
-| smart_terrain_warfare.script | 5 | 4 | keep |
+| smart_terrain_warfare.script | 12 | 10 | keep |
 
 <details><summary>Diff for smart_terrain_warfare.script</summary>
 ```diff
@@ -1183,19 +1225,46 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	This file handles the majority of warfare-related script tasks, such as squad behavior,
  	targeting, smart terrain updates, ownership checks, patrol behavior, etc.
-@@ -1121,9 +1122,9 @@
+@@ -1121,9 +1122,10 @@
  	if ((pda_actor.manual_control and smart.owning_faction ~= warfare.actor_faction) or (not pda_actor.manual_control)) then
  		local targets = find_targets(smart)
  			
 -		if (#targets > 0) then
 -			for i=1,#targets do
 -				if not (smart.target_smarts[targets[i][2]]) then
-+                if (#targets > 0) then
-+                        for _, target in ipairs(targets or {}) do -- added nil check
-+                                if not (smart.target_smarts[target[2]]) then
++               if (#targets > 0) then
++                       for i=1,#targets do
++                               local target = targets[i]
++                               if not (smart.target_smarts[target[2]]) then
  					local target_delta = target_smart_count - invading_faction_props.min_smart_targets_per_base
  					if (target_delta < 0) then
  						local other = alife_object(targets[i][2])
+@@ -4378,9 +4380,9 @@
+ 	local targets = {}
+ 	local mainbase_targets = {}  -- backup array if targets array is empty
+ 	
+-	if (faction == "monster") then
+-		return
+-	end
++       if (faction == "monster") then
++               return {}
++       end
+ 	
+ 	for i=1,#smartCollection do
+ 		-- Do not even factor in which level this base is on. We want to have fluid borders at this point.
+@@ -4600,9 +4602,9 @@
+ 		end
+ 	end
+ 
+-	if (faction == "monster") then
+-		return
+-	end
++       if (faction == "monster") then
++               return {}
++       end
+ 
+ 	for i=1,#smartCollection do
+ 		local other = smartCollection[i] and alife_object(smartCollection[i])		
 ```
 </details>
 | smooth_prog_mcm.script | - | - | missing in gamma |
@@ -1333,7 +1402,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | target_prior.script | - | - | missing in gamma |
 | task_functor_hidden_threat.script | - | - | missing in gamma |
 | tasks_agent_rescue.script | - | - | missing in gamma |
-| tasks_assault.script | 62 | 46 | keep |
+| tasks_assault.script | 72 | 51 | keep |
 
 <details><summary>Diff for tasks_assault.script</summary>
 ```diff
@@ -1378,14 +1447,16 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  		then
  			--printf("# %s | smart (%s) [%s] w/ squad (%s) [%s] = Checking", task_id, smrt_id, smrt_name, sq_id, squad.player_id)
  			
-@@ -133,15 +140,14 @@
+@@ -133,15 +140,15 @@
  		and (squad.current_target_id and squad.current_target_id == smart.id and squad.current_action == 1) 
  		then
  			--printf("- %s | squad (%s) [%s] is targeting smart (%s)", task_id, squad.id, squad.player_id, smart.id)
 -			for i = 1, #cache_assault_func[task_id] do
 -				local fac = cache_assault_func[task_id][i]
-+                        for _, fac in ipairs(cache_assault_func[task_id] or {}) do -- added nil check
- 				if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
+-				if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
++                       for i = 1, #cache_assault_func[task_id] do
++                               local fac = cache_assault_func[task_id][i]
++                               if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
  					-- updating data
  					var.squad_id = squad.id
  					save_var( db.actor, task_id, var )
@@ -1396,41 +1467,48 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  					squad.force_online = true
  					--printf("- %s | squad (%s) [%s] is saved", task_id, squad.id, squad.player_id)
  					return true
-@@ -274,21 +280,22 @@
+@@ -273,22 +280,25 @@
+ 	if (not cache_assault_func[task_id]) then
  		cache_assault_func[task_id] = {}
  		local params = parse_list(task_manager.task_ini,task_id,"status_functor_params")
- 		if var.is_enemy then
+-		if var.is_enemy then
 -			for i=1,#params do
 -				if is_squad_monster[params[i]] or factions_list[params[i]] then
 -					cache_assault_func[task_id][i] = params[i]
 -					printf("/ %s | Faction [%s] is re-added to cache_assault_func table", task_id, params[i])
 -				end
 -			end
-+                        for _, param in ipairs(params or {}) do -- added nil check
-+                                if is_squad_monster[param] or factions_list[param] then
-+                                        local idx = #cache_assault_func[task_id] + 1
-+                                        cache_assault_func[task_id][idx] = param
++               if var.is_enemy then
++                       for i=1,#params do
++                               local param = params[i]
++                               if is_squad_monster[param] or factions_list[param] then
++                                       local idx = #cache_assault_func[task_id] + 1
++                                       cache_assault_func[task_id][idx] = param
 +                                        printf("/ %s | Faction [%s] is re-added to cache_assault_func table", task_id, param)
 +                                end
 +                        end
  		elseif (not is_squad_monster[params[1]]) then
- 			for fac,_ in pairs(factions_list) do
- 				local cnt = 0
- 				local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
+-			for fac,_ in pairs(factions_list) do
+-				local cnt = 0
+-				local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
 -				for i=1,#params do
 -					if (fac ~= params[i]) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, params[i]) then
 -						cnt = cnt + 1
 -					end
 -				end
-+                                for _, param in ipairs(params or {}) do -- added nil check
-+                                        if (fac ~= param) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, param) then
-+                                                cnt = cnt + 1
-+                                        end
++                       for fac,_ in pairs(factions_list) do
++                               local cnt = 0
++                               local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
++                               for i=1,#params do
++                                       local param = params[i]
++                                       if (fac ~= param) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, param) then
++                                               cnt = cnt + 1
++                                       end
 +                                end
  				if (cnt == #params) then
  					local idx = #cache_assault_func[task_id] + 1
  					cache_assault_func[task_id][idx] = fac
-@@ -298,6 +305,10 @@
+@@ -298,6 +308,10 @@
  		end
  		if (#cache_assault_func[task_id] == 0) then
  			printe("! %s | no enemy factions found",task_id)
@@ -1441,7 +1519,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  			return "fail"
  		end
  	end
-@@ -393,23 +404,23 @@
+@@ -393,23 +407,25 @@
  	
  	--// Collect enemy factions
  	if def.is_enemy then -- if faction parameters are enemies
@@ -1451,12 +1529,13 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -				enemy_faction_list[p_status[i]] = true
 -			end
 -		end
-+                for _, status in ipairs(p_status or {}) do -- added nil check
-+                        if is_squad_monster[status] or factions_list[status] then
-+                                --printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, status)
-+                                enemy_faction_list[status] = true
-+                        end
-+                end
++               for i=1,#p_status do
++                       local status = p_status[i]
++                       if is_squad_monster[status] or factions_list[status] then
++                               --printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, status)
++                               enemy_faction_list[status] = true
++                       end
++               end
  		
  	elseif (not is_squad_monster[p_status[1]]) then -- if faction parameters are matutal factions
  		for fac,_ in pairs(factions_list) do
@@ -1468,16 +1547,17 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 -				end
 -			end
 -			if (cnt == #p_status) then
-+                for _, status in ipairs(p_status or {}) do -- added nil check
-+                                if (fac ~= status) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, status) then
-+                                        cnt = cnt + 1
-+                                end
-+                        end
++               for i=1,#p_status do
++                       local status = p_status[i]
++                               if (fac ~= status) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, status) then
++                                       cnt = cnt + 1
++                               end
++                       end
 +                        if (cnt == #p_status) then
  				enemy_faction_list[fac] = true
  				--printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, fac)
  			end
-@@ -418,30 +429,30 @@
+@@ -418,30 +434,30 @@
  	
  	if is_empty(enemy_faction_list) then
  		printe("! %s | no enemy factions found", task_id)
@@ -1529,7 +1609,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  	
  	--// Search all smarts
  	local targets = {} -- target[squad_id] = smart_id
-@@ -459,7 +470,8 @@
+@@ -459,7 +475,8 @@
  			
  				-- if smart is not in blacklisted location
  				local smart_level = sim:level_name(gg:vertex(v.m_game_vertex_id):level_id())
@@ -1822,7 +1902,7 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  end
 ```
 </details>
-| warfare_factions.script | 5 | 3 | keep |
+| warfare_factions.script | 4 | 2 | keep |
 
 <details><summary>Diff for warfare_factions.script</summary>
 ```diff
@@ -1838,14 +1918,12 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
  
  	This file handles faction-level warfare stuff like random patrols, resurgences, etc.
  =======================================================================================
-@@ -54,8 +55,8 @@
- faction_information = {}
+@@ -55,7 +56,7 @@
  faction_timers = {}
  
--for i=1,#factions do
+ for i=1,#factions do
 -	factions_p[factions[i]] = true
-+for _, fac in ipairs(factions or {}) do -- added nil check
-+        factions_p[fac] = true
++       factions_p[factions[i]] = true
  end
  
  --[[
