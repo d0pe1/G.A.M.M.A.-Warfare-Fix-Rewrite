@@ -1,0 +1,88 @@
+local mcm_allow_movement = liz_fdda_redone_mcm.get_config("outfit_anm/allow_movement")
+local mcm_enable_animation = liz_fdda_redone_mcm.get_config("outfit_anm/enable_backpack_equip")
+
+local ruck_last_backpack = -1
+local backpack_to_unequip = nil
+local backpack_to_equip = nil
+
+----------------------------------------
+-- init
+----------------------------------------
+
+function on_game_start()
+    RegisterScriptCallback("on_option_change", on_option_change)
+    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
+end
+
+
+function on_option_change()
+    mcm_allow_movement = liz_fdda_redone_mcm.get_config("outfit_anm/allow_movement")
+    mcm_enable_animation = liz_fdda_redone_mcm.get_config("outfit_anm/enable_backpack_equip")
+end
+
+
+function actor_on_first_update()
+    RegisterScriptCallback("actor_item_to_slot", on_item_to_slot)
+    RegisterScriptCallback("actor_item_to_ruck", on_item_to_ruck)
+    RegisterScriptCallback("actor_on_item_drop", on_item_to_ruck)
+    local eqiupped_backpack = db.actor:item_in_slot(13)
+    if eqiupped_backpack then
+        ruck_last_backpack = eqiupped_backpack:id()
+    end
+end
+
+
+function on_item_to_ruck(obj)
+    if not mcm_enable_animation then return end
+    if IsItem("backpack", nil, obj) and obj:id() == ruck_last_backpack then
+        ruck_last_backpack = -1
+        backpack_to_unequip = "outfit_animation_backpack_unequip_" .. character_community(db.actor):sub(7) .. "_hud"
+        play_animation()
+    end
+end
+
+
+function on_item_to_slot(obj)
+    if not mcm_enable_animation then return end
+    if IsItem("backpack", nil, obj) and obj:id() ~= ruck_last_backpack then
+        ruck_last_backpack = obj:id()
+        backpack_to_equip = "outfit_animation_backpack_equip_" .. character_community(db.actor):sub(7) .. "_hud"
+        play_animation()
+    end
+end
+
+----------------------------------------
+-- main
+----------------------------------------
+
+function play_animation()
+    if lam2.get_action_with_tag("backpack_equip") then return end
+    if lam2.get_action_with_tag("outfit_animation") then return end
+    local a = {
+        tag = "backpack_equip",
+        enter = function (self)
+            if backpack_to_unequip then
+                lam2.add_action(get_template_action_play_backpack_equipunequip_animation(backpack_to_unequip))
+            end
+            if backpack_to_equip then
+                lam2.add_action(get_template_action_play_backpack_equipunequip_animation(backpack_to_equip))
+            end
+            backpack_to_unequip = nil
+            backpack_to_equip = nil
+        end
+    }
+    lam2.add_action(a)
+end
+
+----------------------------------------
+-- action templates
+----------------------------------------
+
+function get_template_action_play_backpack_equipunequip_animation(section)
+    local a = lam2.get_template_action_play_animation()
+    a.tag = "backpack_equip"
+    a.sec = section
+    a.only_allow_movekeys = mcm_allow_movement
+    a.disable_input = not mcm_allow_movement
+    return a
+end

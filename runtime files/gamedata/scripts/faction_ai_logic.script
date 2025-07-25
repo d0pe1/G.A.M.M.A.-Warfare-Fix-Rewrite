@@ -1,0 +1,40 @@
+--[[
+    faction_ai_logic.script
+    -----------------------
+    Strategic AI that automates node designation for NPC factions. Decisions are
+    based on the faction's resource levels with a simple bias table.
+]]
+
+local ai = {}
+-- loaded faction philosophy for priorities
+local phil = dofile("gamma_walo/gamedata/scripts/faction_philosophy.script")
+
+
+--- Determine which resource a faction needs most according to philosophy.
+local function choose_needed_resource(faction, pool)
+    local priorities = phil.get_faction_priorities(faction)
+    local choice, lowest
+    for _, r in ipairs(priorities) do
+        local val = pool.get_resource(faction, r)
+        if lowest == nil or val < lowest then
+            lowest = val
+            choice = r
+        end
+    end
+    return choice or priorities[1]
+end
+
+--- Handle a newly captured node by establishing and specializing it.
+function ai.handle_capture(node_id, node_sys, pool)
+    local node = node_sys.get_node(node_id)
+    if not node then return end
+    local need = choose_needed_resource(node.owner, pool)
+    node_sys.establish_node(node_id, node_sys.STATE.resource)
+    node_sys.specialize_node(node_id, need)
+    printf("[faction_ai] designated %s as %s", node_id, need)
+    if type(_G.on_ai_decide_designation) == 'function' then
+        _G.on_ai_decide_designation(node_id)
+    end
+end
+
+return ai

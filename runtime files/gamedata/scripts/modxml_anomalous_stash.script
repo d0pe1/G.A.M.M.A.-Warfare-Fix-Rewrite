@@ -1,0 +1,56 @@
+function on_xml_read()
+	RegisterScriptCallback("on_xml_read", function(xml_file_name, xml_obj)
+		if xml_file_name:find( [[\ui_inventory]] ) then
+			local query_res = xml_obj:query("npc > takeall_button")
+			if not (type(query_res) == "table" and size_table(query_res) == 1) then return end
+
+			local elem = query_res[1]
+			local phrase_elem = elem.parent
+			--xml_obj:
+			local attr = xml_obj:getElementAttr(elem)
+			xml_obj:insertFromXMLString([[		
+			<pickup_anom x="]] .. attr.x + (attr.width * 0.55) .. [[" y="]] .. attr.y .. [[" width="]] .. attr.width * 0.45 .. [[" height="]] .. attr.height .. [[" stretch="1" hint="ui_st_anom_pickup_hit">
+				<window_name>pickup_anom</window_name>
+				<texture>ui_inGame2_big_inventory_button</texture>
+				<text font="graffiti22" align="c">st_anombp_pickup</text>
+				<text_color>
+					<e color ="ui_6"/>
+					<t color ="ui_black"/>
+					<d color ="ui_5"/>
+					<h color ="ui_black"/>
+				</text_color>
+			</pickup_anom>]], phrase_elem, #phrase_elem.kids)
+
+			xml_obj:insertFromXMLString([[		
+			<take_all_anom x="]] .. attr.x .. [[" y="]] .. attr.y .. [[" width="]] .. attr.width * 0.45 .. [[" height="]] .. attr.height .. [[" stretch="1" hint="ui_st_take_all_hint">
+				<window_name>pickup_anom</window_name>
+				<texture>ui_inGame2_big_inventory_button</texture>
+				<text font="graffiti22" align="c">ui_st_take_all</text>
+				<text_color>
+					<e color ="ui_6"/>
+					<t color ="ui_black"/>
+					<d color ="ui_5"/>
+					<h color ="ui_black"/>
+				</text_color>
+			</take_all_anom>]], phrase_elem, #phrase_elem.kids)
+		end
+
+		if xml_file_name:find( [[\map_spots]] ) then
+			local query_res = xml_obj:query("map_spots")
+			--if not (type(query_res) == "table" and size_table(query_res) == 1) then return end
+
+			local elem = query_res[1]
+			xml_obj:insertFromXMLString([[		
+				<anombp hint="st_anombp_stash">
+                	<level_map spot="anombp_spot" pointer="quest_pointer"/>
+                	<mini_map  spot="anombp_spot_mini"/>
+				</anombp>
+				<anombp_spot width="12" height="12" alignment="c" stretch="1" scale="1" scale_min="1" scale_max="1.5">
+                	<texture>ui_anomstash_map_icon</texture>
+        		</anombp_spot>
+				<anombp_spot_mini width="8" height="8" alignment="c" stretch="1">
+                	<texture>ui_anomstash_map_icon</texture>
+        		</anombp_spot_mini>]], elem)
+		end
+	end)
+end

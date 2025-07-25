@@ -1,0 +1,28 @@
+--[[
+    squad_transport.script
+    ----------------------
+    Assigns resource cargo to squad members and handles transfers or
+    losses. Each stalker carries one unit of the requested resource.
+    Last edit: 2025-07-25
+]]
+
+local transport = {}
+
+--- Create a transport descriptor from a HQ task.
+function transport.create(task)
+    local squad = {from=task.from, to=task.to, resource=task.resource, cargo=task.amount, members={}}
+    for i=1, task.amount do
+        table.insert(squad.members, {carrying=task.resource})
+    end
+    return squad
+end
+
+--- Drop cargo when squad is defeated.
+function transport.drop_cargo(squad)
+    local dropped = squad.cargo
+    squad.cargo = 0
+    squad.members = {}
+    return dropped
+end
+
+return transport

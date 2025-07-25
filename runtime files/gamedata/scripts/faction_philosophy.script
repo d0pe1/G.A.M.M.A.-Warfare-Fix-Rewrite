@@ -1,0 +1,119 @@
+--[[
+    faction_philosophy.script
+    -------------------------
+    Personality profiles for Warfare AI factions. Each profile defines
+    resource priorities, aggression level and diplomacy tendency. Other
+    systems reference this to bias their decisions.
+]]
+
+local philosophy = {
+    data = {
+        duty = {
+            priority = { "weapons", "armor", "medicine" },
+            ignores  = { "herbs" },
+            aggression = 0.9,
+            diplomacy = 0.4
+        },
+        freedom = {
+            priority = { "herbs", "weapons", "electronics" },
+            aggression = 0.6,
+            diplomacy = 0.7
+        },
+        monolith = {
+            priority = { "armor", "weapons" },
+            ignores  = { "science", "medicine" },
+            aggression = 1.0,
+            diplomacy = 0.1
+        },
+        ecologists = {
+            priority = { "science", "electronics", "herbs" },
+            ignores  = { "armor" },
+            aggression = 0.1,
+            diplomacy = 0.9
+        },
+        clear_sky = {
+            priority = { "herbs", "science", "armor" },
+            aggression = 0.3,
+            diplomacy = 0.8
+        },
+        mercenaries = {
+            priority = { "weapons", "electronics", "armor" },
+            ignores  = {},
+            aggression = 0.8,
+            diplomacy = 0.3
+        },
+        bandits = {
+            priority = { "weapons", "scrap", "artifacts" },
+            ignores  = { "science", "electronics" },
+            aggression = 0.7,
+            diplomacy = 0.2
+        },
+        stalker = {
+            priority = { "weapons", "artifacts", "armor" },
+            aggression = 0.5,
+            diplomacy = 0.6
+        },
+        renegades = {
+            priority = { "scrap", "weapons" },
+            ignores  = { "science", "electronics" },
+            aggression = 0.75,
+            diplomacy = 0.2
+        },
+        sin = {
+            priority = { "artifacts" },
+            ignores  = { "science", "electronics", "medicine" },
+            aggression = 0.95,
+            diplomacy = 0.1
+        },
+        unisg = {
+            priority = { "science", "electronics", "artifacts" },
+            aggression = 0.85,
+            diplomacy = 0.3
+        }
+    }
+}
+
+-- default fallback values
+local default_profile = { priority = {}, ignores = {}, aggression = 0.5, diplomacy = 0.5 }
+
+--- Internal helper: get profile table or default
+local function get_profile(id)
+    if type(id) ~= "string" then return default_profile end
+    return philosophy.data[id] or default_profile
+end
+
+--- Get prioritized resource list for a faction.
+-- @param faction_id string
+-- @return table list of resource names
+function philosophy.get_faction_priorities(faction_id)
+    return get_profile(faction_id).priority
+end
+
+--- Get aggression value for a faction.
+-- @param faction_id string
+-- @return number between 0 and 1
+function philosophy.get_faction_aggression(faction_id)
+    return get_profile(faction_id).aggression
+end
+
+--- Get diplomacy level for a faction.
+-- @param faction_id string
+-- @return number between 0 and 1
+function philosophy.get_faction_diplomacy_level(faction_id)
+    return get_profile(faction_id).diplomacy
+end
+
+--- Check if a resource is ignored by a faction.
+-- @param faction_id string
+-- @param resource string
+-- @return boolean
+function philosophy.is_resource_ignored(faction_id, resource)
+    local prof = get_profile(faction_id)
+    if not resource or type(resource) ~= "string" then return false end
+    for _, r in ipairs(prof.ignores) do
+        if r == resource then return true end
+    end
+    return false
+end
+
+return philosophy

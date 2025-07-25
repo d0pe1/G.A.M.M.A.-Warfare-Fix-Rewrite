@@ -1,0 +1,28 @@
+--[[
+    pda_context_menu.script
+    -----------------------
+    Generates context menu options for player-owned nodes on the PDA map.
+    This does not implement UI calls; it simply returns available actions.
+]]
+
+local menu = {}
+
+--- Get context menu options for a node owned by faction.
+function menu.get_options(node_id, faction, node_sys)
+    local node = node_sys.get_node(node_id)
+    if not node or node.owner ~= faction then return {} end
+    local opts = {}
+    if node.state == node_sys.STATE.territory then
+        table.insert(opts, "Designate Node Type")
+    elseif node.state == node_sys.STATE.base and not node.specialization then
+        table.insert(opts, "Specialize Base")
+    elseif node.state == node_sys.STATE.resource and not node.specialization then
+        table.insert(opts, "Designate Node Type")
+    else
+        table.insert(opts, "Upgrade Efficiency")
+    end
+    table.insert(opts, "Request Reinforcements")
+    return opts
+end
+
+return menu

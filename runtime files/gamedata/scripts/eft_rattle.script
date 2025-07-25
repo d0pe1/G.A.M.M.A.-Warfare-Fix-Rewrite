@@ -1,0 +1,120 @@
+-- Revised by oleh5230, 24.06.2024
+-- Original script by Qudix
+-- Last edit: 14.07.25 
+
+local opt_aim_rattle = true
+local opt_lower_raise_rattle = true
+local volume_aim_rattle = 1
+local volume_lower_raise_rattle = 1
+
+function load_settings()
+    if ui_mcm then
+        opt_aim_rattle = ui_mcm.get("grok_casings_sounds/enabled_aim_rattle") or false
+        opt_lower_raise_rattle = ui_mcm.get("grok_casings_sounds/enabled_lower_raise_rattle") or false
+        volume_aim_rattle = ui_mcm.get("grok_casings_sounds/volume_aim_rattle") or 1
+        volume_lower_raise_rattle = ui_mcm.get("grok_casings_sounds/volume_lower_raise_rattle") or 1
+    end
+end
+
+-- orginal _g function includes wpn_lr300 for some reason
+local function IsPistol(o,c)
+	if not (c) then
+		c = o and o:clsid()
+	end
+	local pistol = {
+					[clsid.wpn_pm_s] = true,
+					[clsid.wpn_walther_s] = true,
+					[clsid.wpn_usp45_s] = true,
+					[clsid.wpn_hpsa_s] = true,
+					--[clsid.wpn_lr300_s] = true,
+					[clsid.wpn_pm] = true,
+					[clsid.wpn_walther] = true,
+					[clsid.wpn_usp45] = true,
+					[clsid.wpn_hpsa] = true,
+					--[clsid.wpn_lr300] = true
+	}
+	return c and pistol[c] or false
+end
+
+limit = {
+    ["pistol\\pistol_aim"] = 8,
+    ["rifle\\rifle_aim"] = 8,
+}
+
+local count = 1
+function play_aim_sound(dir, class, volume, frequency)
+    local sound = sound_object(dir .. class .. count)
+    sound:play(db.actor, 0, sound_object.s2d)
+    sound.volume = volume or 0.5
+    sound.frequency = frequency or 1
+    count = count + 1
+    if count > limit[class] then count = 1 end
+end
+
+local cached_sec
+function get_wpn_params(wpn)
+    if not wpn then return "rifle\\rifle_aim", 0.5, 1 end
+    sec = wpn:section()
+    if not cached_sec or sec ~= cached_sec then
+        cached_sec = sec
+        class      = IsPistol(wpn) and "pistol\\pistol_aim" or "rifle\\rifle_aim"
+        weight     = ini_sys:r_string_ex(sec, "inv_weight") or 3.5
+        aim_time   = ini_sys:r_string_ex(sec, "zoom_rotate_time") or 0.25
+        volume     = (0.25 + weight*0.04)
+        frequency  = 1.3 - aim_time
+        if frequency < 0.77 then frequency = 0.77 end
+    end
+    return class, volume, frequency
+end
+
+function actor_on_weapon_zoom_in(wpn)
+    if opt_aim_rattle then
+        local class, volume, frequency = get_wpn_params(wpn)
+        play_aim_sound("weapons\\_rattle\\", class, volume * volume_aim_rattle, frequency)
+    end
+end
+
+function actor_on_weapon_zoom_out(wpn)
+    if opt_aim_rattle then
+        local class, volume, frequency = get_wpn_params(wpn)
+        play_aim_sound("weapons\\_rattle\\", class, volume * volume_aim_rattle, frequency)
+    end
+end
+
+function actor_on_weapon_zoom_type_changed(wpn, previous, current)
+    if opt_aim_rattle then
+        if previous ~= 2 and current == 0 or current == 1 then
+            if axr_main.weapon_is_zoomed then
+                local class, volume, frequency = get_wpn_params(wpn)
+                play_aim_sound("weapons\\_rattle\\", class, volume * volume_aim_rattle * 0.7, frequency)
+            end
+        else
+            local class, volume, frequency = get_wpn_params(wpn)
+            play_aim_sound("weapons\\_rattle\\", class, volume * volume_aim_rattle * 0.7, frequency)
+        end
+    end
+end
+
+function actor_on_weapon_raise(wpn)
+    if opt_lower_raise_rattle then
+        local class, volume, frequency = get_wpn_params(wpn)
+        play_aim_sound("weapons\\_rattle\\", class, volume * volume_lower_raise_rattle, 1)
+    end
+end
+
+function actor_on_weapon_lower(wpn)
+    if opt_lower_raise_rattle then
+        local class, volume, frequency = get_wpn_params(wpn)
+        play_aim_sound("weapons\\_rattle\\", class, volume * volume_lower_raise_rattle, 1)
+    end
+end
+
+function on_game_start()
+    RegisterScriptCallback("actor_on_weapon_zoom_in", actor_on_weapon_zoom_in)
+    RegisterScriptCallback("actor_on_weapon_zoom_out", actor_on_weapon_zoom_out)
+    RegisterScriptCallback("actor_on_weapon_zoom_type_changed", actor_on_weapon_zoom_type_changed)
+    RegisterScriptCallback("actor_on_weapon_raise", actor_on_weapon_raise)
+    RegisterScriptCallback("actor_on_weapon_lower", actor_on_weapon_lower)
+    RegisterScriptCallback("on_option_change", load_settings)
+    load_settings()
+end

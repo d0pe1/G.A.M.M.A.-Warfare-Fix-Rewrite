@@ -1,0 +1,261 @@
+enable_animations = true -- false
+
+local mcm_memory_enable
+local mcm_always_short
+local mcm_allow_movement
+local mcm_enable_animation
+
+local ruck_last_outfit = -1
+-- local is_animation_playing = false
+local item_to_equip
+local item_to_unequip
+
+------------------------------------------------------------------------------
+-- outfit memmory management.
+------------------------------------------------------------------------------
+local mcm_memory_max = 3
+local memory_first = 0
+local memory_last = -1
+local memory = {}
+
+function remember_outfit(sec)
+	local last = memory_last + 1
+	memory_last = last
+	memory[last] = sec
+	if mcm_memory_max > 0 and (memory_size() > mcm_memory_max) then
+		forget_outfit()
+	end
+end
+
+function forget_outfit()
+	local first = memory_first
+	memory[first] = nil
+	memory_first = first + 1
+end
+
+function memory_size()
+	local count = 0
+	for _, __ in pairs(memory) do
+		count = count + 1
+	end
+	return count
+end
+
+function memory_contain(sec)
+	for _, v in pairs(memory) do
+		if v == sec then return true end
+	end
+	return false
+end
+
+------------------------------------------------------------------------------
+-- monkey patches
+------------------------------------------------------------------------------
+
+local originalPIF = actor_effects.play_item_fx
+function actor_effects.play_item_fx(name)
+	if name == "outfit" then return end
+	originalPIF(name)
+end
+
+-- local originalUIIAE = ui_inventory.UIInventory.Action_Equip
+-- ui_inventory.UIInventory.Action_Equip = function (self, obj, bag)
+-- 	obj = self:CheckItem(obj, "Action_Equip")
+-- 	if IsOutfit(obj) then
+-- 		play_animation(function() originalUIIAE(self, obj, bag) end)
+-- 		return
+-- 	end
+-- 	originalUIIAE(self, obj, bag)
+-- end
+
+-- local originalUIAU = ui_inventory.UIInventory.Action_UnEquip
+-- ui_inventory.UIInventory.Action_UnEquip = function (self, obj, bag)
+-- 	obj = self:CheckItem(obj,"Action_UnEquip")
+-- 	if IsOutfit(obj) then
+-- 		play_animation(function() originalUIAU(self, obj, bag) end)
+-- 		return
+-- 	end
+-- 	originalUIAU(self, obj, bag)
+-- end
+
+-- local originalUIDD = ui_inventory.UIInventory.On_CC_DragDrop
+-- ui_inventory.UIInventory.On_CC_DragDrop = function(self, bag_from, idx_from)
+-- 	local obj_from = self.CC[bag_from]:GetObj(idx_from)
+-- 	if not obj_from then return end
+
+-- 	-- When interacting with item picker, get parent cell bag and index
+-- 	bag_from, idx_from = self:Picker_Ownership(bag_from, idx_from, obj_from)
+
+-- 	-- Get hovered container and cell
+-- 	local bag_to, idx_to, obj_to
+-- 	for name,cc in pairs(self.CC) do
+-- 		bag_to, idx_to, obj_to = cc:GetCell_Focused()
+-- 		if bag_to then break end
+-- 	end
+	
+-- 	-- When interacting with item picker, get parent cell bag and index
+-- 	if obj_to then bag_to, idx_to = self:Picker_Ownership(bag_to, idx_to, obj_to) end
+
+-- 	if
+-- 		(bag_to == "actor_equ")
+-- 		and (self:Cond_Equip(obj_from, bag_from) or bag_from == "actor_equ")
+-- 		and (not IsArtefact(obj_from))
+-- 	then
+-- 		local slot = (SYS_GetParam(2,obj_from:section(),"slot") or -1) + 1
+-- 		local cslots = self.slot_cell[slot] or {}
+-- 		for i=1,#cslots do
+-- 			if (cslots[i] == idx_to) then
+-- 				if IsOutfit(obj_from) then
+-- 					play_animation(function()
+-- 						-- originalUIDD(self, bag_from, idx_from) -- can't delay cuz drag and drop checks hovered item
+-- 						if obj_to then
+-- 							db.actor:move_to_ruck(obj_to)
+-- 						end
+-- 						db.actor:move_to_slot(obj_from, idx_to)
+-- 						self:PlaySND(sound_object([[interface\inv_slot]]))
+-- 					end)
+-- 					return
+-- 				end
+
+-- 			end
+-- 		end
+
+-- 	end
+
+-- 	originalUIDD(self, bag_from, idx_from)
+-- end
+
+--- other solution to delaying instant equip:
+--- override mouse events like mouse1_doubleclick, DragnDrop and rightMouse button
+--- function UIInventory:On_CC_Mouse1_DB(bag, idx)
+--- function UIInventory:On_CC_Mouse2(bag, idx)
+--- function UIInventory:On_CC_DragDrop(bag_from, idx_from)
+
+------------------------------------------------------------------------------
+-- callbacks
+------------------------------------------------------------------------------
+function on_game_start()
+	RegisterScriptCallback("on_option_change", initialize)
+	RegisterScriptCallback("actor_on_first_update", initialize)
+end
+
+function initialize()
+	mcm_memory_enable = liz_fdda_redone_mcm.get_config("outfit_anm/memory")
+	mcm_always_short = liz_fdda_redone_mcm.get_config("outfit_anm/always_short")
+	mcm_allow_movement = liz_fdda_redone_mcm.get_config("outfit_anm/allow_movement")
+	mcm_memory_max = liz_fdda_redone_mcm.get_config("outfit_anm/memory_size")
+	mcm_enable_animation = liz_fdda_redone_mcm.get_config("outfit_anm/enable_outfit_equip")
+	RegisterScriptCallback("actor_item_to_slot", on_item_to_slot)
+	RegisterScriptCallback("actor_item_to_ruck", on_item_to_ruck)
+	RegisterScriptCallback("actor_on_item_drop", on_item_to_ruck)
+	-- remember outfit that was on us when game started
+	local equipped_outfit = db.actor:item_in_slot(7)
+	if equipped_outfit then
+		ruck_last_outfit = equipped_outfit:id()
+		remember_outfit(equipped_outfit:section())
+	end
+end
+
+function on_item_to_ruck(obj)
+	if IsOutfit(obj) and obj:id() == ruck_last_outfit then
+		ruck_last_outfit = -1
+
+		if not enable_animations then return end
+		if not db.actor:alive() then return end
+		if has_alife_info("bar_arena_fight") then return end
+		if not mcm_enable_animation then return end
+
+		item_to_unequip = obj and obj:section() or nil
+		play_animation()
+		-- if not is_animation_playing then
+		-- 	is_animation_playing = true
+		-- 	play_animation()
+		-- end
+	end
+end
+
+function on_item_to_slot(obj)
+	if IsOutfit(obj) and obj:id() ~= ruck_last_outfit then
+		ruck_last_outfit = obj:id()
+
+		if not enable_animations then return end
+		if not db.actor:alive() then return end
+		if has_alife_info("bar_arena_fight") then return end
+		if not mcm_enable_animation then return end
+
+		item_to_equip = obj and obj:section() or nil
+		play_animation()
+		-- if not is_animation_playing then
+		-- 	is_animation_playing = true
+		-- 	play_animation()
+		-- end
+	end
+end
+
+------------------------------------------------------------------------------
+-- main
+------------------------------------------------------------------------------
+
+function select_animation(sec)
+	local m_section = mcm_always_short and "outfit_animation_fast_hud" or "outfit_animation_hud"
+	if mcm_memory_enable and sec then
+		if memory_contain(sec) then
+			m_section = "outfit_animation_fast_hud"
+		else
+			remember_outfit(sec)
+		end
+	end
+	return m_section
+end
+
+
+-- function play_animation(callback)
+function play_animation()
+	if lam2.get_action_with_tag("outfit_animation") then return end
+	-- if lam2.has_queued_actions() then return end
+	-- local current_action = lam2.get_current_action()
+	-- if current_action and not current_action.tag == "backpack_open" then return end
+
+	-- local a = lam2.get_template_action_play_animation()
+	-- a.tag = "outfit_animation"
+	-- a.sec = select_animation(item_to_equip or item_to_unequip)
+	-- a.anm = "anm_equip"
+	-- a.only_allow_movekeys = mcm_allow_movement
+	-- a.disable_input = not mcm_allow_movement
+
+	-- item_to_equip = nil
+	-- item_to_unequip = nil
+
+	local a = get_template_action_try_play_outfit_animation()
+	local wpn = lam2.cur_slot
+	local det = lam2.det_active
+	lam2.abort()
+	lam2.add_action(a)
+	lam2.cur_slot = wpn
+	lam2.det_active = det
+end
+
+
+function get_template_action_try_play_outfit_animation()
+	local a = {
+		tag = "outfit_animation",
+		enter = function (self)
+			local section = select_animation(item_to_equip or item_to_unequip)
+			lam2.add_action(get_template_action_play_outfit_animation(section))
+			item_to_equip = nil
+			item_to_unequip = nil
+		end
+	}
+	return a
+end
+
+
+function get_template_action_play_outfit_animation(section)
+	local a = lam2.get_template_action_play_animation()
+	a.tag = "outfit_animation"
+	a.sec = section
+	a.anm = "anm_equip"
+	a.only_allow_movekeys = mcm_allow_movement
+	a.disable_input = not mcm_allow_movement
+	return a
+end

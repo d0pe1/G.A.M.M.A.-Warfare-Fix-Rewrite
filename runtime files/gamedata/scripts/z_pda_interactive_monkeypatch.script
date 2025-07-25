@@ -1,0 +1,18 @@
+local og_func1 = pda.set_active_subdialog
+function pda.set_active_subdialog(section)
+	local value = og_func1(section)
+	if (section == "eptInteractive") then
+		local obj = db.actor:active_item() or db.actor:item_in_slot(14)
+		if obj then
+			local sec = obj and obj:section()
+			--if item_device.device_npc_pda[sec] then
+				return pda_inter_gui.start_PDAX()
+			--end
+		end
+		
+		-- Fallback to normal UI
+		ActorMenu.get_pda_menu():SetActiveSubdialog("eptTasks")
+		return
+	end
+	return value
+end

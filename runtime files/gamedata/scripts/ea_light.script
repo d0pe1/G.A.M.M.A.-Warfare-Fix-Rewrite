@@ -1,0 +1,62 @@
+--- --------------------------------------------------
+--- took from original FDDA
+--- Author: Feel_Fried
+--- --------------------------------------------------
+
+local light = nil
+local light_flag = nil
+local light_bright = nil
+local light_range = nil
+
+function light_on(r, g, b, range, bright, time, y_pos, dirmult)
+    light = script_light() -- Create a light source
+    light.type = 1      -- 1 = Point ; 2 = Spot
+    light.range = range
+    light_bright = bright
+    light_range = range
+    light.lanim = "koster_01_electra"
+    light.lanim_brightness = 0.025
+    light.hud_mode = false
+    light.shadow = true
+    light.volumetric = false
+    light.enabled = true
+    light.color = fcolor():set(r, g, b, bright)
+    local dir = device().cam_dir
+    local pos = device().cam_pos
+    pos = pos:add(dir:mul(dirmult))
+    pos.y = pos.y - y_pos
+    light:set_position(pos)
+    light:set_direction(dir)
+    light:update()
+    CreateTimeEvent("ea_s_l1", "ea_s_l1", time, light_off)
+    CreateTimeEvent("ea_s_l_2move", "ea_l_2move", 0, light_move, r, g, b, y_pos, dirmult)
+    light_flag = true
+    return true
+end
+
+function light_move(r, g, b, y_pos, dirmult)
+    light_bright = light_bright - 0.02
+    light_range = light_range - 0.06
+    light.range = light_range
+    light.color = fcolor():set(r, g, b, light_bright)
+    local dir = device().cam_dir
+    local pos = device().cam_pos
+    pos = pos:add(dir:mul(dirmult))
+    pos.y = pos.y - y_pos
+    light:set_position(pos)
+    light:set_direction(dir)
+    light:update()
+    -- return light_flag and false or true
+    if light_flag then
+        return false
+    else
+        return true
+    end
+end
+
+function light_off()
+    light.enabled = false
+    light:update()
+    light_flag = false
+    return true
+end

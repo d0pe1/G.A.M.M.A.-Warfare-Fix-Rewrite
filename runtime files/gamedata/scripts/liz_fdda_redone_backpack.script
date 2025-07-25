@@ -1,0 +1,215 @@
+
+is_ui_inventory_open = false
+local mcm_backpack_enable = true
+local mcm_backpack_max_speed = 1.5
+local mcm_backpack_min_speed = 1
+local mcm_backpack_min_weight_multiplier = 0.5  -- how much percent from max weight triggers backpack slowdown
+local mcm_backpack_speed_mode = 1               -- 0 - set from mcm, 1 - based on weight carry, 2 - based on backpack type
+local current_backpack_id = -1
+local is_force_close = false
+local is_froce_close_timeout = false
+
+--- -------------------------------------------------
+--- init
+--- -------------------------------------------------
+
+function on_game_start()
+    RegisterScriptCallback("on_game_load", initialize)
+    RegisterScriptCallback("on_option_change", initialize)
+    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
+end
+
+function initialize()
+    mcm_backpack_enable = liz_fdda_redone_mcm.get_config("backpack/enable")
+    mcm_backpack_max_speed = liz_fdda_redone_mcm.get_config("backpack/max_speed")
+    mcm_backpack_min_weight_multiplier = liz_fdda_redone_mcm.get_config("backpack/min_weight_multiplier") / 100
+    mcm_backpack_speed_mode = liz_fdda_redone_mcm.get_config("backpack/type")
+end
+
+function actor_on_first_update()
+    RegisterScriptCallback("GUI_on_show", GUI_on_show)
+    RegisterScriptCallback("GUI_on_hide", GUI_on_hide)
+    RegisterScriptCallback("actor_item_to_slot", on_item_to_slot)
+    RegisterScriptCallback("actor_item_to_ruck", on_item_to_ruck)
+    RegisterScriptCallback("actor_on_item_drop", on_item_to_ruck)
+    -- remember backpack that was on palyer during game start
+    local equipped_backpack = db.actor:item_in_slot(13)
+    if equipped_backpack then
+        current_backpack_id = equipped_backpack:id()
+    end
+end
+
+function GUI_on_show(name)
+    if name == "UIInventory" then
+        local gui = ui_inventory.GUI
+        if gui and gui.mode and gui.mode == "inventory" then
+            is_ui_inventory_open = true
+            try_open_backpack()
+        end
+    end
+end
+
+function GUI_on_hide(name)
+    if name == "UIInventory" then
+        is_ui_inventory_open = false
+    end
+end
+
+function on_item_to_slot(obj)
+    if IsItem("backpack", nil, obj) and obj:id() ~= current_backpack_id then
+        current_backpack_id = obj:id()
+    end
+end
+
+function on_item_to_ruck(obj)
+    if IsItem("backpack", nil, obj) and obj:id() == current_backpack_id then
+        current_backpack_id = -1
+    end
+end
+
+--- -------------------------------------------------
+--- MAIN
+--- -------------------------------------------------
+
+function try_open_backpack()
+    if not mcm_backpack_enable then return end
+    if lam2.get_action_with_tag("backpack_try_open") then return end --already have action that should open backpack, no need to add more
+    lam2.add_action(get_template_action_backpack_try_open())
+end
+
+function try_close_backpack()
+    if is_ui_inventory_open and not is_froce_close_timeout then
+        is_force_close = true
+        is_froce_close_timeout = true --ugh, i don't like this solution, but for now it's ok... i guess
+    end
+end
+
+function get_backpack_speed()
+    local speed = mcm_backpack_min_speed
+    if mcm_backpack_speed_mode == 0 then
+        --get backpack speed from mcm config
+        speed = mcm_backpack_max_speed
+    elseif mcm_backpack_speed_mode == 1 then
+        --get backpack speed based on carryweight
+        local is_overweight
+        local tot_weight
+        local max_weight
+        is_overweight, tot_weight, max_weight = actor_status.get_overweight(false)
+        local min_weight = max_weight * mcm_backpack_min_weight_multiplier
+        local bonus_influence = clamp((tot_weight - max_weight)/(min_weight - max_weight), 0, 1)
+        speed = mcm_backpack_min_speed + (mcm_backpack_max_speed - mcm_backpack_min_speed) * bonus_influence
+    elseif mcm_backpack_speed_mode == 2 and current_backpack_id ~= -1 then
+        --get backpack speed from cofig file
+        local obj = get_object_by_id(current_backpack_id)
+        speed = ini_sys:r_float_ex(obj:section(), "bonus_open_speed") or mcm_backpack_min_speed
+    end
+    return speed
+end
+
+--- -------------------------------------------------
+--- TEMPLATES
+--- -------------------------------------------------
+
+function get_template_action_backpack_try_open()
+    local a = {
+        tag = "backpack_try_open",
+        hands = 2,
+        execute = function (self, time)
+            -- if is_ui_inventory_open and not lam2.get_action_with_tag("backpack_open") then
+            if is_ui_inventory_open and not lam2.get_action_with_tag("backpack_open") and not lam2.get_action_with_tag("backpack_close") then
+                if current_backpack_id ~= -1 then
+                    local player_faction = character_community(db.actor):sub(7) or "stalker"
+                    local action_backpack_idle_anim = get_template_action_backpack_idle(player_faction)
+                    lam2.add_action_first(action_backpack_idle_anim)
+                    local action_backpack_open_anim = get_template_action_backpack_open(player_faction)
+                    lam2.add_action_first(action_backpack_open_anim)
+                else
+                    local action_backpack_idle_empty_anim = get_template_action_backpack_empty()
+                    lam2.add_action_first(action_backpack_idle_empty_anim)
+                end
+                return lam2.states.success
+            end
+            return lam2.states.fail
+        end
+    }
+    return a
+end
+
+
+function get_template_action_backpack_open(player_faction)
+    local a = liz_fdda_redone_consumables.get_template_action_play_animation_fdda_config("backpack_open_" .. player_faction)
+    a.tag = "backpack_open"
+    a.can_skip = false
+    a.speed = get_backpack_speed()
+    a.on_enter = function (self)
+        -- is_backpack_active = true
+        is_froce_close_timeout = false
+    end
+    a.on_execute = function (self, time)
+        -- exiting state before animation end
+        -- hope this prevent rare backpack flickering glitch
+        if time > self.duration - 0.1 then
+            return lam2.states.success
+        end
+    end
+    return a
+end
+
+
+function get_template_action_backpack_idle(player_faction)
+    local a = lam2.get_template_action_play_animation()
+    a.sec = "item_ea_backpack_open_" .. player_faction .. "_hud"
+    a.anm = "anm_ea_idle"
+    a.tag = "backpack_open"
+    a.name = "backpack_idle"
+    a.only_allow_movekeys = false --liz test
+    a.can_skip = false
+    a.on_execute = function (self, time)
+        if lam2.has_queued_actions() then
+            try_close_backpack()
+        end
+        if is_ui_inventory_open and not is_force_close then
+            return lam2.states.running
+        end
+        --ui closed or force close flag is set, then close backpack
+        is_force_close = false --reset flag
+        local player_faction = character_community(db.actor):sub(7)
+        local action_backpack_close_anim = get_template_action_backpack_close(player_faction)
+        lam2.add_action_first(action_backpack_close_anim)
+        return lam2.states.success
+    end
+    return a
+end
+
+
+function get_template_action_backpack_empty()
+    local a = {
+        tag = "backpack_open",
+        name = "backpack_empty",
+        can_skip = false,
+        enter = function (self)
+            is_froce_close_timeout = false
+        end,
+        execute = function(self, time)
+            if lam2.has_queued_actions() then
+                try_close_backpack()
+            end
+            if is_ui_inventory_open and not is_force_close then
+                return lam2.states.running
+            end
+            is_force_close = false
+            return lam2.states.success
+        end
+    }
+    return a
+end
+
+
+function get_template_action_backpack_close(player_faction)
+    local a = liz_fdda_redone_consumables.get_template_action_play_animation_fdda_config("backpack_close_" .. player_faction)
+    -- a.tag = "backpack_open"
+    a.tag = "backpack_close"
+    a.can_skip = false
+    a.speed = get_backpack_speed()
+    return a
+end

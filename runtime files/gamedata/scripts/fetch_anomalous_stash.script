@@ -1,0 +1,94 @@
+local gc = game.translate_string
+local parse_keys = utils_data.parse_string_keys
+
+function on_game_start()
+	if z_fetch_shows_count then
+        RegisterScriptCallback("GUI_on_show", GUI_on_show)
+
+		base_extend_news = z_fetch_shows_count.extend_news_text
+		function z_fetch_shows_count.extend_news_text(text, section, amount)
+			local text = base_extend_news(text, section, amount)
+
+            local hidden_stash = anomalous_stash.hidden_stash
+			if not hidden_stash then return text end
+			hidden_stash_obj = level.object_by_id(hidden_stash)
+			if not hidden_stash_obj then return text end
+
+			local cnt = 0
+			local function find_needed_items(npc, item)
+				if item:section() == section then
+					if item:get_remaining_uses() > 1 then
+						cnt = cnt + item:get_remaining_uses()
+					else
+						cnt = cnt + 1
+					end
+				end
+			end
+
+			hidden_stash_obj:iterate_inventory_box(find_needed_items, hidden_stash_obj)
+		
+			if cnt == 0 then
+				clr_number = utils_xml.get_color("d_red")
+			elseif cnt >= amount then
+				clr_number = utils_xml.get_color("pda_green")
+			else
+				clr_number = utils_xml.get_color("pda_yellow")
+			end
+		
+			local clr_txt = utils_xml.get_color("pda_white")
+			--text = text .. "\\n" .. parse_keys(gc("st_fetch_count_in_anom_stash"), {["count"] = cnt, ["clr_txt"] = clr_txt, ["clr_number"] = clr_number})
+			text = text .. "\\n" .. string.format(gc("st_fetch_count_in_anom_stash"), clr_txt, clr_number, cnt, clr_txt)
+
+			return text
+		end
+
+		if ui_pda_taskboard_tab then
+			base_taskboard_init = ui_pda_taskboard_tab.pda_taskboard_tab.InitControls
+			function ui_pda_taskboard_tab.pda_taskboard_tab:InitControls()
+				base_taskboard_init(self)
+
+                local hidden_stash = anomalous_stash.hidden_stash
+				if not hidden_stash then return end
+				local hidden_stash_obj = level.object_by_id(hidden_stash)
+				if hidden_stash_obj then return end
+
+				local pos = vec_set(db.actor:position())
+				pos.x = pos.x + 50
+				pos.z = pos.z + 50
+				pos.y = -50
+				TeleportObject(hidden_stash, pos, db.actor:level_vertex_id(), db.actor:game_vertex_id())
+				anomalous_stash.is_teleporting = true
+				CreateTimeEvent("anom_stash_fetch", "anom_stash_fetch", 0, function() 
+					hidden_stash_obj = level.object_by_id(hidden_stash)
+					if hidden_stash_obj then
+						anomalous_stash.is_teleporting = false
+						return true
+					end
+				end)
+			end
+		end
+	end
+end
+
+function GUI_on_show(name)
+	if not (name == "Dialog") then return end
+
+    local hidden_stash = anomalous_stash.hidden_stash
+	if not hidden_stash then return end
+
+	local hidden_stash_obj = level.object_by_id(hidden_stash)
+	if hidden_stash_obj then return end
+	local pos = vec_set(db.actor:position())
+	pos.x = pos.x + 50
+	pos.z = pos.z + 50
+	pos.y = -50
+	TeleportObject(hidden_stash, pos, db.actor:level_vertex_id(), db.actor:game_vertex_id())
+	anomalous_stash.is_teleporting = true
+	CreateTimeEvent("anom_stash_fetch", "anom_stash_fetch", 0, function() 
+		hidden_stash_obj = level.object_by_id(hidden_stash)
+		if hidden_stash_obj then
+			anomalous_stash.is_teleporting = false
+			return true
+		end
+	end)
+end

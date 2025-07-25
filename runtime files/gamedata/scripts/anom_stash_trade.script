@@ -1,0 +1,144 @@
+local trade_table = {
+
+	["bandit"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["dolg"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["ecolog"] = {
+		[1] = {
+			["anomalous_backpack"] = 1
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["freedom"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["killer"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["army"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["monolith"] = {
+		[1] = {
+			["anomalous_backpack"] = 1
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["greh"] = {
+		[1] = {
+			["anomalous_backpack"] = 1
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["stalker"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["csky"] = {
+		[1] = {
+            
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	},
+	["isg"] = {
+		[1] = {
+			["anomalous_backpack"] = 1
+		},
+        [2] = {
+            ["anomalous_backpack"] = 1
+        },
+        [3] = {
+            ["anomalous_backpack"] = 2
+        }
+	}
+}
+
+function spawn_items(npc)
+    local is_supplier = trader_autoinject.get_trader_type(npc) == trader_autoinject.SUPPLIER
+    if is_supplier then
+        local community = npc:character_community() or "stalker"
+        local trader_table = trade_table[community] or trade_table["stalker"]
+        local supply_level = clamp(trader_autoinject.supply_level(npc, true) or 1, 1, 3)
+
+        if trader_table[supply_level] then
+            trader_autoinject.spawn_items(npc, trader_table[supply_level], true)
+        end
+    end
+end
+
+TraderAuto = trader_autoinject.update
+
+function trader_autoinject.update(npc)
+    TraderAuto(npc)
+    spawn_items(npc)
+end

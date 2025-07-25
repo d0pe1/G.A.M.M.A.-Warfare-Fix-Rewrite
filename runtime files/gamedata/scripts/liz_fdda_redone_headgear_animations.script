@@ -1,0 +1,337 @@
+
+local mcm_enable_animation = true
+local mcm_animation_speed = 1
+local enable_animations = true
+local ini_blacklist = {}
+local equipped_helmet = -1
+local item_to_unequip = nil
+local item_to_equip = nil
+local r_nvg = z_beefs_nvgs or z_vanilla_nvgs
+
+--- ----------------------------------------------------------------------
+--- init
+--- ----------------------------------------------------------------------
+
+function on_game_start()
+    RegisterScriptCallback("on_game_load", initialize)
+    RegisterScriptCallback("on_option_change", initialize)
+    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
+end
+
+function initialize()
+    ini_blacklist = ini_file("items\\items\\headgear_blacklist.ltx")
+    mcm_enable_animation = liz_fdda_redone_mcm.get_config("headgear_anm/enable")
+    mcm_animation_speed = liz_fdda_redone_mcm.get_config("headgear_anm/speed")
+end
+
+function actor_on_first_update()
+    RegisterScriptCallback("actor_item_to_slot", on_item_to_slot)
+    RegisterScriptCallback("actor_item_to_ruck", on_item_to_ruck)
+    RegisterScriptCallback("actor_on_item_drop", on_item_to_ruck)
+
+    local helm = db.actor:item_in_slot(12)
+    equipped_helmet = helm and helm:id() or -1
+    -- Invoke("actor_on_first_update_te", 3, function() enable_animations = true end)
+end
+
+function on_item_to_slot(obj)
+    if not mcm_enable_animation then return end
+    if IsHeadgear(obj) and obj:id() ~= equipped_helmet then
+        equipped_helmet = obj:id()
+
+        if not enable_animations then return end
+
+        item_to_equip = obj:section()
+        play_animation()
+    end
+end
+
+function on_item_to_ruck(obj)
+    if not mcm_enable_animation then return end
+    if IsHeadgear(obj) and equipped_helmet == obj:id() then
+        equipped_helmet = -1
+
+        if not enable_animations then return end
+
+        item_to_unequip = obj:section()
+        play_animation()
+    end
+end
+
+--- ----------------------------------------------------------------------
+--- monkey patch
+--- ----------------------------------------------------------------------
+
+local originalPIF = actor_effects.play_item_fx
+function actor_effects.play_item_fx(item)
+    if item == "helm" then return end
+    originalPIF(item)
+end
+
+--- ----------------------------------------------------------------------
+--- main
+--- ----------------------------------------------------------------------
+
+function play_animation()
+    if lam2.get_action_with_tag("headgear_animation") then return end
+    if lam2.get_action_with_tag("outfit_animation") then return end
+
+    -- disable mask hud before animation starts (brobably will backfire somehow upd: it didn't)
+    if ui_options.get("video/player/mask_hud") then
+        actor_effects.helm_off = true
+        actor_effects.Update_Mask(db.actor)
+    end
+
+    local a = {
+        tag = "headgear_animation",
+        can_skip = false,
+        enter = function (self)
+            --nvg
+            local nv_was_enabled = false
+            if r_nvg and item_device.nv_state then
+                local torch = db.actor:item_in_slot(10)
+                r_nvg.set_nightvision_animated(torch and torch:section(), not item_device.nv_state)
+                nv_was_enabled = true
+            end
+            --uneqiup
+            if item_to_unequip and not ini_blacklist:section_exist(item_to_unequip) then
+                --fade
+                if ini_sys:r_bool_ex(item_to_unequip .. "_headgear_hud", "fade_use") then
+                    lam2.add_action(get_template_action_unequp_fade())
+                end
+                lam2.add_action(get_template_action_unequip(item_to_unequip .. "_headgear_hud"))                
+            end
+            --equp
+            if item_to_equip and not ini_blacklist:section_exist(item_to_equip) then
+                lam2.add_action(get_template_action_equip(item_to_equip .. "_headgear_hud"))
+            end
+            lam2.add_action(get_template_action_disable_mask_hud(false))
+            --nvg
+            if nv_was_enabled then
+                lam2.add_action(get_template_action_set_nightvision(true))
+            end
+            --reset
+            item_to_unequip = nil
+            item_to_equip = nil
+        end,
+        on_skip = function (self)
+            item_to_unequip = nil
+            item_to_equip = nil
+        end
+    }
+    lam2.add_action(a)
+end
+
+function on_toggle_equip(obj)
+    if not mcm_enable_animation then
+        db.actor:move_to_slot(obj, 12)
+        return
+    end
+
+    -- play animation, move helmet in slot
+    --nvg
+    local nv_was_enabled = false
+    if r_nvg and item_device.nv_state then
+        local torch = db.actor:item_in_slot(10)
+        r_nvg.set_nightvision_animated(torch and torch:section(), not item_device.nv_state)
+        nv_was_enabled = true
+    end
+    --equip
+    lam2.add_action(get_template_action_equip(obj:section() .. "_headgear_hud"))
+    lam2.add_action(get_template_action_move_to_slot(obj))
+    --nvg
+    if nv_was_enabled then
+        lam2.add_action(get_template_action_set_nightvision(true))
+    end
+end
+
+function on_toggle_unequip(obj)
+    if not mcm_enable_animation then
+        db.actor:move_to_ruck(obj)
+        return
+    end
+
+    --nvg
+    local nv_was_enabled = false
+    if r_nvg and item_device.nv_state then
+        local torch = db.actor:item_in_slot(10)
+        r_nvg.set_nightvision_animated(torch and torch:section(), not item_device.nv_state)
+        nv_was_enabled = true
+    end
+    --fade
+    if ini_sys:r_bool_ex(obj:section() .. "_headgear_hud", "fade_use") then
+        lam2.add_action(get_template_action_unequp_fade())
+    end
+    --unequip
+    lam2.add_action(get_template_action_disable_mask_hud(true))
+    lam2.add_action(get_template_action_unequip(obj:section() .. "_headgear_hud"))
+    lam2.add_action(get_template_action_move_to_ruck(obj))
+    lam2.add_action(get_template_action_disable_mask_hud(false))
+    --nvg
+    if nv_was_enabled then
+        lam2.add_action(get_template_action_set_nightvision(true))
+    end
+end
+
+--- ----------------------------------------------------------------------
+--- utils
+--- ----------------------------------------------------------------------
+
+function fade_start()
+    level.add_pp_effector("deimos_short.ppe", 4277, false)
+end
+
+function fade_stop()
+    level.remove_pp_effector(4277)
+end
+
+--- ----------------------------------------------------------------------
+--- action templates
+--- ----------------------------------------------------------------------
+
+--unequip fade start before unequip animation with constant delay at 0.4s
+--so there is no point to have fade start time in the config file
+function get_template_action_unequp_fade()
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_unequip_fade",
+        hands = 2,
+        fade_started = false,
+        fade_stopped = false,
+        execute = function (self, time)
+            --start fade
+            if not self.fade_started then
+                self.fade_started = true
+                fade_start()
+                return lam2.states.running
+            end
+            --disable fade
+            if not self.fade_stopped then
+                self.fade_stopped = true
+                fade_stop()
+                return lam2.states.running
+            end
+            --stop delay
+            if time > 0.4 then
+                return lam2.states.success
+            end
+            return lam2.states.running
+        end
+    }
+    return a
+end
+
+function get_template_action_unequip(section)
+    local a = lam2.get_template_action_play_animation()
+    a.tag = "headgear_animation"
+    a.name = "headgear_unequip"
+    a.sec = ini_sys:section_exist(section) and section or "gasmask_headgear_hud"
+    a.anm = "anm_unequip"
+    a.cam = "cam_unequip"
+    a.snd = "snd_unequip"
+    a.speed = mcm_animation_speed
+    return a
+end
+
+function get_template_action_equip(section)
+    local a = lam2.get_template_action_play_animation()
+    a.tag = "headgear_animation"
+    a.name = "headgear_equip"
+    a.sec = ini_sys:section_exist(section) and section or "gasmask_headgear_hud"
+    a.anm = "anm_equip"
+    a.cam = "cam_equip"
+    a.snd = "snd_equip"
+    a.speed = mcm_animation_speed
+    a.fade_enabled = ini_sys:r_bool_ex(section, "fade_use")
+    a.fade_started = false
+    a.fade_stopped = false
+    a.on_execute = function (self, time)
+        --start fade
+        if self.fade_enabled and time > self.duration - 0.35 and not self.fade_started then
+            self.fade_started = true
+            fade_start()
+        end
+        --interrupt fade
+        if self.fade_enabled and time > self.duration - 0.25 and not self.fade_stopped then
+            self.fade_stopped = true
+            fade_stop()
+        end
+    end
+    return a
+end
+
+function get_template_action_switch_mask_hud()
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_switch_mask_hud",
+        enter = function (self)
+            if ui_options.get("video/player/mask_hud") then
+                actor_effects.switch_helm()
+                actor_effects.Update_Mask(db.actor)
+            end
+        end
+    }
+    return a
+end
+
+function get_template_action_disable_mask_hud(value)
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_disable_mask_hud",
+        value = value,
+        enter = function (self)
+            if ui_options.get("video/player/mask_hud") then
+                actor_effects.helm_off = self.value
+                actor_effects.Update_Mask(db.actor)
+            end
+        end,
+    }
+    return a
+end
+
+function get_template_action_move_to_slot(obj)
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_move_to_slot",
+        target = obj,
+        enter = function (self)
+            enable_animations = false
+            db.actor:move_to_slot(self.target, 12)
+        end,
+        exit = function (self)
+            enable_animations = true
+        end
+    }
+    return a
+end
+
+function get_template_action_move_to_ruck(obj)
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_move_to_ruck",
+        target = obj,
+        enter = function (self)
+            enable_animations = false
+            db.actor:move_to_ruck(self.target)
+        end,
+        exit = function (self)
+            enable_animations = true
+        end
+    }
+    return a
+end
+
+function get_template_action_set_nightvision(state)
+    local a = {
+        tag = "headgear_animation",
+        name = "headgear_set_nightvision",
+        target = state,
+        enter = function (self)
+            if r_nvg and item_device.nv_state ~= self.target then
+                local torch = db.actor:item_in_slot(10)
+                r_nvg.set_nightvision_animated(torch and torch:section(), not item_device.nv_state)
+            end
+        end
+    }
+    return a
+end

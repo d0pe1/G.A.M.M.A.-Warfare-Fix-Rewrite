@@ -1,0 +1,47 @@
+--[[
+    daily_sim_engine.script
+    -----------------------
+    Runs the daily simulation cycle for Warfare overhaul. This ties together
+    resource production, base consumption, transport task generation and squad
+    spawning. Called once per in-game day by an external scheduler.
+    Last edit: 2025-07-26
+]]
+
+local node_system  = require 'node_system'
+local resource_sys  = require 'resource_system'
+local resource_pool = require 'resource_pool'
+local base_logic    = require 'base_node_logic'
+local coordinator   = require 'hq_coordinator'
+local spawn_system  = require 'squad_spawn_system'
+local diplomacy     = require 'diplomacy_core'
+local faction_state = require 'faction_state'
+
+local daily = {}
+
+--- Execute one full day tick.
+function daily.run_day()
+    -- produce resources from specialized nodes
+    node_system.tick_production(resource_pool, resource_sys)
+
+    -- consume resources from each base, queue transports if lacking
+    for id, base in pairs(base_logic.bases) do
+        if not base_logic.consume(id) then
+            if base.owner then
+                coordinator.register_base(base.owner, id)
+                coordinator.evaluate(base.owner)
+            end
+        end
+    end
+
+    -- spawn squads if faction pools and bases allow
+    for faction, _ in pairs(resource_sys.factions) do
+        if spawn_system.can_spawn_squad(faction, resource_sys) then
+            spawn_system.spawn_squad(faction, 'patrol', resource_sys)
+        end
+        diplomacy.evaluate(faction, resource_pool)
+    end
+
+    faction_state.evaluate_all()
+end
+
+return daily

@@ -1,0 +1,178 @@
+--[[
+    resource_system.script
+    ----------------------
+    Implements dynamic resource collection and pooling per faction. Resources are
+    gathered from nodes and consumed by infrastructure buildings or upgrades.
+    This module is intentionally lightweight and can be extended by other
+    scripts. All functions are documented for clarity.
+]]
+
+local resource_system = {
+    -- Tracks resource amounts per faction.
+    -- Example: factions["duty"] = {scrap = 10, herbs = 5}
+    factions = {},
+
+    -- Tracks resource nodes currently controlled in the world.
+    -- Example: nodes["jupiter_factory"] = {
+    --   owner = "duty", type = "scrap", stock = 3,
+    --   output = 1, capacity = 5
+    -- }
+    nodes = {},
+
+    -- Upgrade configuration loaded from LTX
+    upgrades = {}
+}
+
+--- Initialize resource pool for a faction.
+-- @param faction string Faction identifier
+-- @return table Newly created resource pool
+function resource_system.init_faction(faction)
+    local pool = {scrap = 0, herbs = 0, electronics = 0, artifacts = 0}
+    resource_system.factions[faction] = pool
+    return pool
+end
+
+--- Internal helper: ensure node entry exists
+local function get_node(id)
+    if not resource_system.nodes[id] then
+        resource_system.nodes[id] = {owner=nil, type=nil, stock=0, output=1, capacity=10}
+    end
+    return resource_system.nodes[id]
+end
+
+--- Load upgrade configuration from misc/resource_upgrades.ltx.
+local function load_upgrades()
+    local ini = ini_file and ini_file("misc\\resource_upgrades.ltx")
+    if not ini or not ini.section_exist or not ini:section_exist("upgrades") then
+        -- fallback defaults if config missing
+        resource_system.upgrades = {
+            [1] = {output=1, capacity=10},
+            [2] = {output=2, capacity=20},
+            [3] = {output=3, capacity=30}
+        }
+        return
+    end
+    local cfg = {}
+    local level = 1
+    while ini:line_exist("upgrades", string.format("level%d_output", level)) do
+        local out = tonumber(ini:r_float("upgrades", string.format("level%d_output", level))) or 1
+        local cap = tonumber(ini:r_s32("upgrades", string.format("level%d_capacity", level))) or 10
+        cfg[level] = {output=out, capacity=cap}
+        level = level + 1
+    end
+    resource_system.upgrades = cfg
+end
+
+load_upgrades()
+
+--- Internal helper to fetch a faction resource pool.
+-- Creates the pool if missing.
+-- @param faction string Faction identifier
+-- @return table Resource pool
+local function get_pool(faction)
+    return resource_system.factions[faction] or resource_system.init_faction(faction)
+end
+
+--- Apply upgrade values to a node.
+-- @param id string Node identifier
+-- @param level number Upgrade level
+function resource_system.apply_node_upgrade(id, level)
+    local node = get_node(id)
+    node.level = level
+    local cfg = resource_system.upgrades[level] or resource_system.upgrades[1]
+    node.output = cfg.output
+    node.capacity = cfg.capacity
+end
+
+--- Produce resources for all nodes once per in-game day.
+function resource_system.tick_daily()
+    for id, node in pairs(resource_system.nodes) do
+        if node.owner and node.type then
+            node.stock = math.min((node.stock or 0) + (node.output or 1), node.capacity or 10)
+        end
+    end
+end
+
+--- Add resources to a faction.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type (scrap/herbs/electronics/artifacts)
+-- @param amount number Quantity to add
+function resource_system.add_resource(faction, rtype, amount)
+    local pool = get_pool(faction)
+    pool[rtype] = (pool[rtype] or 0) + (amount or 0)
+end
+
+--- Withdraw resources from a node stockpile.
+-- @param node_id string
+-- @param amount number
+-- @return number withdrawn
+function resource_system.withdraw_from_node(node_id, amount)
+    local node = get_node(node_id)
+    local take = math.min(node.stock or 0, amount or 0)
+    node.stock = (node.stock or 0) - take
+    return take
+end
+
+--- Consume resources from a faction pool.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type
+-- @param amount number Quantity to consume
+-- @return boolean success True if enough resources were available
+function resource_system.consume_resource(faction, rtype, amount)
+    local pool = get_pool(faction)
+    if (pool[rtype] or 0) < amount then
+        return false
+    end
+    pool[rtype] = pool[rtype] - amount
+    return true
+end
+
+--- Retrieve current amount of a resource for a faction.
+-- @param faction string Faction identifier
+-- @param rtype string Resource type
+-- @return number amount
+function resource_system.get_resource(faction, rtype)
+    local pool = get_pool(faction)
+    return pool[rtype] or 0
+end
+
+--- Return id of a node owned by faction that stores a resource type.
+-- Simply returns the first matching node with stock > 0.
+function resource_system.find_node_with_resource(faction, rtype)
+    for id, node in pairs(resource_system.nodes) do
+        if node.owner == faction and node.type == rtype and (node.stock or 0) > 0 then
+            return id
+        end
+    end
+    return nil
+end
+
+--- Capture a resource node for a faction and immediately collect its value.
+-- @param node_id string Unique node identifier
+-- @param faction string Faction capturing the node
+--- Convenience wrapper matching cross-module API.
+function resource_system.get_faction_resource(faction_id, res_type)
+    return resource_system.get_resource(faction_id, res_type)
+end
+
+--- Modify multiple resources at once using a delta table.
+-- @param faction_id string
+-- @param delta table {scrap=1, herbs=-1} etc
+function resource_system.modify_faction_resource(faction_id, delta)
+    local pool = get_pool(faction_id)
+    for r, d in pairs(delta or {}) do
+        pool[r] = (pool[r] or 0) + d
+        if pool[r] < 0 then pool[r] = 0 end
+    end
+end
+-- @param level number Initial upgrade level
+function resource_system.capture_node(node_id, faction, rtype, amount, level)
+    local node = get_node(node_id)
+    node.owner = faction
+    node.type = rtype
+    node.stock = (node.stock or 0) + (amount or 0)
+    resource_system.apply_node_upgrade(node_id, level or 1)
+    resource_system.add_resource(faction, rtype, amount or 0)
+end
+
+return resource_system

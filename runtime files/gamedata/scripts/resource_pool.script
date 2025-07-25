@@ -1,0 +1,54 @@
+--[[
+    resource_pool.script
+    --------------------
+    Central storage for faction resource levels. Each specialized node contributes
+    directly to its faction's production capability. No consumable currency is
+    tracked – only the number of active nodes of each type.
+]]
+
+local resource_pool = {
+    levels = {}
+}
+
+--- Ensure a pool exists for a faction.
+local function get_pool(faction)
+    if not resource_pool.levels[faction] then
+        resource_pool.levels[faction] = {scrap=0, herbs=0, electronics=0, artifacts=0}
+    end
+    return resource_pool.levels[faction]
+end
+
+--- Recalculate resource levels from node_system state.
+-- @param node_sys table Node system to read from
+function resource_pool.update_from_nodes(node_sys)
+    -- reset all levels
+    resource_pool.levels = {}
+    for id, node in pairs(node_sys.nodes) do
+        if node.owner and node.specialization then
+            local pool = get_pool(node.owner)
+            local r = node.specialization
+            if node.state == node_sys.STATE.artifact then
+                r = "artifacts"
+            end
+            if pool[r] ~= nil then
+                pool[r] = pool[r] + (node.level or 1)
+            end
+        end
+    end
+end
+
+--- Get current level of a resource type for a faction.
+-- @param faction string
+-- @param rtype string
+function resource_pool.get_resource(faction, rtype)
+    local p = get_pool(faction)
+    return p[rtype] or 0
+end
+
+--- Return a copy of all resource levels for a faction.
+function resource_pool.get_totals(faction)
+    local p = get_pool(faction)
+    return {scrap=p.scrap, herbs=p.herbs, electronics=p.electronics, artifacts=p.artifacts}
+end
+
+return resource_pool

@@ -1,0 +1,137 @@
+-- Modified by Melanc 2022.02.12 to add HUD indicator when near campfire
+
+--[[ 
+	Updated by HarukaSai 25.05.2022 
+	- converted edit to arszi psy to monkey patch
+	- moved everything to get psy regen to reduce the amount of campfire look ups
+
+	31.07.2022
+	- added mcm configuration
+]]
+
+local regens = {
+   health = 0.0005,
+   rad    = -0.0005,
+   psy	  = 0.0075
+}
+
+local enable_bhs = true
+local bodypart_regen = 0.01
+
+local dist         = 10.0
+local mcm_id = "cozy_campfire"
+
+function get_nearby_lit_campfire()
+	local pos = db.actor:position()
+	for id,binder in pairs(bind_campfire.campfires_all) do
+		if (binder and binder.campfire and binder.campfire:is_on()) then
+			if (pos:distance_to_sqr(binder.object:position()) <= dist) then
+				return true
+			end
+		end 
+	end 
+	return false
+end
+
+local options = {
+	id = mcm_id, sh = true,
+	gr = {
+		{ id = mcm_id     , type = "slide", link = "ui_options_slider_player", text = "ui_mcm_menu_" .. mcm_id, size = {512, 50}, spacing = 20},
+		{ id = "health",    type = "track", val = 2, step = 0.5, def = 5 ,  min = 0, max = 10},
+		{ id = "rad", 		type = "track", val = 2, step = 0.1, def = 1.5, min = 0, max = 10},
+		{ id = "psy", 		type = "track", val = 2, step = 0.1, def = 1.5, min = 0, max = 10},
+		{id="divider", type="line" },
+		{id = "enablegrokbhssystem", type = "check", val = 1, def = true},
+		{id = "bodypart", type = "track" , val = 2, min = 0.1, max = 10, step = 0.1, def = 1.5},
+	}
+}
+
+function on_mcm_load()
+    return options
+end
+
+function on_option_change()
+	regens.health =  tonumber(ui_mcm.get("cozy_campfire/health")) * 0.0001
+	regens.rad =  tonumber(ui_mcm.get("cozy_campfire/rad")) * 0.0001
+	regens.psy =  tonumber(ui_mcm.get("cozy_campfire/psy")) * 0.001
+
+	enable_bhs = ui_mcm.get("cozy_campfire/enablegrokbhssystem")
+	bodypart_regen = tonumber(ui_mcm.get("cozy_campfire/bodypart")) * 0.001
+end
+
+function on_game_start()
+	actor_status.add_indicator("Campfire",{
+		index= 4,
+		typ= "booster",
+		functor= {"cozy_campfire_mcm","get_nearby_lit_campfire"},
+		icon= "ui\\campfire_hud\\campfire_buff.dds",
+		background= "ui\\campfire_hud\\campfire_background",
+		anim_icon= false,
+		anim_bk= false,
+	})
+
+	RegisterScriptCallback("on_option_change", on_option_change)
+	on_option_change()
+
+	cached_get_psy_regen = arszi_psy.get_psy_health_regeneration
+	
+	arszi_psy.get_psy_health_regeneration = function()
+		local actor = db.actor
+		local campfire = get_nearby_lit_campfire()
+
+		if campfire then
+			actor:change_health(regens.health)
+			actor:change_radiation(-regens.rad)
+
+			if enable_bhs then
+				regen_body_part(bodypart_regen)
+			end
+		end
+
+		return cached_get_psy_regen() + (campfire and regens.psy or 0)
+	end
+end
+
+function regen_body_part(amount)
+	local regen_amount = zzz_player_injuries.health.head + amount
+	if(regen_amount > zzz_player_injuries.maxhp.head) then
+		regen_amount = zzz_player_injuries.maxhp.head
+	end
+	zzz_player_injuries.health.head = regen_amount
+	utils_obj.save_var(db.actor,"health.head",zzz_player_injuries.health.head)
+
+	regen_amount = zzz_player_injuries.health.torso + amount
+	if(regen_amount > zzz_player_injuries.maxhp.torso) then
+		regen_amount = zzz_player_injuries.maxhp.torso
+	end
+	zzz_player_injuries.health.torso = regen_amount
+	utils_obj.save_var(db.actor,"health.torso",zzz_player_injuries.health.torso)
+
+	regen_amount = zzz_player_injuries.health.leftarm + amount
+	if(regen_amount > zzz_player_injuries.maxhp.leftarm) then
+		regen_amount = zzz_player_injuries.maxhp.leftarm
+	end
+	zzz_player_injuries.health.leftarm = regen_amount
+	utils_obj.save_var(db.actor,"health.leftarm",zzz_player_injuries.health.leftarm)
+
+	regen_amount = zzz_player_injuries.health.rightarm + amount
+	if(regen_amount > zzz_player_injuries.maxhp.rightarm) then
+		regen_amount = zzz_player_injuries.maxhp.rightarm
+	end
+	zzz_player_injuries.health.rightarm = regen_amount
+	utils_obj.save_var(db.actor,"health.rightarm",zzz_player_injuries.health.rightarm)
+
+	regen_amount = zzz_player_injuries.health.leftleg + amount
+	if(regen_amount > zzz_player_injuries.maxhp.leftleg) then
+		regen_amount = zzz_player_injuries.maxhp.leftleg
+	end
+	zzz_player_injuries.health.leftleg = regen_amount
+	utils_obj.save_var(db.actor,"health.leftleg",zzz_player_injuries.health.leftleg)
+
+	regen_amount = zzz_player_injuries.health.rightleg + amount
+	if(regen_amount > zzz_player_injuries.maxhp.rightleg) then
+		regen_amount = zzz_player_injuries.maxhp.rightleg
+	end
+	zzz_player_injuries.health.rightleg = regen_amount
+	utils_obj.save_var(db.actor,"health.rightleg",zzz_player_injuries.health.rightleg)
+end

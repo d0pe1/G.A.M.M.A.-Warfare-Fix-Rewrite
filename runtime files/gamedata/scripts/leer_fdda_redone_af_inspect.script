@@ -1,0 +1,208 @@
+
+particle = particles_object("artefact\\effects\\af_idle_dist")
+light = nil
+light_flag = false
+containers = {
+	["af_aac"] = true,
+	["af_aam"] = true,
+	["af_iam"] = true,
+	["lead_box"] = true,
+}
+local key_stop_inspect = {
+	[337] = true, -- left mouse button
+	[338] = true, -- middle mouse button
+	[339] = true, -- right mouse button
+	[19] = true   -- key R
+}
+local flag_stop_inspect = false
+
+--- -----------------------------------
+--- main
+--- -----------------------------------
+
+function on_before_key_press(key, bind, dis, flags)
+	if key_stop_inspect[key] then
+		flag_stop_inspect = true
+	end
+end
+
+function st_inspect(obj)
+	if containers[obj:section()] then return end
+	local kind = ini_sys:r_string_ex(obj:section(), "kind") or nil
+	if kind and (kind == "i_arty" or kind == "i_arty_cont") then
+		return game.translate_string("st_inspect")
+	end
+end
+
+function inspect(obj)
+    local section = obj:section()
+	local is_container = false
+
+	if is_container_acrtifact(section) then
+		local art = system_ini():r_string_ex(section, "1icon_layer")
+		if art then
+			section = art
+			is_container = true
+		end
+	end
+
+	--if we have lead box animation installed use it if we inspect artifact from container
+	hide_hud_inventory()
+	if is_container and zzzz_leer_fdda_redone_af_box_anim then
+		lam2.add_action(zzzz_leer_fdda_redone_af_box_anim.get_template_action_af_box_remove(section))
+		lam2.add_action(get_template_action_inspect_start(section))
+		lam2.add_action(get_template_action_inspect_idle(section))
+		lam2.add_action(get_template_action_inspect_end(section))
+		lam2.add_action(zzzz_leer_fdda_redone_af_box_anim.get_template_action_af_box_add(section))
+	else
+		lam2.add_action(get_template_action_inspect_start(section))
+		lam2.add_action(get_template_action_inspect_idle(section))
+		lam2.add_action(get_template_action_inspect_end(section))
+	end
+end
+
+--- -----------------------------------
+--- utils
+--- -----------------------------------
+
+function is_container_acrtifact(section)
+	for c, _ in pairs(containers) do
+		if string.find(section, c) then
+			return true
+		end
+	end
+	return false
+end
+
+function get_play_pos()
+	pos = db.actor:bone_position("jaw_1"):add(device().cam_dir:mul(0.3))
+	pos.y = pos.y - 0.1
+	return pos
+end
+
+function get_light_rgb(section)
+	if system_ini():line_exist(section, "trail_light_color") then
+		local rgb = system_ini():r_string_ex(section, "trail_light_color", "")
+		local r, g, b = rgb:match("([^,]+),([^,]+),([^,]+)")
+		r = tonumber(r)
+		g = tonumber(g)
+		b = tonumber(b)
+		return r, g, b
+	end
+end
+
+function light_on(r, g, b, range, bright, y_pos, dirmult)
+	light = script_light()
+	light.type = 1
+	light.range = range
+	light_bright = bright
+	light_range = range
+	light.lanim = "koster_01_electra"
+	light.lanim_brightness = 1
+	light.hud_mode = false
+	light.shadow = false
+	light.volumetric = false
+	light.enabled = true
+	light.color = fcolor():set(r, g, b, bright)
+	local dir = device().cam_dir
+	local pos = device().cam_pos
+	pos = pos:add(dir:mul(dirmult))
+	pos.y = pos.y - y_pos
+	light:set_position(pos)
+	light:set_direction(dir)
+	light:update()
+	CreateTimeEvent("l_move", "l_move", 0, light_move, r, g, b, y_pos, dirmult)
+	light_flag = true
+	return true
+end
+
+function light_move(r, g, b, y_pos, dirmult)
+	light_bright = light_bright
+	light_range = light_range
+	light.range = light_range
+	light.color = fcolor():set(r, g, b, light_bright)
+	local dir = device().cam_dir
+	local pos = device().cam_pos
+	pos = pos:add(dir:mul(dirmult))
+	pos.y = pos.y - y_pos
+	light:set_position(pos)
+	light:set_direction(dir)
+	light:update()
+	if light_flag then
+		return false
+	else
+		return true
+	end
+end
+
+function light_off()
+	if not light then return end
+
+	light.enabled = false
+	light:update()
+	light_flag = false
+	return true
+end
+
+--- -----------------------------------
+--- action templates
+--- -----------------------------------
+
+function get_template_action_inspect_start(section)
+    local a = lam2.get_template_action_play_animation()
+	a.tag = "af_inspect"
+	a.name = "af_inspect_start"
+    a.sec = section .. "_anm_hud"
+    a.anm = "anm_show"
+    a.target = section
+    a.on_enter = function (self)
+        particle:play_at_pos(get_play_pos())
+        local r, g, b = get_light_rgb(self.target)
+		light_on(r, g, b, 1, 50, 0.2, 0.3)
+    end
+    return a
+end
+
+function get_template_action_inspect_idle(section)
+    local a = lam2.get_template_action_play_animation()
+	a.tag = "af_inspect"
+	a.name = "af_inspect_idle"
+	a.sec = section .. "_anm_hud"
+    a.anm = "anm_idle"
+	a.gui = nil
+	a.on_enter = function (self)
+		self.gui = ui_inventory.GUI
+		RegisterScriptCallback("on_before_key_press", on_before_key_press)
+	end
+	a.on_execute = function (self, time)
+		--if inventory ui is open stop showing artefat
+		if self.gui and self.gui:IsShown() then
+			return lam2.states.success
+		end
+		if flag_stop_inspect then
+			return lam2.states.success
+		end
+		if particle then
+			particle:move_to(get_play_pos(), device().cam_dir)
+		end
+		return lam2.states.running
+	end
+	a.on_exit = function (self)
+		UnregisterScriptCallback("on_before_key_press", on_before_key_press)
+		flag_stop_inspect = false
+	end
+    return a
+end
+
+function get_template_action_inspect_end(section)
+    local a = lam2.get_template_action_play_animation()
+	a.tag = "af_inspect"
+	a.name = "af_inspect_end"
+	a.sec = section .. "_anm_hud"
+    a.anm = "anm_hide"
+    a.on_exit = function (self)
+        particle:stop()
+        light_off()
+    end
+    return a
+end

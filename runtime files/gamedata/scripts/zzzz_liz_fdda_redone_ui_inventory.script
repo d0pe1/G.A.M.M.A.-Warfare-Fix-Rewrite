@@ -1,0 +1,54 @@
+--- ---------------------------------------------
+--- this script disables various inventory ui inputs while
+--- outfit/helmet or backpack equip in the process
+--- to prevent player from spamming it. Spamming in itself shouldn't break anything
+--- but it looks janky
+--- ---------------------------------------------
+
+local baseOCCM1DB = ui_inventory.UIInventory.On_CC_Mouse1_DB
+ui_inventory.UIInventory.On_CC_Mouse1_DB = function (self, bag, idx)
+    if lam2.is_running() then
+        local obj = self.CC[bag]:GetObj(idx)
+        if obj and (IsOutfit(obj) or IsItem("backpack", nil, obj) or IsHeadgear(obj)) then
+            local ca = lam2.get_current_action()
+            if ca and ca.can_skip then
+                lam2.stop_all_actions()
+            elseif not (ca.tag == "backpack_open" or ca.tag == "body_search") then
+                return
+            end
+        end
+    end
+    baseOCCM1DB(self, bag, idx)
+end
+
+local baseOCCM2 = ui_inventory.UIInventory.On_CC_Mouse2
+ui_inventory.UIInventory.On_CC_Mouse2 = function (self, bag, idx)
+    if lam2.is_running() then
+        local obj = self.CC[bag]:GetObj(idx)
+        if obj and (IsOutfit(obj) or IsItem("backpack", nil, obj) or IsHeadgear(obj)) then
+            local ca = lam2.get_current_action()
+            if ca and ca.can_skip then
+                lam2.stop_all_actions()
+            elseif not (ca.tag == "backpack_open" or ca.tag == "body_search") then
+                return
+            end
+        end
+    end
+    baseOCCM2(self, bag, idx)
+end
+
+local baseMCCDD = ui_inventory.UIInventory.On_CC_DragDrop
+ui_inventory.UIInventory.On_CC_DragDrop = function (self, bag_from, idx_from)
+    if lam2.is_running() then
+        local obj_from = self.CC[bag_from]:GetObj(idx_from)
+        if obj_from and (IsOutfit(obj_from) or IsItem("backpack", nil, obj_from) or IsHeadgear(obj_from)) then
+            local ca = lam2.get_current_action()
+            if ca and ca.can_skip then
+                lam2.stop_all_actions()
+            elseif not (ca.tag == "backpack_open" or ca.tag == "body_search") then
+                return
+            end
+        end
+    end
+    baseMCCDD(self, bag_from, idx_from)
+end
