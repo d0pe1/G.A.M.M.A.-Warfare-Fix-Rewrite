@@ -63,3 +63,4 @@ All notable changes to this project will be documented in this file.
 - Added `generate_diff_summary.py` tool producing `diff_summary.json` for Pass 1 static validation.
 - Generated `docs/function_compat_report.md` for Pass 2 signature and callsite audit.
 - Pass 3 root cause fixes removing unnecessary nil guards.
+- Refreshed function signature audit via new script `function_signature_audit.py`
