@@ -8,10 +8,12 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 - Prioritize **compatibility and stability** over abstraction or refactors.  
 - If a change risks breaking GAMMA baseline scripts or MO2 overrides, **flag and document it**.
 - always leave a modification Note in the header comment in each file you change
+- before starting implementation, plan out steps into prescope.md for self checking and subtask awareness + easy iterative memory for sub scopes
 - Once a subtask is complete, the agent must:  
-  1. Document what was added (with links to modified files).  
-  2. Mark the checkbox as done ([x]) in this file.  
-  3. Create a **Pull Request for review**.  
+  1. Document what was added (with links to modified files).
+  2. check it's own prescope.md for completion  
+  3. Mark the checkbox as done ([x]) in this file.
+  4. Create a **Pull Request for review**.  
 
 ---
 
@@ -20,18 +22,18 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 **Goal:** Statically verify that all modifications in `gamma_walo` are compatible with the original files in `runtime files`. Ensure no regressions or invalid behavior changes were introduced without justification. **No runtime execution is required.**  
 
 ### ✅ Task Outline (5-Pass Static Validation)
- - [x] **Pass 1: Baseline Diff Mapping**
+ - [ ] **Pass 1: Baseline Diff Mapping**
   - For each file in `gamma_walo`, locate the corresponding file in `runtime files`.  
   - Produce a side-by-side diff summary (function additions, deletions, modifications).  
   - Output: `diff_summary.json` or Markdown list.  
 
- - [x] **Pass 2: Signature & Callsite Audit**
+ - [ ] **Pass 2: Signature & Callsite Audit**
   - For each modified function: extract parameters, return structure, and globals used.  
   - Grep all other scripts for references to this function.  
   - Validate that all callsites remain compatible.  
   - Output: `function_compat_report.md`.  
 
-- [x] **Pass 3: Nil Defense Elimination & Root Tracing**
+- [ ] **Pass 3: Nil Defense Elimination & Root Tracing**
   - Identify functions where nil checks were added/altered.  
   - Trace the source of the nil state and fix upstream rather than band-aiding.  
   - Output: `root_cause_fixes.md`.  
