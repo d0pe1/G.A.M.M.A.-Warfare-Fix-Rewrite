@@ -4,9 +4,10 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 
 ## 📜 Task Execution Rules  
 - All tasks must **integrate with the existing GAMMA modpack and Anomaly engine systems**.  
-- Never build standalone systems: every feature must hook into existing engine callbacks, task systems, or data flows.  
+- Never build standalone systems: every feature must hook into existing engine callbacks, task systems, or data flows (as referencable under "Runtime Files")
 - Prioritize **compatibility and stability** over abstraction or refactors.  
-- If a change risks breaking GAMMA baseline scripts or MO2 overrides, **flag and document it**.  
+- If a change risks breaking GAMMA baseline scripts or MO2 overrides, **flag and document it**.
+- always leave a modification Note in the header comment in each file you change
 - Once a subtask is complete, the agent must:  
   1. Document what was added (with links to modified files).  
   2. Mark the checkbox as done ([x]) in this file.  
