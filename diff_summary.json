@@ -81,39 +81,39 @@
       },
       {
         "name": "is_faction_pair_unaffected",
-        "diff_lines": 22
-      },
-      {
-        "name": "is_relation_allowed",
         "diff_lines": 23
       },
       {
+        "name": "is_relation_allowed",
+        "diff_lines": 24
+      },
+      {
         "name": "reset_all_relations",
-        "diff_lines": 28
+        "diff_lines": 31
       },
       {
         "name": "calculate_relation_change",
-        "diff_lines": 81
+        "diff_lines": 84
       },
       {
         "name": "get_random_enemy_faction",
-        "diff_lines": 21
+        "diff_lines": 22
       },
       {
         "name": "get_random_natural_faction",
-        "diff_lines": 21
+        "diff_lines": 22
       },
       {
         "name": "online_npc_on_death",
-        "diff_lines": 16
+        "diff_lines": 26
       },
       {
         "name": "get_rank_relation",
-        "diff_lines": 21
+        "diff_lines": 28
       },
       {
         "name": "get_reputation_relation",
-        "diff_lines": 21
+        "diff_lines": 28
       }
     ]
   },
@@ -183,6 +183,14 @@
     "modified": [
       {
         "name": "process_targets",
+        "diff_lines": 16
+      },
+      {
+        "name": "find_targets",
+        "diff_lines": 15
+      },
+      {
+        "name": "find_targets_for_overflow",
         "diff_lines": 15
       }
     ]
@@ -212,11 +220,11 @@
       },
       {
         "name": "evaluate_squads_smarts",
-        "diff_lines": 20
+        "diff_lines": 22
       },
       {
         "name": "postpone_for_next_frame",
-        "diff_lines": 144
+        "diff_lines": 153
       }
     ]
   },
