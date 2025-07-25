@@ -20,7 +20,7 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 **Goal:** Statically verify that all modifications in `gamma_walo` are compatible with the original files in `runtime files`. Ensure no regressions or invalid behavior changes were introduced without justification. **No runtime execution is required.**  
 
 ### ✅ Task Outline (5-Pass Static Validation)
-- [ ] **Pass 1: Baseline Diff Mapping**  
+ - [x] **Pass 1: Baseline Diff Mapping**
   - For each file in `gamma_walo`, locate the corresponding file in `runtime files`.  
   - Produce a side-by-side diff summary (function additions, deletions, modifications).  
   - Output: `diff_summary.json` or Markdown list.  
