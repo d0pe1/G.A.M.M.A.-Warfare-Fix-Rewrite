@@ -38,10 +38,10 @@ This document defines specific, scoped tasks for Codex agents to implement in or
   - Trace the source of the nil state and fix upstream rather than band-aiding.  
   - Output: `root_cause_fixes.md`.  
 
-- [ ] **Pass 4: Behavior Consistency Review**  
-  - Compare logic and outputs of changed functions to their originals.  
-  - Identify intentional vs unintentional changes.  
-  - Output: `behavior_change_log.md`.  
+ - [x] **Pass 4: Behavior Consistency Review**
+  - Compare logic and outputs of changed functions to their originals.
+  - Identify intentional vs unintentional changes.
+  - Output: `behavior_change_log.md`.
 
 - [ ] **Pass 5: Final Verification + Structured Report**  
   - Rerun diff, callsite, and consistency checks after fixes.  

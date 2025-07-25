@@ -62,3 +62,27 @@ originating cause of nil values. Summarize fixes in `docs/root_cause_fixes.md`.
 - Documentation regenerated.
 - Tests pass.
 - `agent_subtasks.md` Pass 3 checkbox marked as done.
+
+## Task: Pass 4: Behavior Consistency Review
+
+### Objective
+Analyze modified functions for behavioral deviations between `runtime files` and
+`gamma_walo`. Document significant logic differences.
+
+### Steps
+1. Create `tools/behavior_consistency_review.py` to parse `diff_summary.json` and
+   inspect changed functions.
+2. Categorize each function as `major` or `minor` change based on diff size and
+   presence of altered return statements.
+3. Output findings to `docs/behavior_change_log.md`.
+4. Run `python tools/gen_docs.py` to keep documentation in sync.
+5. Execute `busted` to verify existing tests still pass.
+
+### Integration Points
+- Static analysis only; ensures script parity with original Anomaly logic.
+
+### Completion Criteria
+- `docs/behavior_change_log.md` generated summarizing all detected changes.
+- Documentation regenerated.
+- Tests pass.
+- `agent_subtasks.md` Pass 4 checkbox marked as done.
