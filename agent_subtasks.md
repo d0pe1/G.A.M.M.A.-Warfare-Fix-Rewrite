@@ -25,8 +25,8 @@ This document defines specific, scoped tasks for Codex agents to implement in or
 - [ ] LUA Error at Marking ! [20:36:14.836] in crashlog.log
 - rewrite whatever needs to be, so it doesn even try to field thats empty... and find out why it might have been empty here at runtime.
 - Note: I was trying to run the game, started new game selected warfare mode, clicked to launch new savegame, it started loading, crashed before being in game.
+- if you need to patch only under 'runtime files" make sure to copy it from there into gamma_walo to its corresponding location
 
-- 
 ### ✅ Task Outline (5-Pass Static Validation)
  - [x] **Pass 1: Baseline Diff Mapping**
   - For each file in `gamma_walo`, locate the corresponding file in `runtime files`.  
