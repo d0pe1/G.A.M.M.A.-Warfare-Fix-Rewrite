@@ -147,8 +147,10 @@ function evaluate_squads_smarts(task_id, var, squad, smart)
 					var.squad_id = squad.id
 					save_var( db.actor, task_id, var )
 					
-					-- reset gametime so they don't leave
-                                        squad.stay_time = game.get_game_time()
+                                       -- reset gametime so they don't leave
+                                       if not _G.WARFARE then
+                                               squad.stay_time = game.get_game_time()
+                                       end
 					squad.force_online = true
 					--printf("- %s | squad (%s) [%s] is saved", task_id, squad.id, squad.player_id)
 					return true
@@ -199,7 +201,7 @@ function postpone_for_next_frame(task_id, squad_id)
 			news_ico = task_manager.task_ini:r_string_ex(task_id, "icon") or "ui_iconsTotal_mutant"
 		end
 
-		db.actor:give_talk_message2(news_caption, news_text, news_ico, "iconed_answer_item", task_id)
+               db.actor:give_talk_message2(news_caption, news_text, news_ico, "iconed_answer_item")
 	end
 	return true
 end
