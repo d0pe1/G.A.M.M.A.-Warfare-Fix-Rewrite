@@ -134,11 +134,13 @@ function sim_squad_scripted:get_script_target()
 		return smart.id
 	end
 	
-	local new_id = tonumber(new_target)
-	local se_target = new_id and alife_object(new_id)
-	if se_target and (se_target:clsid() == clsid.online_offline_group_s or se_target:clsid() == clsid.smart_terrain) then
-		return new_id
-	end
+        local new_id = tonumber(new_target)
+        local se_target = new_id and alife_object(new_id)
+        -- gammas patch: validate object before use to prevent crashes when targets change
+        local obj = se_target
+        if obj and (obj:clsid() == clsid.online_offline_group_s or obj:clsid() == clsid.smart_terrain) then
+                return new_id
+        end
 end
 
 function sim_squad_scripted:update()

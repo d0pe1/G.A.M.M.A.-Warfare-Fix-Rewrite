@@ -394,3 +394,40 @@
 ### Completed WALO-7
 - Added _G.WARFARE conditional stay_time and removed extra parameter from news message call.
 - Date: 2025-07-26
+
+## Prescope: Integrate scripted squad target fix
+- **Task ID**: WALO-9
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Apply gammas patch modification ensuring squad target objects are validated before use.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Single-line safety check.
+
+### Scope & Context
+- Modify `gamma_walo/gamedata/scripts/sim_squad_scripted.script`.
+
+### Dependencies
+- None.
+
+### Data Flow Analysis
+- **Input**: `new_target` string or id from task logic.
+- **Output**: Validated target id for squad assignment.
+- **Consumers**: Squad update loop.
+
+### Failure Cases
+- Undefined variable if patch applied incorrectly.
+
+### Test Plan
+- Busted spec verifying `obj:clsid` check exists.
+
+### Rollback & Risk
+- Revert script if squads fail to reach targets.
+
+### Definition of Done
+- Updated script and passing spec.
+- agent_prio entry removed and changelog updated.
+
+### Completed WALO-9
+- Ported scripted squad target validation fix.
+- Date: 2025-07-26
