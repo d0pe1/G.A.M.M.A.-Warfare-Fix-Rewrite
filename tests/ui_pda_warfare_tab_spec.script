@@ -1,2 +1,0 @@
-dofile("tests/spec_helper.lua")
-pending('ui_pda_warfare_tab requires UI classes')

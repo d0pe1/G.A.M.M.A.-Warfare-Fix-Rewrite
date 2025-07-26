@@ -1,2 +1,0 @@
-dofile("tests/spec_helper.lua")
-pending('game_fast_travel heavy dependencies not stubbed')

@@ -1,2 +1,0 @@
-dofile("tests/spec_helper.lua")
-pending('smart_terrain_warfare enormous file not unit tested')
