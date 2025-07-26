@@ -31,3 +31,60 @@
 
 ### Implementation Notes
 Cloned baseline scripts and configs from `runtime files` into the new `gamma_walo` directory. Only files referenced by `old walo` and `gammas patch` were copied to keep the repository lightweight.
+
+## Prescope: Run Analyzer profile
+- **Task ID**: Setup & Diff Analysis - Run Analyzer profile
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Generate reports comparing baseline runtime scripts against old_walo and gammas patch. Create docs/runtime_vs_gamma_walo.md and docs/api_map.md.
+
+### Scope & Context
+- New script at `gamma_walo/tools/analyzer.py`.
+- Reads files under `runtime files`, `old walo`, and `gammas patch`.
+- Outputs Markdown docs under `docs/`.
+
+### Dependencies
+- None. Files already present.
+
+### Data Flow Analysis
+- Input: script directories.
+- Output: diff summary and API map docs.
+- Downstream tasks will use docs to plan merges.
+
+### Failure Cases
+- Missing files paths cause crashes.
+- Large diff may produce oversized docs. Limit context lines.
+
+### Test Plan
+- Run `python3 gamma_walo/tools/analyzer.py`
+- Confirm docs/runtime_vs_gamma_walo.md and docs/api_map.md generated.
+- Spot-check that diff summaries mention known differences.
+
+### Rollback & Risk
+- Low risk; docs only. Delete docs to rollback.
+
+
+## Prescope: Address analyzer review comments
+- **Task ID**: Setup & Diff Analysis - Run Analyzer profile
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Resolve code review notes for analyzer script (unused imports, relative paths)
+
+### Scope & Context
+- Modify `gamma_walo/tools/analyzer.py`
+- Regenerate docs to verify script still works
+
+### Dependencies
+- None
+
+### Data Flow Analysis
+- Input: same directories
+- Output: docs unchanged format but cleaner
+
+### Failure Cases
+- Mis-specified paths could break diff generation
+
+### Test Plan
+- `python3 -m py_compile gamma_walo/tools/analyzer.py`
+- `python3 gamma_walo/tools/analyzer.py`
+
+### Rollback & Risk
+- If issues, revert file
