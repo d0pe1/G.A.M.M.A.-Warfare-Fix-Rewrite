@@ -30,19 +30,25 @@ Each agent is a specialized "game-dev persona" that:
 3. Repeat this process recursively until you reach a `[ ]` task that can be executed.  
 
 ### **Step 4: If a task explodes in scope**
-1. Mark the current task `[a]` (blocked). This applies also to child tasks in agent_prio.md! Should a child task be too complex, also mark it [a] and put []childtasks directly under it
+1. Mark the current task `[a]` (blocked).  
+   - This applies also to child tasks in `agent_prio.md`.  
+   - Should a child task be too complex, also mark it `[a]` and add new `[ ]` subtasks directly below it.  
 2. Split it into **multiple `[ ]` subtasks directly below it** in the same file (`agent_prio.md`).  
 3. Assign each subtask a weight and document the dependencies.  
 4. STOP. Future runs will pick the new subtasks.  
 
-### **Step 5: When finishing a child task**
-1. Note its completion in:
-DevDiary.md (with a short description)
-CHANGELOG.md (with a one-line summary)
-Any relevant docs in /docs/
-2.Remove the completed child task from agent_prio.md.
+---
 
-Why: This keeps agent_prio.md clean and prevents agents from re-running already completed subtasks.
+### ⚠️ **Step 5: When finishing a child task**
+1. Note its completion in:
+   - `DevDiary.md` (with a short description)
+   - `CHANGELOG.md` (with a one-line summary)
+   - Any relevant docs in `/docs/`
+2. **Remove the completed child task from `agent_prio.md`.**
+
+> **Why?**  
+> This keeps `agent_prio.md` clean and prevents agents from re-running already completed subtasks.
+
 ---
 
 ### **Weighting System**
@@ -117,28 +123,45 @@ Why: This keeps agent_prio.md clean and prevents agents from re-running already 
 
 ### **Example: Priority Cascade**
 
-agent_tasks.md
+**agent_tasks.md**
+```
 [a] Implement Logistics System
+```
 
-agent_prio.md
+**agent_prio.md**
+```
 [a] Implement Logistics System
 [ ] Find hooks into gamma runtime files (weight: 800)
 [ ] Implement hook-compatible APIs for transport squads (weight: 600)
+```
 
-agent_prio.md (if one of the above is [a])
+**agent_prio.md** (if one of the above is `[a]`)
+```
 [a] Find hooks into gamma runtime files
 [ ] Locate capture event hooks (weight: 500)
 [ ] Locate simulation scheduler hooks (weight: 400)
+```
 
-In this example:  
-- Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
-- They jump into `agent_prio.md` and pick the highest-weight child (`Find hooks`).
-- should a subtask here be marked [a] they jump to it's first [] Subchild, here "[ ] Locate capture event hooks (weight: 500)"
-- If that explodes in scope, it’s split further.  
+**Workflow:**  
+1. Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
+2. They jump into `agent_prio.md` and pick the highest-weight child (`Find hooks`).  
+3. If that child is `[a]`, they go deeper and pick the highest-weight subchild (`Locate capture event hooks`).  
+4. If a task explodes in scope, it is split further.  
+
+**After finishing `Locate capture event hooks`:**
+- It is **removed** from `agent_prio.md`.  
+- A note is added to `DevDiary.md` and `CHANGELOG.md`.
+
+**agent_prio.md (after cleanup)**
+```
+[a] Find hooks into gamma runtime files
+[ ] Locate simulation scheduler hooks (weight: 400)
+```
 
 ---
 
 **This ensures:**  
 - Agents never skip blockers.  
 - Large tasks are split automatically.  
+- Completed child tasks don’t pollute `agent_prio.md`.  
 - We always work from the most foundational (highest-weight) tasks downward.  
