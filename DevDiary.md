@@ -354,3 +354,6 @@
 ### Completed WALO-8
 - Ported UI option tweaks from old_walo into gamma_walo/ui_options.script and added tests.
 - Date: 2025-07-26
+### Completed WALO-6
+- Added nil checks in smart_terrain_warfare.script to protect target selection.
+- Date: 2025-07-26
