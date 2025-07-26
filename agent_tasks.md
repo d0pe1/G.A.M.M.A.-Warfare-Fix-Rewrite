@@ -1,16 +1,20 @@
-# Agent Task Checklist
+# **Agent Task Checklist**
 
 This checklist breaks down the implementation of the **G.A.M.M.A. Warfare Overhaul** into discrete, verifiable steps.  
 Each task should be assigned to an agent defined in `agents.md`.  
-Use the following symbols to track progress:
+
+## **Task Status Symbols**
 
 - `[ ]` = Not started  
 - `[~]` = In progress / Awaiting live test / User review needed  
 - `[x]` = Completed, stable, tests pass  
+- `[a]` = Blocked until **priority tasks** in `agent_prio.md` are resolved  
 
-If a task is marked `[~]`, append an entry to `usertodo.md` describing what needs to be tested or confirmed manually.
+> **Rule:**  
+> If a task is marked `[~]`, append an entry to `usertodo.md` describing what needs to be tested or confirmed manually.  
+> If a task is marked `[a]`, create or update `agent_prio.md` to describe the blocking task(s) in detail (including dependencies and required outcomes).  
 
-When a task is complete, update the checkbox and remove its entry from `usertodo.md`.
+When a task is complete, update the checkbox and remove its entry from `usertodo.md` and/or `agent_prio.md`.  
 
 ---
 
@@ -18,44 +22,76 @@ When a task is complete, update the checkbox and remove its entry from `usertodo
 
 Every agent must follow this **pre-scoping, compatibility-aware, self-checking workflow** before touching any code:  
 
-1. **Read context first**  
-   - `README.md` → understand the purpose and architecture.  
-   - `agents.md` → understand your role.  
-   - `agent_tasks.md` → locate your assigned task(s).  
-   - `docs/` (`SystemsDesign.md`, `WorldDesign.md`, `api_map.md`) → study the design and engine hooks.  
-   - Inspect related code in `gamma_walo/`, `runtime files/`, `old_walo/`, and `gammas_patch/`.  
+### **Read context first**  
+1. `README.md` → understand the purpose and architecture.  
+2. `agents.md` → understand your role.  
+3. `agent_tasks.md` → locate your assigned task(s).  
+4. `docs/` (SystemsDesign.md, WorldDesign.md, api_map.md) → study the design and engine hooks.  
+5. Inspect related code in `gamma_walo/`, `runtime files/`, `old_walo/`, and `gammas_patch/`.  
 
-2. **Pre-scope your task** *(write this in `DevDiary.md` before you code)*  
-   - Identify **dependencies**: which files, modules, and functions will be touched.  
-   - Identify **engine hooks**: confirm which calls into the Anomaly engine (e.g. `level.map_add_object_spot`, `spawn_item`).  
-   - Identify **side effects**: what downstream systems could break if you change this?  
-   - Identify **tests**: what automated tests will confirm the feature works? What edge cases must be handled?  
+### **Pre-scope your task (write in `DevDiary.md` before you code)**  
+- Identify dependencies: which files, modules, and functions will be touched.  
+- Identify engine hooks: confirm which calls into the Anomaly engine (e.g. `level.map_add_object_spot`, `spawn_item`).  
+- Identify side effects: what downstream systems could break if you change this?  
+- Identify tests: what automated tests will confirm the feature works?  
 
-3. **Check compatibility**  
-   - Use `runtime_vs_gamma_walo.md` to check for differences vs. baseline.  
-   - If you detect a conflict, create a **new subtask** in the appropriate section below.  
+> **Blocking tasks:**  
+> If your pre-scope identifies that a **different agent or system** must complete work first, **mark your task `[a]`** and add a corresponding entry to `agent_prio.md`.  
 
-4. **Implement iteratively**  
-   - Modify **only** files in `gamma_walo/`.  
-   - Comment every function, modernize Lua style when safe.  
-   - Integrate with other systems: no "islands of logic."  
+### **Check compatibility**  
+- Use `runtime_vs_gamma_walo.md` to check for differences vs. baseline.  
+- If you detect a conflict, create a new subtask and mark `[a]` if you are blocked by its completion.  
 
-5. **Self-check your work**  
-   - Write or update **Busted specs** (`*.spec.script`) for every new or modified module.  
-   - Run tests in a mocked engine environment.  
-   - If the game crashes, log it in `runtime_crashes/` and create a new "Fix crash" subtask.  
+### **Implement iteratively**  
+- Modify only files in `gamma_walo/`.  
+- Comment every function, modernize Lua style when safe.  
+- Integrate with other systems: no "islands of logic."  
 
-6. **Update the repo**  
-   - Mark the task `[x]` when tests pass and no crashes occur.  
-   - Update headers in modified source files.  
-   - Update `CHANGELOG.md` and append detailed notes to `DevDiary.md`.  
+### **Self-check your work**  
+- Write or update Busted specs (`*.spec.script`) for every new or modified module.  
+- Run tests in a mocked engine environment.  
+- If the game crashes, log it in `runtime_crashes/` and create a new "Fix crash" subtask marked `[a]` if others must resolve it.  
 
-7. **Never move on until your task is stable**  
-   - If tests fail or crashes persist, do **not** start a new task.  
-   - Fix or create subtasks to resolve issues.  
+### **Update the repo**  
+- Mark the task `[x]` when tests pass and no crashes occur.  
+- Update headers in modified source files.  
+- Update `CHANGELOG.md` and append detailed notes to `DevDiary.md`.  
 
 ---
 
+## **How `[a]` Priority System Works**
+
+1. If you **cannot complete a task** due to missing work or dependencies:  
+   - Change its status to `[a]`.  
+   - Create or update an entry in `agent_prio.md` describing:  
+     - What blocking task(s) must be done.  
+     - Which agent/system should handle it.  
+     - Any test conditions to confirm it is resolved.  
+
+2. Once the blocking tasks in `agent_prio.md` are complete:  
+   - Update the status of the original `[a]` task back to `[ ]` or `[~]` and continue work.  
+
+3. Agents must **always scan `agent_prio.md` first** and pick **unresolved priority tasks** before taking new work from `agent_tasks.md`.  
+
+---
+
+## **1–10. Task Sections**
+
+The rest of the task sections (Setup & Diff Analysis → Documentation & Logging) remain as in your original checklist, but now every task can be:  
+
+- `[ ]` → Not started  
+- `[~]` → In progress  
+- `[x]` → Complete  
+- `[a]` → Blocked by a priority task  
+
+---
+
+### **Example**  
+
+[~] Implement daily resource generation in resource_system.script
+↳ Test timers in mocked environment
+[a] Cannot continue: requires Logistics System (section 4) event hooks to be available
+↳ Added blocking task: agent_prio.md#logistics_hooks
 ---
 
 ## **1. Setup & Diff Analysis**
