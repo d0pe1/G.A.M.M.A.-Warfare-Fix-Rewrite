@@ -94,3 +94,33 @@ Cloned baseline scripts and configs from `runtime files` into the new `gamma_wal
 Created `docs/conflict_summary.md` summarizing key differences between
 `old_walo` scripts and the baseline runtime. This will guide future
 merge work for the WALO port task.
+
+## Prescope: Summarize gammas_patch conflicts
+- **Task ID**: WALO port - Summarize conflicts between gammas patch and runtime baseline
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Document differences found in gammas patch scripts relative to baseline to aid future merges.
+
+### Scope & Context
+- Affects only documentation.
+- Inputs: `docs/runtime_vs_gamma_walo.md` diffs for gammas patch files.
+- Output: updated `docs/conflict_summary.md` with bullet list for each file.
+
+### Dependencies
+- None.
+
+### Data Flow Analysis
+- Review diff lines for each gammas patch file.
+- Summarize unique changes vs baseline.
+- Added note for `ui_mm_faction_select.script` whitespace-only changes.
+
+### Failure Cases
+- Overlooking small diff lines could miss subtle modifications.
+
+### Test Plan
+- Verify updated doc lists all four patch scripts.
+
+### Rollback & Risk
+- Low; doc update only.
+
+### Implementation Notes
+Added bullet for `ui_mm_faction_select.script` noting no functional differences.
