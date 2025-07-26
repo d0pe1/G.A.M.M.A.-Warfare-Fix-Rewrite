@@ -147,26 +147,15 @@ Each agent is a specialized "game-dev persona" that:
 **agent_tasks.md**
 [a] Implement Logistics System
 
-Copy
-Edit
-
 **agent_prio.md**
 [a] Implement Logistics System
 [ ] Find hooks into gamma runtime files (weight: 800)
 [ ] Implement hook-compatible APIs for transport squads (weight: 600)
 
-csharp
-Copy
-Edit
-
 **agent_prio.md** (if one of the above is `[a]`)
 [a] Find hooks into gamma runtime files
 [ ] Locate capture event hooks (weight: 500)
 [ ] Locate simulation scheduler hooks (weight: 400)
-
-markdown
-Copy
-Edit
 
 **Workflow:**  
 - Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
