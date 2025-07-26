@@ -12,20 +12,7 @@
   "dialogs.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "give_task_mysteries_of_the_zone",
-        "diff_lines": 8
-      },
-      {
-        "name": "warfare_disabled",
-        "diff_lines": 7
-      },
-      {
-        "name": "has_2000_money",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "diplomacy_core.script": {
     "added": [],
@@ -45,12 +32,7 @@
   "faction_expansions.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "get_advanced_chance",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "faction_philosophy.script": {
     "added": [],
@@ -70,64 +52,12 @@
   "game_relations.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "safe_ini_r_float",
-        "diff_lines": 15
-      },
-      {
-        "name": "safe_ini_r_s32",
-        "diff_lines": 35
-      },
-      {
-        "name": "is_faction_pair_unaffected",
-        "diff_lines": 23
-      },
-      {
-        "name": "is_relation_allowed",
-        "diff_lines": 24
-      },
-      {
-        "name": "reset_all_relations",
-        "diff_lines": 31
-      },
-      {
-        "name": "calculate_relation_change",
-        "diff_lines": 84
-      },
-      {
-        "name": "get_random_enemy_faction",
-        "diff_lines": 22
-      },
-      {
-        "name": "get_random_natural_faction",
-        "diff_lines": 22
-      },
-      {
-        "name": "online_npc_on_death",
-        "diff_lines": 26
-      },
-      {
-        "name": "get_rank_relation",
-        "diff_lines": 28
-      },
-      {
-        "name": "get_reputation_relation",
-        "diff_lines": 28
-      }
-    ]
+    "modified": []
   },
   "hq_coordinator.script": {
-    "added": [
-      "coordinator.get_fallback_base"
-    ],
+    "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "coordinator.register_base",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "legendary_squad_system.script": {
     "added": [],
@@ -187,20 +117,12 @@
   "smart_terrain_warfare.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "process_targets",
-        "diff_lines": 16
-      },
-      {
-        "name": "find_targets",
-        "diff_lines": 15
-      },
-      {
-        "name": "find_targets_for_overflow",
-        "diff_lines": 15
-      }
-    ]
+    "modified": []
+  },
+  "soulslike_scenarios.script": {
+    "added": [],
+    "removed": [],
+    "modified": []
   },
   "squad_gear_scaler.script": {
     "added": [],
@@ -208,10 +130,7 @@
     "modified": []
   },
   "squad_loot_recovery.script": {
-    "added": [
-      "recovery.on_npc_death",
-      "recovery.collect_nearby_loot"
-    ],
+    "added": [],
     "removed": [],
     "modified": []
   },
@@ -221,53 +140,19 @@
     "modified": []
   },
   "squad_transport.script": {
-    "added": [
-      "transport.reroute",
-      "transport.mark_danger"
-    ],
+    "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "transport.create",
-        "diff_lines": 15
-      },
-      {
-        "name": "transport.drop_cargo",
-        "diff_lines": 23
-      }
-    ]
+    "modified": []
   },
   "tasks_assault.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "evaluate_smarts_squads",
-        "diff_lines": 22
-      },
-      {
-        "name": "evaluate_squads_smarts",
-        "diff_lines": 22
-      },
-      {
-        "name": "postpone_for_next_frame",
-        "diff_lines": 153
-      }
-    ]
+    "modified": []
   },
   "tasks_defense.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "get_random_stalker_chatter",
-        "diff_lines": 11
-      },
-      {
-        "name": "barrier_defense_available",
-        "diff_lines": 11
-      }
-    ]
+    "modified": []
   },
   "tasks_smart_control.script": {
     "added": [],
@@ -282,12 +167,7 @@
   "ui_options.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "init_opt_base",
-        "diff_lines": 24
-      }
-    ]
+    "modified": []
   },
   "ui_pda_diplomacy.script": {
     "added": [],
@@ -297,12 +177,7 @@
   "ui_pda_warfare_tab.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "pda_warfare_tab",
-        "diff_lines": 17
-      }
-    ]
+    "modified": []
   },
   "verbose_logger.script": {
     "added": [],
@@ -312,30 +187,12 @@
   "warfare.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "initialize",
-        "diff_lines": 8
-      },
-      {
-        "name": "on_game_start",
-        "diff_lines": 17
-      },
-      {
-        "name": "sort_priority_table",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "warfare_factions.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "update",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "warfare_monkeypatches.script": {
     "added": [],
@@ -345,12 +202,7 @@
   "warfare_options.script": {
     "added": [],
     "removed": [],
-    "modified": [
-      {
-        "name": "override_functions",
-        "diff_lines": 8
-      }
-    ]
+    "modified": []
   },
   "xr_logic.script": {
     "added": [],
@@ -3934,12 +3786,6 @@
     "missing_in_gamma": true
   },
   "soulslike_scenario_logic_factory.script": {
-    "added": [],
-    "removed": [],
-    "modified": [],
-    "missing_in_gamma": true
-  },
-  "soulslike_scenarios.script": {
     "added": [],
     "removed": [],
     "modified": [],

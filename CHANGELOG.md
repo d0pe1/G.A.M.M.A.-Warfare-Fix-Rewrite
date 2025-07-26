@@ -71,3 +71,4 @@ All notable changes to this project will be documented in this file.
 - Implemented transport squad loot recovery system and tests.
 - Added dynamic transport rerouting when members die or danger detected.
 - Fixed crash in tasks_defense.script using global is_factions_enemies.
+- Added nil guards in soulslike_scenarios.script to prevent crash when marking looter.
