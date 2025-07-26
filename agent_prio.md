@@ -3,6 +3,6 @@
   - [x] **WALO-4** Apply blacklist loop optimisations in game_relations.script (weight=150)
   - [ ] **WALO-6** Add nil checks in smart_terrain_warfare.script (weight=100)
   - [ ] **WALO-7** Apply stability fixes in tasks_assault.script and tasks_smart_control.script (weight=100)
-  - [ ] **WALO-8** Merge warfare tweak options in ui_options.script (weight=150)
+  - [x] **WALO-8** Merge warfare tweak options in ui_options.script (weight=150)
   - [ ] **WALO-9** Integrate scripted squad target fix in sim_squad_scripted.script (weight=100)
   - [ ] **WALO-10** Review remaining warfare scripts and merge functional changes (weight=50)

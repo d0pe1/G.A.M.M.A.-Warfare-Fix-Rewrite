@@ -8,3 +8,4 @@
 - WALO-5: Applied loop optimisation and removed squad cap logic in sim_offline_combat.script
 - WALO-3: Verified simplified spawn chance formulas and added spec
 - WALO-4: Optimised blacklist loops in game_relations.script and added tests
+- WALO-8: Merged warfare tweak options into ui_options.script
