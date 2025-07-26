@@ -357,3 +357,40 @@
 ### Completed WALO-6
 - Added nil checks in smart_terrain_warfare.script to protect target selection.
 - Date: 2025-07-26
+
+## Prescope: Apply stability fixes in tasks_assault.script and tasks_smart_control.script
+- **Task ID**: WALO-7
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Integrate minor bug fixes from old_walo to avoid crashes when assault tasks generate news messages and to keep squad stay time logic compatible with Warfare mode.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Simple conditional and parameter adjustment.
+
+### Scope & Context
+- Modify `gamma_walo/gamedata/scripts/tasks_assault.script`.
+- Ensure `db.actor:give_talk_message2` is called with correct parameters and squad timers respect Warfare state.
+
+### Dependencies
+- None.
+
+### Data Flow Analysis
+- **Input**: Task system state when selecting assault squads.
+- **Output**: Stable task behaviour and correct news messages.
+- **Consumers**: Assault mission scripts and in-game PDA.
+
+### Failure Cases
+- If parameters are wrong, task news may not display or squads may behave oddly.
+
+### Test Plan
+- Run existing Busted suite to ensure no regressions.
+
+### Rollback & Risk
+- Revert script if tasks malfunction; low risk as changes mirror old_walo behaviour.
+
+### Definition of Done
+- Updated script and passing tests.
+- agent_prio entry removed and changelog updated.
+### Completed WALO-7
+- Added _G.WARFARE conditional stay_time and removed extra parameter from news message call.
+- Date: 2025-07-26
