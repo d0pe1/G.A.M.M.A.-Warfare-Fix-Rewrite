@@ -14,3 +14,4 @@
 - Ported WALO dialog helper and important document rewards into `dialogs.script` and added tests.
 - Added tests verifying spawn chance formulas in faction_expansions.script.
 - Optimized loops in game_relations.script based on WALO version and added unit tests for blacklist checks.
+- Hardened sim_offline_combat loops using pairs and removed SIMBOARD guard.

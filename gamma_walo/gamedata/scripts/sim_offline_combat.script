@@ -115,13 +115,14 @@ local function smart_terrain_on_update(smart)
 		return
 	end
 	
-        shuffle_table(tbl_smart)
+       shuffle_table(tbl_smart)
 
-        local sim = alife()
+       local sim = alife()
+       local lid_1
 
-        for _,id_1 in ipairs(tbl_smart) do
-                local squad_1 = sim:object(id_1)
-                local section = squad_1 and squad_1:section_name()
+       for i,id_1 in pairs(tbl_smart) do
+               local squad_1 = sim:object(id_1)
+               local section = squad_1 and squad_1:section_name()
 		
 		if squad_1 and (not squad_1.online) and SIMBOARD.squads[squad_1.id] and (squad_1:npc_count() > 0)
 		then
@@ -130,8 +131,8 @@ local function smart_terrain_on_update(smart)
 				return
 			end
 	
-                        local lid_1 = game_graph():vertex(squad_1.m_game_vertex_id):level_id()
-                        if lid_1 and squads_by_level[lid_1] then
+                       lid_1 = lid_1 or game_graph():vertex(squad_1.m_game_vertex_id):level_id()
+                       if lid_1 and squads_by_level[lid_1] then
 				
 --				if (not task_squads[id_1]) and (not task_giver_squads[id_1]) then
 					-- disable offline combat for ignore list when Warfare is active
@@ -150,9 +151,9 @@ local function smart_terrain_on_update(smart)
 							end
 						end
 				
-                                                -- Otherwise, scan for squads in the same map
-                                                for _,id_2 in ipairs(tbl_smart) do
-                                                        in_combat = validate_enemy(sim, lid_1, squad_1, id_1, id_2, community_1)
+                                               -- Otherwise, scan for squads in the same map
+                                               for j,id_2 in pairs(tbl_smart) do
+                                                       in_combat = validate_enemy(sim, lid_1, squad_1, id_1, id_2, community_1)
 							if in_combat then
 								if enable_debug then
 									printf("% OCS | Battle in smart [%s]", smart:name())
@@ -242,10 +243,6 @@ end
 
 local function coordinator()
        ResetTimeEvent("cycle","ocs", UPDATE_TIME)
-
-       if not (SIMBOARD and SIMBOARD.smarts) then
-               return true -- wait until SIMBOARD initialized
-       end
 	
 	-- Toggle feature
 	
