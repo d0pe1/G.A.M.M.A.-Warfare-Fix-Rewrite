@@ -931,10 +931,31 @@ This report compares scripts in `runtime files/gamedata/scripts` against their c
 | tasks_brain_game.script | - | - | missing in gamma |
 | tasks_chimera_scan.script | - | - | missing in gamma |
 | tasks_dead_night.script | - | - | missing in gamma |
-| tasks_defense.script | 0 | 0 | keep |
+| tasks_defense.script | 4 | 1 | keep |
 
 <details><summary>Diff for tasks_defense.script</summary>
 ```diff
+--- runtime files/gamedata/scripts/tasks_defense.script
++++ gamma_walo/gamedata/scripts/tasks_defense.script
+@@ -10,6 +10,7 @@
+ local ti2ta = utils_data.CTime_to_table
+ local ta2ti = utils_data.CTime_from_table
+ local send_tip = dynamic_news_helper.send_tip
++local game_relations = require 'game_relations' -- added explicit require for relation helpers
+ local MONO_SQUADS 		= 6	--10
+ local ZOMB_SQUADS 		= 8	--15
+ local STARTING_SQUADS 	= 3	--5
+@@ -241,7 +242,9 @@
+ 	-- printl('barrier_defense_available(%s) AAA',tid)
+ 	-- dont trigger if hostile to freedom
+ 	-- should check vs default_comm in gameplay_disguise but what if disguise is disabled? it it nil? or what?
+-	if is_factions_enemies(character_community(db.actor),"freedom") then return false end
++        if game_relations.is_factions_enemies(character_community(db.actor), "freedom") then
++                return false
++        end
+ 	
+ 	if not MDATA then return false end
+ 	-- printl('barrier_defense_available(%s) BBB',tid)
 ```
 </details>
 | tasks_delivery.script | - | - | missing in gamma |
