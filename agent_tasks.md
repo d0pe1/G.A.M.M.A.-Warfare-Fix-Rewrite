@@ -97,9 +97,9 @@ The rest of the task sections (Setup & Diff Analysis → Documentation & Logging
 ## **1. Setup & Diff Analysis**
 
 - [x] **Clone baseline** – Create the `gamma_walo` directory by copying the baseline files from `runtime files` *(old walo will tell you which files are used rn to build warfare mode)*.
-- [ ] **Run Analyzer profile** – Execute the Analyzer script to generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.  
+- [x] **Run Analyzer profile** – Execute the Analyzer script to generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
   - If the Analyzer script is missing, implement a diff script in Python or Lua.
-- [ ] **Generate API map** – Scan all scripts under `runtime files/gamedata/scripts` and produce `docs/api_map.md` listing functions and the modules that call them.  
+- [x] **Generate API map** – Scan all scripts under `runtime files/gamedata/scripts` and produce `docs/api_map.md` listing functions and the modules that call them.
   - Pay attention to engine hooks such as `level.map_add_object_spot` and `spawn_item`.
 - [ ] **Identify conflicts** – For every file in `old_walo` and `gammas patch` that differs from the runtime baseline, summarise the changes and note possible merge strategies *(replace vs merge functions)*. Add corresponding subtasks under the relevant system below.
 - [ ] **Update agent tasks** – Add any missing tasks discovered during the diff (e.g. bug fixes, missing features) to the appropriate section.
