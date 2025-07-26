@@ -12,3 +12,4 @@
 - Updated conflict summary with notes about `gammas patch` script differences.
 - Planned merge strategy per WALO file documented in `docs/walo_merge_strategy.md`.
 - Ported WALO dialog helper and important document rewards into `dialogs.script` and added tests.
+- Added tests verifying spawn chance formulas in faction_expansions.script.
