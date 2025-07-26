@@ -44,15 +44,15 @@ Progress: 37% complete (weight done / total weight)
 - [x] **Clone baseline** *(weight=50)* – Create the `gamma_walo` directory by copying the baseline files from `runtime files`.
 - [x] **Run Analyzer profile** *(weight=100)* – Generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
 - [x] **Generate API map** *(weight=50)* – Scan baseline scripts and generate `docs/api_map.md`.
-- [ ] **Identify conflicts** *(weight=300)* – Summarise changes for every `old_walo` and `gammas patch` file vs baseline and plan merge strategies.
+- [x] **Identify conflicts** *(weight=300)* – Summarise changes for every `old_walo` and `gammas patch` file vs baseline and plan merge strategies.
 - [ ] **Update agent tasks** *(weight=100)* – Add missing tasks discovered during diff analysis.
 
 ---
 
 ## **2. Integration of Existing Mods**
 
-- [ ] **WALO port** *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
-- [ ] **Gamma patch port** *(weight=700)* – Integrate fixes/features from `gammas patch` into `gamma_walo`.
+- [a] **WALO port** *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
+- [a] **Gamma patch port** *(weight=700)* – Integrate fixes/features from `gammas patch` into `gamma_walo`.
 - [ ] **Modernise code** *(weight=150)* – Update outdated Lua idioms where safe.
 - [ ] **Merge important_docs table** *(weight=100)* – Integrate document reward table from `dialogs.script`.
 - [ ] **Apply spawn chance formulas** *(weight=100)* – Port revised `get_advanced_chance` and `get_veteran_chance`.
