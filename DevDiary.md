@@ -89,3 +89,8 @@ Cloned baseline scripts and configs from `runtime files` into the new `gamma_wal
 
 ### Rollback & Risk
 - Low risk: doc only. Delete file to rollback.
+
+### Implementation Notes
+Created `docs/conflict_summary.md` summarizing key differences between
+`old_walo` scripts and the baseline runtime. This will guide future
+merge work for the WALO port task.
