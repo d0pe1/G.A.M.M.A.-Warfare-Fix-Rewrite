@@ -198,3 +198,41 @@
 ### Completed WALO-2
 - Added old_walo document reward values to dialogs.script and preserved warfare_disabled helper. Updated tests accordingly.
 - Date: 2025-07-26
+
+## Prescope: Optimise loops in sim_offline_combat
+- **Task ID**: WALO-5
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Apply old_walo loop caching and remove squad cap debug lines from sim_offline_combat.script.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Simple code edits with limited integration points.
+
+### Scope & Context
+- Modify gamma_walo/gamedata/scripts/sim_offline_combat.script.
+- No new hooks; relies on existing offline combat callbacks.
+
+### Dependencies
+- Completion of earlier WALO subtasks ensured baseline file present.
+
+### Data Flow Analysis
+- **Input**: old_walo version of script for reference.
+- **Output**: Updated script and new Busted spec.
+- **Consumers**: Offline combat simulation during gameplay.
+
+### Failure Cases
+- Typo in loops causing nil errors.
+- Tests failing if pattern checks not met.
+
+### Test Plan
+- New spec verifies cached lid_1 and absence of squad cap variables.
+
+### Rollback & Risk
+- Revert script if crashes occur; low risk as logic unchanged.
+
+### Definition of Done
+- Spec passes, agent_prio updated and changelog written.
+
+### Completed WALO-5
+- Applied cached lid_1 loops and removed squad cap debug block from sim_offline_combat.script. Added test.
+- Date: 2025-07-26

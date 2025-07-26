@@ -103,6 +103,11 @@ local m_class = {
 -------------------------------
 -- Main
 -------------------------------
+--[[
+    Process offline combat for all squads assigned to a single smart terrain.
+    @param smart (table) smart terrain object currently being updated
+    Side effects: may trigger simulated battles and modify global opponent lists.
+]]
 local function smart_terrain_on_update(smart)
 
         empty_table(tbl_smart)
@@ -118,8 +123,9 @@ local function smart_terrain_on_update(smart)
         shuffle_table(tbl_smart)
 
         local sim = alife()
+        local lid_1
 
-        for _,id_1 in ipairs(tbl_smart) do
+        for i,id_1 in pairs(tbl_smart) do
                 local squad_1 = sim:object(id_1)
                 local section = squad_1 and squad_1:section_name()
 		
@@ -130,7 +136,7 @@ local function smart_terrain_on_update(smart)
 				return
 			end
 	
-                        local lid_1 = game_graph():vertex(squad_1.m_game_vertex_id):level_id()
+                        lid_1 = lid_1 or game_graph():vertex(squad_1.m_game_vertex_id):level_id()
                         if lid_1 and squads_by_level[lid_1] then
 				
 --				if (not task_squads[id_1]) and (not task_giver_squads[id_1]) then
@@ -150,10 +156,10 @@ local function smart_terrain_on_update(smart)
 							end
 						end
 				
-                                                -- Otherwise, scan for squads in the same map
-                                                for _,id_2 in ipairs(tbl_smart) do
+                                               -- Otherwise, scan for squads in the same map
+                                               for j,id_2 in pairs(tbl_smart) do
                                                         in_combat = validate_enemy(sim, lid_1, squad_1, id_1, id_2, community_1)
-							if in_combat then
+                                                        if in_combat then
 								if enable_debug then
 									printf("% OCS | Battle in smart [%s]", smart:name())
 									printf("------------------------------------------------------------------------")
@@ -362,14 +368,7 @@ local function coordinator()
 		printf("- OCS | Combat Distance: %s - Execlude special characters: %s - Mutants included: %s", opt_dist, opt_exclude, can_fight_mutant)
 	end
 	
-	--[[ Debugger
-	if enable_debug and (not _G.WARFARE) then
-		for lid,v in pairs(squads_by_level) do
-			local clr = limit_by_level[lid] and "%" or "~"
-			printf(clr .. " OCS | lvl: %s - squad_count: %s - allow_simulation %s", sim:level_name(lid), count_by_level[lid], tostring(limit_by_level[lid]))
-		end
-	end
-	--]]
+
 	
 	return false
 end
