@@ -155,3 +155,37 @@ Added bullet for `ui_mm_faction_select.script` noting no functional differences.
 
 ### Implementation Notes
 Will create new Markdown file summarizing planned approach for every `old_walo` and `gammas patch` script. This completes the planning stage before actual code merges.
+
+## Prescope: Port dialogs.script helper and important_docs table
+- **Task ID**: WALO port – Port dialogs.script helper and important_docs table
+- **Agent**: ResourceInfrastructureAgent (assuming generic dev agent)
+- **Summary**: Integrate `warfare_disabled` dialog helper and the `important_docs` reward table from old WALO. Ensures tasks and document rewards behave as expected in warfare mode.
+
+### Scope & Context
+- Affected file: `gamma_walo/gamedata/scripts/dialogs.script`
+- Engine hooks: dialog conditions via `warfare_disabled`; trade reward functions.
+
+### Dependencies
+- None. This file is independent of other WALO merges.
+
+### Data Flow Analysis
+- Input: dialog preconditions call `warfare_disabled`; trade functions reference `important_docs` table.
+- Output: returns boolean for dialog options; reward values for documents.
+- Downstream: quest dialogs and trade interactions.
+
+### Failure Cases
+- Missing table entries could break main storyline rewards.
+- Incorrect helper logic may hide dialog options incorrectly.
+
+### Test Plan
+- Unit test: call `warfare_disabled` with `_G.WARFARE` both true and false.
+- Unit test: ensure `important_docs` contains expected keys.
+
+### Rollback & Risk
+- Low risk: revert file if issues arise.
+
+
+## Implementation: Port dialogs.script helper and important_docs table
+- Added detailed comments for `warfare_disabled` helper.
+- Restored important document reward values from old WALO.
+- Created Busted tests covering helper logic and table presence.

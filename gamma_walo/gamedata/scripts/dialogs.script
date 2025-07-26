@@ -32,12 +32,17 @@ function give_task_mysteries_of_the_zone(a,b)
 	task_manager.get_task_manager():give_task("mar_find_doctor_task")
 end
 
--- Helper used in dialog preconditions to hide options when Warfare is active
-function warfare_disabled(a,b)
-	if _G.WARFARE then
-		return false
-	end
-	return true
+--[[
+        Check if Warfare is disabled.
+        @param a Unused dialog actor
+        @param b Unused dialog npc
+        @return boolean True if Warfare mode is not active
+]]
+function warfare_disabled(a, b)
+       if _G.WARFARE then
+               return false
+       end
+       return true
 end
 
 -------------------------------------------
@@ -2469,7 +2474,16 @@ end
 -----------------------------------------------------------------------------------
 -- Trade important documents
 -----------------------------------------------------------------------------------
+-- Table of quest document sections and their base sell prices
+-- pulled from old WALO to keep storyline rewards consistent
 local important_docs = {
+       ["main_story_1_quest_case"] = 10000,
+       ["main_story_2_lab_x18_documents"] = 13000,
+       ["main_story_3_lab_x16_documents"] = 16000,
+       ["main_story_4_lab_x10_documents"] = 20000,
+       ["main_story_5_lab_x8_documents"] = 13000,
+       ["main_story_6_jup_ug_documents"] = 14000,
+       ["main_story_7_mon_con_documents"] = 25000,
 }
 
 local important_docs_warfare_names = {
