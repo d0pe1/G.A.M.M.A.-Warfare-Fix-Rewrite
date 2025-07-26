@@ -34,5 +34,7 @@ This document lists high level differences between the baseline runtime scripts 
   - Corrects target validation when squads change tasks.
 - **ui_options.script**
   - Adds menu bindings used by the patch.
+- **ui_mm_faction_select.script**
+  - Only whitespace differences; no functional changes.
 
 These differences must be reviewed in detail before porting features into the `gamma_walo` codebase.
