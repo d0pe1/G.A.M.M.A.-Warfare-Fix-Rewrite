@@ -152,7 +152,12 @@
   "tasks_defense.script": {
     "added": [],
     "removed": [],
-    "modified": []
+    "modified": [
+      {
+        "name": "barrier_defense_available",
+        "diff_lines": 13
+      }
+    ]
   },
   "tasks_smart_control.script": {
     "added": [],

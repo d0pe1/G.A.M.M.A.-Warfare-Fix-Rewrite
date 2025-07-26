@@ -72,3 +72,4 @@ All notable changes to this project will be documented in this file.
 - Added dynamic transport rerouting when members die or danger detected.
 - Fixed crash in tasks_defense.script using global is_factions_enemies.
 - Added nil guards in soulslike_scenarios.script to prevent crash when marking looter.
+- 2025-07-26: Ensure game_relations required before calling is_factions_enemies in tasks_defense.
