@@ -154,13 +154,12 @@ function is_faction_pair_unaffected(fac1, fac2)
 	end
 	
        for i=1,#blacklist_pair do
-               local pair = blacklist_pair[i]
-                if (pair[1] == fac1) and (pair[2] == fac2) then
-                        return true
-                elseif (pair[2] == fac1) and (pair[1] == fac2) then
-                        return true
-                end
-        end
+               if (blacklist_pair[i][1] == fac1) and (blacklist_pair[i][2] == fac2) then
+                       return true
+               elseif (blacklist_pair[i][2] == fac1) and (blacklist_pair[i][1] == fac2) then
+                       return true
+               end
+       end
 	return false
 end
 
@@ -190,13 +189,12 @@ function is_relation_allowed (faction_1 , faction_2) -- Check if the relation be
 	
 	-- Check blacklisted pairs 
        for i = 1, #blacklist_pair do
-               local pair = blacklist_pair[i]
-                if (pair[1] == faction_1) and (pair[2] == faction_2) then
-                        return false
-                elseif (pair[2] == faction_1) and (pair[1] == faction_2) then
-                        return false
-                end
-        end
+               if (blacklist_pair[i][1] == faction_1) and (blacklist_pair[i][2] == faction_2) then
+                       return false
+               elseif (blacklist_pair[i][2] == faction_1) and (blacklist_pair[i][1] == faction_2) then
+                       return false
+               end
+       end
 	
 	return true
 end
