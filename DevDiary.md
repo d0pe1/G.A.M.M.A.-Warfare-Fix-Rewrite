@@ -189,3 +189,31 @@ Will create new Markdown file summarizing planned approach for every `old_walo` 
 - Added detailed comments for `warfare_disabled` helper.
 - Restored important document reward values from old WALO.
 - Created Busted tests covering helper logic and table presence.
+
+## Prescope: Apply spawn chance formulas
+- **Task ID**: agent_prio - Apply spawn chance formulas to faction_expansions.script
+- **Agent**: ResourceInfrastructureAgent? Wait we are implementing integration of WALO features - which agent is responsible? According to agents.md, there is ResourceInfrastructureAgent for resource system, LogisticsAgent etc. For WALO port tasks, maybe DiffAnalysisAgent or other? No, not defined. We'll treat as DiffAnalysisAgent or general. But the tasks from 'Integration of Existing Mods' may not have dedicated agent. We'll pick DiffAnalysisAgent or some new 'Migration' agent. But we can just mention Myself as DiffAnalysisAgent since we are porting. Let's choose 'DiffAnalysisAgent'.
+- **Summary**: Ensure WALO's simplified squad spawn chance formulas are present and tested.
+### Scope & Context
+- Affects `gamma_walo/gamedata/scripts/faction_expansions.script`.
+- Functions: `get_advanced_chance`, `get_veteran_chance`.
+- Hooks: Called by squad spawn logic via `smart_terrain_warfare.script` and `warfare_factions.script`.
+### Dependencies
+- None blocking; formulas already exist in baseline.
+### Data Flow
+- Inputs: `resource` count per faction; global `warfare.resource_count`.
+- Output: numeric chance used by spawn selection.
+- Consumers: faction and smart terrain spawn routines.
+### Failure Cases
+- Incorrect formulas could skew faction balance.
+- Missing global `warfare` table may cause errors during tests.
+### Test Plan
+- Unit tests to compute chance at 0 and maximum resources.
+- Verify veteran chance scales quadratically.
+### Rollback & Risk
+- Low risk; formulas unchanged from baseline. Tests ensure correctness.
+
+## Implementation: Apply spawn chance formulas
+- Confirmed formulas already matched old WALO version.
+- Added `faction_expansions_spec.lua` tests verifying `get_advanced_chance` and `get_veteran_chance` outputs.
+
