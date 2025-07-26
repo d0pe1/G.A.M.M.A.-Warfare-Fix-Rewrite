@@ -60,3 +60,14 @@ All notable changes to this project will be documented in this file.
 - Added faction_state system tracking HQs and collapse.
 \n- Added HQ logistics upgrade prioritization logic and base upgrade tests.
 - Fixed Windows path escapes in `game_relations.script` preventing Lua load error.
+- Added `generate_diff_summary.py` tool producing `diff_summary.json` for Pass 1 static validation.
+- Generated `docs/function_compat_report.md` for Pass 2 signature and callsite audit.
+- Pass 3 root cause fixes removing unnecessary nil guards.
+- Refreshed function signature audit via new script `function_signature_audit.py`
+- Verified nil defense status; no new guards needed. Updated root_cause_fixes.md.
+- Generated behavior change review via `behavior_consistency_review.py` producing docs/behavior_change_log.md for Pass 4.
+
+- Final integration verification completed. Generated docs/final_integration_report.md for Pass 5.
+- Implemented transport squad loot recovery system and tests.
+- Added dynamic transport rerouting when members die or danger detected.
+- Fixed crash in tasks_defense.script using global is_factions_enemies.

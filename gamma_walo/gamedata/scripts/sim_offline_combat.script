@@ -107,14 +107,9 @@ local function smart_terrain_on_update(smart)
 
         empty_table(tbl_smart)
 
-        local smart_data = SIMBOARD.smarts[smart.id]
-        if not (smart_data and smart_data.squads) then
-                return -- added nil check
-        end
-
-        for id,_ in pairs(smart_data.squads) do
-                tbl_smart[#tbl_smart+1] = id
-        end
+       for id,_ in pairs(SIMBOARD.smarts[smart.id].squads) do
+               tbl_smart[#tbl_smart+1] = id
+       end
 	
 	if (#tbl_smart == 0) then
 		return
@@ -246,7 +241,11 @@ local function squad_on_update(squad_1)
 end
 
 local function coordinator()
-	ResetTimeEvent("cycle","ocs", UPDATE_TIME)
+       ResetTimeEvent("cycle","ocs", UPDATE_TIME)
+
+       if not (SIMBOARD and SIMBOARD.smarts) then
+               return true -- wait until SIMBOARD initialized
+       end
 	
 	-- Toggle feature
 	

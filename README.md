@@ -44,10 +44,12 @@ Established resource nodes must be designated manually:
 
 ## Development Workflow
 
-This repository maintains two script sets:
+This repository maintains 4 script sets:
 
-- `runtime files/` – original Warfare scripts shipped with Anomaly.
-- `gamma_walo/` – our cleaned and extended version.
+- `runtime files/` – script files as the engine would currently (in the default gamma modpack) would load at runtime = is status of gamefiles pre our modding attempt under gamma_walo.
+- `gamma_walo/` – our cleaned and extended version we are trying to build for the GAMMA Modpack, should hook up new system we describe while not breaking compatibility to all the non modified gamma baseline files as found under "runtime files".
+- `old_walo` – Vintars Clean Warfare A-Life Overhaul Mod files for referrence (link : https://www.moddb.com/mods/stalker-anomaly/addons/warfare-alife-overhaul)
+- `gammas patch` – Fix Attempts by the GAMMA TEAM for reference, as delivered with the Modpack
 
 Run the **Analyzer** profile to review differences between these directories. After any script update execute the **DocGen** profile to refresh `docs/runtime_vs_gamma_walo.md` and `docs/api_map.md`.
 

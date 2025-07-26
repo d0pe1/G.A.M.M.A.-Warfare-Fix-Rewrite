@@ -1,114 +1,141 @@
-# Warfare Dev Agent Profile
+# ⚔ Warfare Dev Agent Profile  
 
-## Skills Required
-- Advanced Lua (STALKER-style, 5.1 flavor)
-- STALKER Anomaly modding
-- LTX config comprehension
-- Familiarity with Warfare mode (AI squads, simulation layers)
-- Debugging MO2 + user logs
-
-## Resources
-- [Monolith Engine Lua API (community mirror)](https://github.com/revolucas/anomaly-api-docs) ← link this
-- [GAMMA Modpack Repo](https://github.com/Grokitach/Stalker-GAMMA)
-- [Mod Organizer 2 Guide](https://github.com/ModOrganizer2/modorganizer)
-
-## Agent Purpose
-This Codex Agent helps merge, harden, refactor and modernize STALKER Anomaly's Warfare scripts, with the goal of:
-- Reducing nil crashes and save corruption
-- Increasing script modularity and readability
-- Enabling hybrid Warfare + Story game modes
-- Building developer-facing tooling for future modders
-
-# Warfare Codex Agent Modes
-
-This section defines key agent behavior presets. Activate these by referencing the mode name in your Codex tasks.
+## 🔒 Global Development Context  
+1. **Work inside the GAMMA modpack reality:**  
+   - All changes must assume the presence of **STALKER Anomaly + GAMMA modpack systems** (Warfare, Story, Engine hooks, MO2 overrides).  
+   - Never create standalone systems that do not hook into existing engine functions, tasks, or events.  
+2. **Preserve integration:**  
+   - Modified systems must work with **existing MO2 load orders and GAMMA scripts**, even if the baseline code is “messy.”  
+   - Avoid abstract rewrites unless they explicitly improve compatibility.  
+3. **Hook, don’t fork:**  
+   - Extend existing systems via callbacks, overrides, or patches, not by duplicating logic.  
+4. **Reject unanchored features:**  
+   - Any new subsystem must be anchored to existing Anomaly/GAMMA data flows (e.g., faction AI, economy, artifact spawns).  
+5. **Assume downstream players + modders:**  
+   - Maintain savegame stability and expose your changes for other GAMMA modders to build on.  
 
 ---
 
-## 🛡️ 1. `Fixer`
+## **Skills Required**  
+- **Advanced Lua 5.1** (STALKER-Anomaly style scripting)  
+- **STALKER Anomaly modding expertise** (engine quirks, script integration)  
+- **LTX configuration comprehension**  
+- **Deep understanding of Warfare mode** (AI squads, simulation layers, task systems)  
+- **Debugging MO2** (load order, user logs, mod conflicts)  
 
-**Goal:** Harden Lua logic to avoid nil crashes and runtime instability.
-
-**Behavior:**
-- Scan all `.script` files for common crash vectors.
-- Add `type()` checks before method calls.
-- Replace `for i = 1, #x` with `ipairs(x or {})` when safe.
-- Add early returns for invalid AI or object handles.
-- Annotate all inserted guards (e.g. `-- added nil check`).
-
----
-
-## 🧠 2. `Analyzer`
-
-**Goal:** Compare file versions and describe behavioral or structural changes.
-
-**Behavior:**
-- Diff each `gamma_patch/` file against `old_walo/`.
-- Output:
-  - Code added, removed, or moved
-  - Stability or logic impact
-  - Verdict: keep, skip, or flag for review
-- Output format: Markdown table + code block highlights.
+## **Core Resources**  
+- **[Monolith Engine Lua API (community mirror)](INSERT-LINK)**  
+- **[GAMMA Modpack Repo](INSERT-LINK)**  
+- **[Mod Organizer 2 Guide](INSERT-LINK)**  
 
 ---
 
-## 🔁 3. `Merger`
+## **Agent Purpose**  
+This Codex Agent is responsible for maintaining and extending the **Warfare scripts** in STALKER Anomaly with the following goals:  
 
-**Goal:** Build a unified, cleaned-up `gamma_walo/` script set.
-
-**Behavior:**
-- Use `old_walo/` as base.
-- Apply only safe `gamma_patch/` changes:
-  - Crash fixes
-  - Logging
-  - Callback additions
-  - Bugfixes
-- Preserve original formatting unless cleaned.
-- Add inline fix comments.
+1. **Eliminate instability:** Reduce nil crashes and prevent save corruption.  
+2. **Improve code quality:** Increase modularity, readability, and maintainability.  
+3. **Enhance compatibility:** Enable hybrid Warfare + Story modes without regressions.  
+4. **Empower future modders:** Build developer-facing tooling and documentation.  
 
 ---
 
-## 🔍 4. `Scanner`
-
-**Goal:** Scan the repo for remaining runtime overrides and unknown conflicts.
-
-**Behavior:**
-- Compare `runtime/` files to `gamma_walo/`.
-- Report:
-  - Redundant overrides
-  - Undocumented changes
-  - Risky or unexplained behavior
-- Can also list `.ltx` file collisions for future pass.
+## **Warfare Codex Agent Modes**  
+Activate a mode by name when assigning Codex tasks. Each mode has strict behaviors:  
 
 ---
 
-## 📊 5. `DocGen`
-
-**Goal:** Extract developer-friendly docs for STALKER modding.
-
-**Behavior:**
-- Parse `.script` files for function signatures
-- Group by file and system (`sim_`, `task_`, etc.)
-- Output `docs/api_map.md` with indexable functions
-- Optional: map known STALKER engine callbacks
-
----
-
-## 💥 6. `StressTester`
-
-**Goal:** Inject trace logging and sanity checks into critical logic paths.
-
-**Behavior:**
-- Target `task_`, `sim_`, `game_`, `xr_` files
-- Add `printf` or `SendScriptCallback` on entry/exit
-- Log important data structures
-- Mark `TODO:` flags for potential fail points
+### 🛡️ **1. Fixer** – Harden Logic  
+**Goal:** Prevent nil crashes and runtime instability.  
+**Behavior:**  
+- Scan all `.script` files for crash vectors.  
+- Add `type()` or validity checks before method calls.  
+- Use `ipairs(x or {})` when safe to avoid iteration failures.  
+- Add early returns for invalid AI/object handles.  
+- Annotate all inserted guards (e.g., `-- added nil check`).  
+- **Context Enforcement:** Ensure fixes do not break GAMMA engine or modpack call patterns.
 
 ---
 
-## 🗒 Workflow Guidelines
+### 🧠 **2. Analyzer** – Understand Changes  
+**Goal:** Identify and explain differences between baseline and modified files.  
+**Behavior:**  
+- Diff `gamma_walo/` vs `runtime/` file versions.  
+- Produce a table of:  
+  - **Code added / removed / moved**  
+  - **Stability or logic impact**  
+  - **Verdict:** keep, skip, or flag  
+- Output in Markdown (table + highlighted code blocks).  
+- **Context Enforcement:** Flag changes that disconnect from GAMMA systems.
 
-- After modifying any script, run the **Analyzer** and **DocGen** profiles.
-- Commit the regenerated `docs/runtime_vs_gamma_walo.md` and `docs/api_map.md`.
-- Append a brief note to `CHANGELOG.md` for every iteration.
-- Ensure each `.script` file begins with a comment block header stating its intent and last edit date.
+---
+
+### 🔁 **3. Merger** – Unify Script Sets  
+**Goal:** Build a cleaned-up, single `gamma_walo/` source of truth.  
+**Behavior:**  
+- Use baseline `runtime/` as base.  
+- Apply only verified changes (crash fixes, bugfixes, logging, callbacks).  
+- Preserve original formatting unless cleaning improves readability.  
+- Add inline comments for all fixes.  
+- **Context Enforcement:** Avoid rewrites that strip GAMMA engine hooks.
+
+---
+
+### 🔍 **4. Scanner** – Detect Conflicts  
+**Goal:** Identify redundant overrides and potential conflicts.  
+**Behavior:**  
+- Compare `runtime/` vs `gamma_walo/`.  
+- Report:  
+  - Redundant overrides  
+  - Undocumented behavior changes  
+  - Risky or unexplained edits  
+- Also list `.ltx` file collisions for a later pass.  
+- **Context Enforcement:** Detect and flag orphaned systems (code that isn’t hooked into GAMMA).
+
+---
+
+### 📊 **5. DocGen** – Generate Developer Docs  
+**Goal:** Create an API map and developer reference.  
+**Behavior:**  
+- Parse `.script` files for function signatures and constants.  
+- Group by file and system (e.g., `sim_`, `task_`, `xr_`).  
+- Output: `docs/api_map.md` with indexable function listings.  
+- Optional: Map known STALKER engine callbacks.  
+- **Context Enforcement:** Document where GAMMA hooks into each function.
+
+---
+
+### 💥 **6. StressTester** – Add Logging Hooks  
+**Goal:** Create traceable logs for critical paths.  
+**Behavior:**  
+- Target `task_`, `sim_`, `game_`, `xr_` files.  
+- Inject logging on function entry/exit.  
+- Log major data structures and states.  
+- Mark `TODO:` flags at high-risk logic points.  
+- **Context Enforcement:** Focus only on GAMMA integration points.
+
+---
+
+## **🗒 Workflow Guidelines**  
+- Always commit regenerated docs:  
+  - `docs/runtime_vs_gamma_walo.md`  
+  - `docs/api_map.md`  
+- Append a brief entry to `CHANGELOG.md` for every iteration.  
+- Each `.script` file must begin with a **comment header**:  
+  - File intent  
+  - Last edit date  
+  - Author/agent note  
+
+---
+
+## **Additional Pass – GAMMA Hook Audit**  
+### [ ] Pass 6: GAMMA Hook Audit  
+- Scan all new or modified systems.  
+- For each system/function, confirm it has at least **one integration point** into existing GAMMA/Anomaly engine hooks.  
+- If not:  
+  - Flag it as *orphaned*, or  
+  - Suggest a hook location (task manager, faction manager, artifact spawner, etc.).  
+- Output: `gamma_integration_audit.md`  
+
+> ❌ Do **not** accept systems that “look clean but don’t integrate”.  
+> ✅ Always ask: *"How does this tie into GAMMA’s actual gameplay?"* before implementing or merging.  

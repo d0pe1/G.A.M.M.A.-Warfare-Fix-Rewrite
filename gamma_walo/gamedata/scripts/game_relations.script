@@ -153,7 +153,8 @@ function is_faction_pair_unaffected(fac1, fac2)
 		return false
 	end
 	
-        for _, pair in ipairs(blacklist_pair or {}) do -- added nil check
+       for i=1,#blacklist_pair do
+               local pair = blacklist_pair[i]
                 if (pair[1] == fac1) and (pair[2] == fac2) then
                         return true
                 elseif (pair[2] == fac1) and (pair[1] == fac2) then
@@ -188,7 +189,8 @@ function is_relation_allowed (faction_1 , faction_2) -- Check if the relation be
 	end
 	
 	-- Check blacklisted pairs 
-        for _, pair in ipairs(blacklist_pair or {}) do -- added nil check
+       for i = 1, #blacklist_pair do
+               local pair = blacklist_pair[i]
                 if (pair[1] == faction_1) and (pair[2] == faction_2) then
                         return false
                 elseif (pair[2] == faction_1) and (pair[1] == faction_2) then
@@ -307,17 +309,20 @@ end
 
 function reset_all_relations()
 	local tbl = {}
-        for _, faction in ipairs(factions_table_all or {}) do -- added nil check
-                local value = ini_g:r_string_ex("communities_relations" , faction)
-                tbl[faction] = str_explode(value,",")
-        end
+       for i=1, #factions_table_all do
+               local faction = factions_table_all[i]
+               local value = ini_g:r_string_ex("communities_relations" , faction)
+               tbl[faction] = str_explode(value,",")
+       end
 
-        for _, faction_i in ipairs(factions_table_all or {}) do -- added nil check
-                for index_j, faction_j in ipairs(factions_table_all or {}) do
-                        set_factions_community_num( faction_i , faction_j , tonumber(tbl[faction_i][index_j]) )
-                        --printf("TRX - " .. faction_i .. " + " .. faction_j .. " = " .. tonumber(tbl[faction_i][index_j]))
-                end
-        end
+       for i=1,#factions_table_all do
+               local faction_i = factions_table_all[i]
+               for j=1,#factions_table_all do
+                       local faction_j = factions_table_all[j]
+                       set_factions_community_num( faction_i , faction_j , tonumber(tbl[faction_i][j]) )
+                       --printf("TRX - " .. faction_i .. " + " .. faction_j .. " = " .. tonumber(tbl[faction_i][j]))
+               end
+       end
 end
 
 function calculate_relation_change( victim_tbl, killer_tbl)
@@ -355,12 +360,13 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 	local enemy_num = 0
 	local natural_num = 0
 	local friend_num = 0
-        for _, faction in ipairs(factions_table or {}) do -- added nil check
-                if (victim_faction ~= faction) then
-                        local rel = get_factions_community( victim_faction , faction )
-                        if (rel <= -1000) then
-                                enemy_num = enemy_num + 1
-                        elseif (rel > -1000) and (rel < 1000) then
+       for i=1,#factions_table do
+               local faction = factions_table[i]
+               if (victim_faction ~= faction) then
+                       local rel = get_factions_community( victim_faction , faction )
+                       if (rel <= -1000) then
+                               enemy_num = enemy_num + 1
+                       elseif (rel > -1000) and (rel < 1000) then
                                 natural_num = natural_num + 1
                         elseif (rel >= 1000) then -- fixed logic irrationality
                                 friend_num = friend_num + 1
@@ -375,8 +381,9 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 
 	-- If killed NPC was enemy of faction, raise relation toward killer faction:
 	if ( math.random( 100 ) > 50 ) then
-                for _, faction in ipairs(factions_table or {}) do -- added nil check
-                        if ( faction ~= killer_faction ) then
+               for i = 1, #factions_table do
+                       local faction = factions_table[i]
+                       if ( faction ~= killer_faction ) then
                                 if ( is_factions_enemies( faction, victim_faction ) ) then
 					if ( math.random( 100 ) > 50 ) then -- random faction picker
 						
@@ -414,8 +421,9 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 
 	-- If killed NPC was friend or neutral to faction, lower relation toward killer faction:
 	else
-                for _, faction in ipairs(factions_table or {}) do -- added nil check
-                        if ( faction ~= killer_faction ) then
+               for i = 1, #factions_table do
+                       local faction = factions_table[i]
+                       if ( faction ~= killer_faction ) then
                                 if ( not is_factions_enemies( faction, victim_faction ) ) then
 					if ( math.random( 100 ) > 50 ) then -- random faction picker
 					
@@ -455,24 +463,26 @@ end
 
 local rnd_enemy = {}
 function get_random_enemy_faction(comm)
-        empty_table(rnd_enemy)
-        for _, faction in ipairs(factions_table or {}) do -- added nil check
-                if (comm ~= faction) and is_factions_enemies(faction, comm) and is_relation_allowed(faction , comm) then
-                        rnd_enemy[#rnd_enemy + 1] = faction
-                end
-        end
-        return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
+       empty_table(rnd_enemy)
+       for i = 1, #factions_table do
+               local faction = factions_table[i]
+               if (comm ~= faction) and is_factions_enemies(faction, comm) and is_relation_allowed(faction , comm) then
+                       rnd_enemy[#rnd_enemy + 1] = faction
+               end
+       end
+       return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
 end
 
 local rnd_natural = {}
 function get_random_natural_faction(comm)
-        empty_table(rnd_natural)
-        for _, faction in ipairs(factions_table or {}) do -- added nil check
-                if (comm ~= faction) and (not is_factions_enemies(faction, comm)) and is_relation_allowed(faction , comm) then
-                        rnd_natural[#rnd_natural + 1] = faction
-                end
-        end
-        return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
+       empty_table(rnd_natural)
+       for i = 1, #factions_table do
+               local faction = factions_table[i]
+               if (comm ~= faction) and (not is_factions_enemies(faction, comm)) and is_relation_allowed(faction , comm) then
+                       rnd_natural[#rnd_natural + 1] = faction
+               end
+       end
+       return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
 end
 
 
@@ -559,15 +569,16 @@ local function on_game_load() -- Restore faction relations
 	if (USE_MARSHAL) then
 		if 	(alife_storage_manager.get_state().new_game_relations) then
 			-- Restore relations for each faction:
-                        for index_i, faction_1 in ipairs(factions_table or {}) do -- added nil check
-                                for j = (index_i + 1), #factions_table do
-                                        local faction_2 = factions_table[j]
+                       for i = 1, #factions_table do
+                               local faction_1 = factions_table[i]
+                               for j = (i + 1), #factions_table do
+                                       local faction_2 = factions_table[j]
 					
 					load_relation ( faction_1 , faction_2 ) -- load and set overall faction relations:
 					load_relation ( "actor_" .. faction_1 , faction_2 ) -- load and set actor faction 1 / faction 2 relations:
-					load_relation ( faction_1 , "actor_" .. faction_2 ) -- load and set actor faction 2 / faction 1 relations:
-				end
-			end
+                                       load_relation ( faction_1 , "actor_" .. faction_2 ) -- load and set actor faction 2 / faction 1 relations:
+                               end
+                       end
 		else
 			reset_all_relations()
 			alife_storage_manager.get_state().new_game_relations = true
@@ -923,15 +934,16 @@ function get_rank_relation(obj_1, obj_2)
 	if (not rank_relation) then
 		rank_relation = {}
 		
-                local rn = utils_obj.get_rank_list()
-                for _, rank in ipairs(rn or {}) do -- added nil check
-                        rank_relation[rank] = {}
-                        local t = parse_list(ini_sys,"rank_relations",rank)
-                        for j,num in ipairs(t) do
-                                rank_relation[rank][rn[j]] = tonumber(num)
-				--printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
-			end
-		end
+               local rn = utils_obj.get_rank_list()
+               for i=1,#rn do
+                       local rank = rn[i]
+                       rank_relation[rank] = {}
+                       local t = parse_list(ini_sys,"rank_relations",rank)
+                       for j,num in ipairs(t) do
+                               rank_relation[rank][rn[j]] = tonumber(num)
+                                --printf("-rank [%s][%s] = %s", rn[i], rn[j], tonumber(num))
+                       end
+               end
 	end
 	
 	local rank_1 = ranks.get_obj_rank_name(obj_1)
@@ -945,15 +957,16 @@ function get_reputation_relation(obj_1, obj_2)
 	if (not reputation_relation) then
 		reputation_relation = {}
 		
-                local rn = utils_obj.get_reputation_list()
-                for _, rep in ipairs(rn or {}) do -- added nil check
-                        reputation_relation[rep] = {}
-                        local t = parse_list(ini_sys,"reputation_relations",rep)
-                        for j,num in ipairs(t) do
-                                reputation_relation[rep][rn[j]] = tonumber(num)
-				--printf("-rep [%s][%s] = %s", rn[i], rn[j], tonumber(num))
-			end
-		end
+               local rn = utils_obj.get_reputation_list()
+               for i=1,#rn do
+                       local rep = rn[i]
+                       reputation_relation[rep] = {}
+                       local t = parse_list(ini_sys,"reputation_relations",rep)
+                       for j,num in ipairs(t) do
+                               reputation_relation[rep][rn[j]] = tonumber(num)
+                               --printf("-rep [%s][%s] = %s", rn[i], rn[j], tonumber(num))
+                       end
+               end
 	end
 	
 	local rep_1 = utils_obj.get_reputation_name(obj_1:character_reputation())
