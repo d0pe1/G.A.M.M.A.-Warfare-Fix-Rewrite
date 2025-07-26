@@ -1,5 +1,4 @@
 [a] **WALO-1** Integrate features from old_walo into gamma_walo (weight=800)
-  - [ ] **WALO-2** Port warfare_disabled helper and important_docs table into dialogs.script (weight=200)
   - [ ] **WALO-3** Replace spawn chance formulas in faction_expansions.script (weight=150)
   - [ ] **WALO-4** Apply blacklist loop optimisations in game_relations.script (weight=150)
   - [ ] **WALO-5** Optimise loops and remove squad cap logic in sim_offline_combat.script (weight=200)

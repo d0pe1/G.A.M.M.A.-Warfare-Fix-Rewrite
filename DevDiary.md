@@ -159,3 +159,42 @@
 ### Definition of Done
 - All subtasks in agent_prio.md completed with tests passing and documentation updated.
 
+
+## Prescope: Port important_docs table
+- **Task ID**: WALO-2
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Merge the important_docs reward table from old_walo into gamma_walo dialogs.script and ensure warfare_disabled function preserved.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Simple table port with minimal hooks.
+
+### Scope & Context
+- Modify gamma_walo/gamedata/scripts/dialogs.script to include document reward values.
+- Ensure warfare_disabled helper remains unchanged.
+
+### Dependencies
+- Requires old_walo version for values. No other blockers.
+
+### Data Flow Analysis
+- **Input**: Document reward entries from old_walo.
+- **Output**: Updated dialogs.script used by task dialogs.
+- **Consumers**: NPC dialog trade logic.
+
+### Failure Cases
+- Typo in table causing nil lookups.
+- Tests failing if file not updated correctly.
+
+### Test Plan
+- Update Busted spec to check for specific document entries.
+
+### Rollback & Risk
+- Revert file if dialog errors occur. Low risk.
+
+### Definition of Done
+- Spec passes confirming document table entries.
+- agent_prio updated and changelog entry written.
+
+### Completed WALO-2
+- Added old_walo document reward values to dialogs.script and preserved warfare_disabled helper. Updated tests accordingly.
+- Date: 2025-07-26
