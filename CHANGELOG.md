@@ -6,3 +6,4 @@
 - WALO-1: Prescoped WALO port and split into subtasks.
 - WALO-2: Ported important_docs table from old_walo into dialogs.script and updated tests.
 - WALO-5: Applied loop optimisation and removed squad cap logic in sim_offline_combat.script
+- WALO-3: Verified simplified spawn chance formulas and added spec
