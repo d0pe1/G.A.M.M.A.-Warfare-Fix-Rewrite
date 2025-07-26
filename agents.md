@@ -1,164 +1,144 @@
-###################################################################################################
-# Agent Profiles for the G.A.M.M.A. Warfare Overhaul
-#
-# This document defines the scope, responsibilities and working practices for the autonomous
-# agents that will implement the G.A.M.M.A. Warfare Overhaul for STALKER Anomaly.  
-# 
-# The overhaul introduces new systems (resource infrastructure, squad logistics, progression,
-# diplomacy and faction philosophies) and aims to integrate and modernise code from multiple 
-# sources (old_walo, gammas patch and the existing runtime files) without breaking compatibility.
-#
-# Each agent is modelled as a game‑developer specialist that writes Lua scripts, integrates with
-# the X‑Ray engine API, updates documentation and tests, and iteratively improves the codebase.
-###################################################################################################
+# **Agent Profiles for the G.A.M.M.A. Warfare Overhaul**
 
-## General Guidelines
+This document defines the roles and operating procedures for the autonomous agents working on the **G.A.M.M.A. Warfare Overhaul**.  
+Agents must implement features, integrate systems, and maintain compatibility with STALKER Anomaly’s GAMMA runtime at all times.  
 
-### Language & framework
-- Implementation is in Lua, running inside the X‑Ray engine.
-- Use engine functions via the level namespace (e.g. level.map_add_object_spot, spawn_item) and related modules.
-
-### Data flow awareness
-- Systems are interdependent. Example: Resource nodes feed logistics, which enable squad spawns and affect diplomacy.
-- Agents must expose clear interfaces and avoid hidden dependencies.
-
-### Prescoping & Blocking Tasks
-- All agents must follow the Prescope Workflow (see prescope_workflow.md) before writing any code.
-- Prescoping must be recorded in DevDiary.md or a prescope_<task>.md.
-- If a task is blocked by dependencies:
-  - Mark it as [a] (blocked) in agent_tasks.md
-  - Add a blocking entry with resolution criteria to agent_prio.md
-- Agents must scan agent_prio.md first on every run.
-  Unresolved priority tasks always take precedence.
-
-### Documentation & testing
-- Document every function: purpose, parameters & return value, side effects.
-- Maintain corresponding Busted test files.
-- Update CHANGELOG.md, DevDiary.md, and /docs whenever code changes.
-
-### Iteration
-- Workflow: Plan -> Prescope -> Implement -> Test -> Fix -> Document
-- Do not mark tasks [x] until stable.
-- Never advance if crash logs or failing tests exist.
-
-### Error handling
-- If runtime crash logs appear in runtime_crashes/:
-  - Mark the task [a]
-  - Create a "Fix crash" entry in agent_prio.md
-  - Fix before continuing
-
-###################################################################################################
-## Agents
-###################################################################################################
-
-# NOTE: Every agent procedure begins with:
-# 0. Complete prescoping first (see prescope_workflow.md)
-
-1. DiffAnalysisAgent
-Role: Identify differences between runtime files, old_walo, gammas patch and produce reports.
-
-Outputs:
-- docs/runtime_vs_gamma_walo.md
-- docs/api_map.md
-- Updates agent_tasks.md & agent_prio.md
-
-Procedures:
-0. Complete prescoping
-1. Run Analyzer or diff script
-2. Compare and document conflicts
-3. Populate reports and create [a] tasks if blockers exist
+Each agent is a specialized "game-dev persona" that:  
+- Reads Lua/X-Ray engine code  
+- Integrates with existing systems  
+- Prescopes tasks thoroughly before touching code  
+- Splits large tasks into smaller subtasks if needed  
+- Iterates with tests and documentation  
 
 ---
 
-2. ResourceInfrastructureAgent
-Role: Implement the Resource Infrastructure System.
+## **Task Selection Workflow (Priority + Recursive Splitting)**
 
-Outputs:
-- gamma_walo/gamedata/scripts/resource_system.script
-- Updated hooks, configs, tests, docs/resource_system.md
+### **Step 1: Scan `agent_tasks.md`**
+1. Look for any `[a]` (blocked) task.  
+   - If **none exist**, pick a `[ ]` (not started) task with the **highest weight** and start from there.  
+   - If **one exists**, this is a blocking task → jump into `agent_prio.md`.
 
-Procedures:
-0. Complete prescoping
-1. Implement ResourceNode, BaseNode, HQNode
-2. Hook into capture events
-3. Implement daily resource generation
-4. Add APIs for dependent systems
-5. Write tests and docs
+### **Step 2: Scan `agent_prio.md` (only if a `[a]` task exists in agent_tasks.md)**
+1. Find the corresponding `[a]` parent task from `agent_tasks.md`.  
+2. Take its **direct child subtasks** that are `[ ]` (not started).  
+3. Pick the child task with the **highest weight**.
+
+### **Step 3: If the selected task in `agent_prio.md` is also `[a]`**
+1. Look at its direct children subtasks.  
+2. Pick one `[ ]` subtask with the highest weight.  
+3. Repeat this process recursively until you reach a `[ ]` task that can be executed.  
+
+### **Step 4: If a task explodes in scope**
+1. Mark the current task `[a]` (blocked). This applies also to child tasks in agent_prio.md! Should a child task be too complex, also mark it [a] and put []childtasks directly under it
+2. Split it into **multiple `[ ]` subtasks directly below it** in the same file (`agent_prio.md`).  
+3. Assign each subtask a weight and document the dependencies.  
+4. STOP. Future runs will pick the new subtasks.  
+
+### **Step 5: When finishing a child task**
+1. Note its completion in:
+DevDiary.md (with a short description)
+CHANGELOG.md (with a one-line summary)
+Any relevant docs in /docs/
+2.Remove the completed child task from agent_prio.md.
+
+Why: This keeps agent_prio.md clean and prevents agents from re-running already completed subtasks.
+---
+
+### **Weighting System**
+- **Weight 1–1000:** Represents importance and complexity.
+  - **1000:** Foundational systems required by many downstream tasks  
+  - **500:** Mid-tier core systems  
+  - **100:** Features or append-only integrations  
+  - **10:** P-complete (tiny) tasks, bug fixes, one-liners  
+
+> **Agents always pick the highest-weight `[ ]` task available at their current level.**
 
 ---
 
-3. LogisticsAgent
-Role: Implement Squad Logistics: transport squads, ambush handling, rerouting.
+## **General Guidelines**
 
-Procedures:
-0. Complete prescoping
-1. Define TransportSquad class
-2. Spawn squads from stockpile thresholds
-3. Implement pathfinding and ambush handling
-4. Write tests and docs
+### **Language & framework**
+- All work is in **Lua** (X-Ray engine).  
+- Integrate with engine hooks via `level.*`, `relation_registry.*`, etc.  
+- Maintain strict compatibility with GAMMA’s baseline runtime.
 
----
+### **Prescoping**
+- **Always follow `prescope_workflow.md` before touching code.**
+- If you can’t prescope, STOP and mark the task `[a]`.  
 
-4. SquadProgressionAgent
-Role: Squad XP gain, promotions, legendary status, PDA updates.
+### **Documentation & Testing**
+- Every function must be commented (purpose, params, return, side-effects).  
+- Maintain Busted specs for all modules.  
+- Update `DevDiary.md`, `CHANGELOG.md` and `/docs` for every task.  
 
-Procedures:
-0. Complete prescoping
-
----
-
-5. DiplomacyAgent
-Role: Diplomacy & Player Faction system.
-
-Procedures:
-0. Complete prescoping
+### **Crashes**
+- If a crash occurs:  
+  1. Save the log in `runtime_crashes/`  
+  2. Mark the current task `[a]`  
+  3. Create a “Fix crash” subtask in `agent_prio.md`  
 
 ---
 
-6. FactionPhilosophyAgent
-Role: Define philosophies affecting AI decisions.
+## **Agents**
 
-Procedures:
-0. Complete prescoping
+### **1. DiffAnalysisAgent**
+- **Role:** Compare `runtime files/`, `old_walo/` and `gammas_patch/` to identify conflicts.  
+- **Outputs:** `docs/runtime_vs_gamma_walo.md`, `docs/api_map.md` and new subtasks in `agent_prio.md` if conflicts are found.
+
+### **2. ResourceInfrastructureAgent**
+- **Role:** Implement `resource_system.script` (nodes, bases, HQ).  
+- **Dependencies:** Must hook into territory capture & simulation events.  
+- **Outputs:** Core resource APIs, tests, and `docs/resource_system.md`.
+
+### **3. LogisticsAgent**
+- **Role:** Implement `logistics_system.script` (transport squads, ambushes, rerouting).  
+- **Dependencies:** Requires stockpile APIs from `ResourceInfrastructureAgent`.  
+
+### **4. SquadProgressionAgent**
+- **Role:** Implement `squad_progression.script` (XP, promotions, legendary squads).  
+
+### **5. DiplomacyAgent**
+- **Role:** Implement `diplomacy_system.script` (alliances, wars, tribute, player faction).  
+
+### **6. FactionPhilosophyAgent**
+- **Role:** Implement `faction_philosophy.script` and `.ltx` configs for AI behavior biases.  
+
+### **7. UIAgent**
+- **Role:** Extend PDA and menus with new actions and displays.  
+
+### **8. TestingAgent**
+- **Role:** Run Busted specs and block all agents if tests fail.  
+
+### **9. DocumentationAgent**
+- **Role:** Update all documentation, changelogs, and dev diaries.  
 
 ---
 
-7. UIAgent
-Role: Extend PDA and context menus for nodes, upgrades, diplomacy.
+### **Example: Priority Cascade**
 
-Procedures:
-0. Complete prescoping
+agent_tasks.md
+[a] Implement Logistics System
+
+agent_prio.md
+[a] Implement Logistics System
+[ ] Find hooks into gamma runtime files (weight: 800)
+[ ] Implement hook-compatible APIs for transport squads (weight: 600)
+
+agent_prio.md (if one of the above is [a])
+[a] Find hooks into gamma runtime files
+[ ] Locate capture event hooks (weight: 500)
+[ ] Locate simulation scheduler hooks (weight: 400)
+
+In this example:  
+- Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
+- They jump into `agent_prio.md` and pick the highest-weight child (`Find hooks`).
+- should a subtask here be marked [a] they jump to it's first [] Subchild, here "[ ] Locate capture event hooks (weight: 500)"
+- If that explodes in scope, it’s split further.  
 
 ---
 
-8. TestingAgent
-Role: Maintain test suite and block others if failures exist.
-
-Procedures:
-0. Complete prescoping
-
----
-
-9. DocumentationAgent
-Role: Maintain all docs and logs.
-
-Procedures:
-0. Complete prescoping
-
-###################################################################################################
-## Workflow Notes
-###################################################################################################
-
-- Agents must prescope tasks: see prescope_workflow.md
-- Blocked tasks = [a] -> agent_prio.md entry required
-- Always clear [a] tasks before picking anything new
-
-###################################################################################################
-## Example of Blocking
-###################################################################################################
-
-[~] LogisticsAgent: implement transport squad ambush handling
-[a] Blocked: requires ResourceInfrastructureAgent API for node stockpiles
-    Added blocking task: agent_prio.md#resource_api_hook
-
-###################################################################################################
+**This ensures:**  
+- Agents never skip blockers.  
+- Large tasks are split automatically.  
+- We always work from the most foundational (highest-weight) tasks downward.  
