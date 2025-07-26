@@ -118,3 +118,44 @@
 ### Completed SETUP-4
 - Verified gamma_walo mirrors baseline file structure via new Busted spec.
 - Date: 2025-07-26
+
+## Prescope: WALO Port
+- **Task ID**: WALO-1
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Begin porting useful features from old_walo into gamma_walo. This requires merging multiple scripts carefully.
+
+### Complexity Classification
+- **Complexity**: [NP-complete]
+- **Justification**: Many scripts need selective merging and testing, so it must be broken down into smaller tasks.
+
+### Scope & Context
+- Affected modules include dialogs.script, faction_expansions.script, game_relations.script, sim_offline_combat.script, sim_squad_scripted.script, smart_terrain_warfare.script, tasks_assault.script, tasks_smart_control.script and ui_options.script.
+- These hook into dialog conditions, spawn chance calculation, offline combat loops and UI options.
+
+### Dependencies
+- Baseline copies of these scripts already exist in gamma_walo.
+- Diff reports in docs/runtime_vs_gamma_walo.md guide needed changes.
+
+### NP Split Strategy
+- Create per-file subtasks under WALO-1 in agent_prio.md describing each merge step with weights.
+
+### Data Flow Analysis
+- **Input**: Differences between old_walo and baseline scripts.
+- **Output**: Updated gamma_walo scripts integrating selected features.
+- **Consumers**: Warfare gameplay scripts during runtime.
+
+### Failure Cases
+- Merge mistakes leading to Lua errors or broken warfare logic.
+- Conflicts with GAMMA patch functionality.
+
+### Test Plan
+- For each merged script add or update Busted specs.
+- Run existing specs after each change.
+
+### Rollback & Risk
+- Use git revert to undo problematic merges.
+- Medium risk: wrong merges could destabilise the overhaul.
+
+### Definition of Done
+- All subtasks in agent_prio.md completed with tests passing and documentation updated.
+

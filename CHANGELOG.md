@@ -3,3 +3,4 @@
 - SETUP-2 completed enumeration of old_walo files
 - SETUP-3: Copied baseline files into gamma_walo
 - SETUP-4: Verified gamma_walo structure via test
+- WALO-1: Prescoped WALO port and split into subtasks.
