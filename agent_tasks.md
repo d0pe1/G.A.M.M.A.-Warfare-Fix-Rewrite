@@ -1,8 +1,16 @@
-# Agent Task Checklist  
+# Agent Task Checklist
 
 This checklist breaks down the implementation of the **G.A.M.M.A. Warfare Overhaul** into discrete, verifiable steps.  
 Each task should be assigned to an agent defined in `agents.md`.  
-When a task is complete and its tests pass, mark the checkbox and append a note in `DevDiary.md`.  
+Use the following symbols to track progress:
+
+- `[ ]` = Not started  
+- `[~]` = In progress / Awaiting live test / User review needed  
+- `[x]` = Completed, stable, tests pass  
+
+If a task is marked `[~]`, append an entry to `usertodo.md` describing what needs to be tested or confirmed manually.
+
+When a task is complete, update the checkbox and remove its entry from `usertodo.md`.
 
 ---
 
