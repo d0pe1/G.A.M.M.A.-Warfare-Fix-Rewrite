@@ -1,6 +1,5 @@
 [a] WALO port
 [x] Port dialogs.script helper and important_docs table (weight: 300)
-[ ] Optimize relation loops in game_relations.script (weight: 250)
 [ ] Harden sim_offline_combat loops (weight: 200)
 [ ] Add nil checks to smart_terrain_warfare.script (weight: 150)
 [ ] Merge tasks_assault stability fixes (weight: 150)

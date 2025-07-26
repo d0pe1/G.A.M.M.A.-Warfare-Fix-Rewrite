@@ -217,3 +217,9 @@ Will create new Markdown file summarizing planned approach for every `old_walo` 
 - Confirmed formulas already matched old WALO version.
 - Added `faction_expansions_spec.lua` tests verifying `get_advanced_chance` and `get_veteran_chance` outputs.
 
+### Task: Optimize relation loops in game_relations.script
+- Dependencies: gamma_walo/gamedata/scripts/game_relations.script, old walo version for reference, relation_registry engine API
+- Hooks: functions called by NPC death callbacks via online_npc_on_death/offline_npc_on_death and game load via on_game_load
+- Predicted breakage: Mistyped indices may crash relation checks during gameplay
+
+- Ported blacklist loop optimisations from old WALO into game_relations.script and verified with new busted specs.
