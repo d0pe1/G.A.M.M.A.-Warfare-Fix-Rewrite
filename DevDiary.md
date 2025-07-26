@@ -277,3 +277,41 @@
 ### Completed WALO-3
 - Verified spawn chance formulas already use simplified version; added tests to ensure correctness.
 - Date: 2025-07-26
+
+## Prescope: Optimise blacklist loops
+- **Task ID**: WALO-4
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Remove temporary pair variables in game_relations.script when iterating blacklist pairs. Use direct indexing as in old_walo.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Straightforward code edit with no branching logic.
+
+### Scope & Context
+- Modify gamma_walo/gamedata/scripts/game_relations.script in functions checking faction pair immunity.
+- Loops affect relation validation but no new hooks needed.
+
+### Dependencies
+- Prior WALO subtasks ensured baseline file exists.
+
+### Data Flow Analysis
+- **Input**: blacklist_pair table from dynamic_faction_relations.ltx.
+- **Output**: more efficient loops using direct index access.
+- **Consumers**: Relation checks during gameplay.
+
+### Failure Cases
+- Syntax error if pattern replaced incorrectly.
+- Specs may fail if detection of patterns wrong.
+
+### Test Plan
+- New Busted spec ensures `local pair` is removed and indexing uses `[i][1]`/`[i][2]`.
+
+### Rollback & Risk
+- Revert file if relations misbehave; risk is minimal as logic unchanged.
+
+### Definition of Done
+- Spec passes, changelog updated and agent_prio marked.
+
+### Completed WALO-4
+- Applied blacklist loop optimisation in game_relations.script and added tests.
+- Date: 2025-07-26
