@@ -223,3 +223,35 @@ Will create new Markdown file summarizing planned approach for every `old_walo` 
 - Predicted breakage: Mistyped indices may crash relation checks during gameplay
 
 - Ported blacklist loop optimisations from old WALO into game_relations.script and verified with new busted specs.
+
+
+## Prescope: Harden sim_offline_combat loops
+- **Task ID**: WALO port - Harden sim_offline_combat loops
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Integrate loop improvements from old WALO to prevent index errors and ensure offline combat simulation stability.
+
+### Scope & Context
+- Affects `gamma_walo/gamedata/scripts/sim_offline_combat.script`.
+- Modifies loops in `smart_terrain_on_update`, `coordinator`, and related functions.
+- Uses engine hooks: `RegisterScriptCallback`, `alife`, `game_graph`.
+
+### Dependencies
+- Requires existing SIMBOARD and warfare options tables as per baseline.
+- No blocking tasks.
+
+### Data Flow Analysis
+- Inputs: tables of squads (`SIMBOARD.smarts[smart.id].squads`, `squads_by_level`).
+- Outputs: offline combat results via `simulate_battle` and stats updates.
+- Downstream: dynamic news, relation changes.
+
+### Failure Cases
+- Nil indexes in `ipairs` loops could skip elements or error.
+- Early return waiting for SIMBOARD may stall simulation.
+
+### Test Plan
+- Busted spec scanning the script to ensure `ipairs(tbl_smart)` usage removed.
+- Verify absence of initialization guard line.
+
+### Rollback & Risk
+- Revert file to previous version if simulation misbehaves.
+- Tests guard against accidental reintroduction of fragile loops.
