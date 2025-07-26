@@ -154,13 +154,13 @@ function is_faction_pair_unaffected(fac1, fac2)
 	end
 	
        for i=1,#blacklist_pair do
-               local pair = blacklist_pair[i]
-                if (pair[1] == fac1) and (pair[2] == fac2) then
-                        return true
-                elseif (pair[2] == fac1) and (pair[1] == fac2) then
-                        return true
-                end
-        end
+               -- direct index lookup avoids temporary table creation
+               if (blacklist_pair[i][1] == fac1) and (blacklist_pair[i][2] == fac2) then
+                       return true
+               elseif (blacklist_pair[i][2] == fac1) and (blacklist_pair[i][1] == fac2) then
+                       return true
+               end
+       end
 	return false
 end
 
@@ -190,13 +190,13 @@ function is_relation_allowed (faction_1 , faction_2) -- Check if the relation be
 	
 	-- Check blacklisted pairs 
        for i = 1, #blacklist_pair do
-               local pair = blacklist_pair[i]
-                if (pair[1] == faction_1) and (pair[2] == faction_2) then
-                        return false
-                elseif (pair[2] == faction_1) and (pair[1] == faction_2) then
-                        return false
-                end
-        end
+               -- inline access to reduce temporary variable allocations
+               if (blacklist_pair[i][1] == faction_1) and (blacklist_pair[i][2] == faction_2) then
+                       return false
+               elseif (blacklist_pair[i][2] == faction_1) and (blacklist_pair[i][1] == faction_2) then
+                       return false
+               end
+       end
 	
 	return true
 end
@@ -308,19 +308,16 @@ function change_faction_relations ( faction_1, faction_2, delta , force) -- Chan
 end
 
 function reset_all_relations()
-	local tbl = {}
+       local tbl = {}
        for i=1, #factions_table_all do
-               local faction = factions_table_all[i]
-               local value = ini_g:r_string_ex("communities_relations" , faction)
-               tbl[faction] = str_explode(value,",")
+               local value = ini_g:r_string_ex("communities_relations" , factions_table_all[i])
+               tbl[factions_table_all[i]] = str_explode(value,",")
        end
 
        for i=1,#factions_table_all do
-               local faction_i = factions_table_all[i]
                for j=1,#factions_table_all do
-                       local faction_j = factions_table_all[j]
-                       set_factions_community_num( faction_i , faction_j , tonumber(tbl[faction_i][j]) )
-                       --printf("TRX - " .. faction_i .. " + " .. faction_j .. " = " .. tonumber(tbl[faction_i][j]))
+                       set_factions_community_num( factions_table_all[i] , factions_table_all[j] , tonumber(tbl[factions_table_all[i]][j]) )
+                       --printf("TRX - " .. factions_table_all[i] .. " + " .. factions_table_all[j] .. " = " .. tonumber(tbl[factions_table_all[i]][j]))
                end
        end
 end
@@ -361,16 +358,15 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 	local natural_num = 0
 	local friend_num = 0
        for i=1,#factions_table do
-               local faction = factions_table[i]
-               if (victim_faction ~= faction) then
-                       local rel = get_factions_community( victim_faction , faction )
+               if (victim_faction ~= factions_table[i]) then
+                       local rel = get_factions_community( victim_faction , factions_table[i] )
                        if (rel <= -1000) then
                                enemy_num = enemy_num + 1
                        elseif (rel > -1000) and (rel < 1000) then
-                                natural_num = natural_num + 1
-                        elseif (rel >= 1000) then -- fixed logic irrationality
-                                friend_num = friend_num + 1
-                        end
+                               natural_num = natural_num + 1
+                       elseif (rel >= 1000) then -- fixed logic irrationality
+                               friend_num = friend_num + 1
+                       end
                 end
         end
 	
@@ -382,10 +378,9 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 	-- If killed NPC was enemy of faction, raise relation toward killer faction:
 	if ( math.random( 100 ) > 50 ) then
                for i = 1, #factions_table do
-                       local faction = factions_table[i]
-                       if ( faction ~= killer_faction ) then
-                                if ( is_factions_enemies( faction, victim_faction ) ) then
-					if ( math.random( 100 ) > 50 ) then -- random faction picker
+                       if ( factions_table[i] ~= killer_faction ) then
+                               if ( is_factions_enemies( factions_table[i], victim_faction ) ) then
+                                        if ( math.random( 100 ) > 50 ) then -- random faction picker
 						
 						-- Relation calculation:
 						-- 1. Big impact: Rank of victim
@@ -403,8 +398,8 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 						
 						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_bad + ( k_rep_good / 10 ) ) )
 						
-                                                if is_relation_allowed( faction , killer_faction ) and ( natural_num + friend_num > friend_count_limit ) then
-                                                        change_faction_relations( faction, killer_faction, value )
+                                               if is_relation_allowed( factions_table[i] , killer_faction ) and ( natural_num + friend_num > friend_count_limit ) then
+                                                       change_faction_relations( factions_table[i], killer_faction, value )
 							--printf("- Relations: Relations positive change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. value)
 						else
 							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
@@ -422,10 +417,9 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 	-- If killed NPC was friend or neutral to faction, lower relation toward killer faction:
 	else
                for i = 1, #factions_table do
-                       local faction = factions_table[i]
-                       if ( faction ~= killer_faction ) then
-                                if ( not is_factions_enemies( faction, victim_faction ) ) then
-					if ( math.random( 100 ) > 50 ) then -- random faction picker
+                       if ( factions_table[i] ~= killer_faction ) then
+                               if ( not is_factions_enemies( factions_table[i], victim_faction ) ) then
+                                        if ( math.random( 100 ) > 50 ) then -- random faction picker
 					
 						-- Relation calculation:
 						-- 1. Big impact: Rank of victim
@@ -443,8 +437,8 @@ function calculate_relation_change( victim_tbl, killer_tbl)
 						
 						local value = math.floor( death_value * ( v_rank + ( k_rank / 5 ) ) * ( v_rep_good + ( k_rep_bad / 10 ) ) )
 
-                                                if is_relation_allowed( faction , killer_faction ) and ( enemy_num > enemy_count_limit ) then
-                                                        change_faction_relations( faction, killer_faction, -(value) )
+                                               if is_relation_allowed( factions_table[i] , killer_faction ) and ( enemy_num > enemy_count_limit ) then
+                                                       change_faction_relations( factions_table[i], killer_faction, -(value) )
 							--printf("- Relations: Relations negative change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation change = " .. -(value))
 						else
 							--printf("% Relations: Relations change | " .. factions_table[i] .. " <-> " .. killer_faction .. " relation can't be changed!")
@@ -465,9 +459,8 @@ local rnd_enemy = {}
 function get_random_enemy_faction(comm)
        empty_table(rnd_enemy)
        for i = 1, #factions_table do
-               local faction = factions_table[i]
-               if (comm ~= faction) and is_factions_enemies(faction, comm) and is_relation_allowed(faction , comm) then
-                       rnd_enemy[#rnd_enemy + 1] = faction
+               if (comm ~= factions_table[i]) and is_factions_enemies(factions_table[i], comm) and is_relation_allowed(factions_table[i] , comm) then
+                       rnd_enemy[#rnd_enemy + 1] = factions_table[i]
                end
        end
        return (#rnd_enemy > 0) and rnd_enemy[math.random(#rnd_enemy)] or nil
@@ -477,9 +470,8 @@ local rnd_natural = {}
 function get_random_natural_faction(comm)
        empty_table(rnd_natural)
        for i = 1, #factions_table do
-               local faction = factions_table[i]
-               if (comm ~= faction) and (not is_factions_enemies(faction, comm)) and is_relation_allowed(faction , comm) then
-                       rnd_natural[#rnd_natural + 1] = faction
+               if (comm ~= factions_table[i]) and (not is_factions_enemies(factions_table[i], comm)) and is_relation_allowed(factions_table[i] , comm) then
+                       rnd_natural[#rnd_natural + 1] = factions_table[i]
                end
        end
        return (#rnd_natural > 0) and rnd_natural[math.random(#rnd_natural)] or nil
@@ -570,8 +562,8 @@ local function on_game_load() -- Restore faction relations
 		if 	(alife_storage_manager.get_state().new_game_relations) then
 			-- Restore relations for each faction:
                        for i = 1, #factions_table do
-                               local faction_1 = factions_table[i]
                                for j = (i + 1), #factions_table do
+                                       local faction_1 = factions_table[i]
                                        local faction_2 = factions_table[j]
 					
 					load_relation ( faction_1 , faction_2 ) -- load and set overall faction relations:
