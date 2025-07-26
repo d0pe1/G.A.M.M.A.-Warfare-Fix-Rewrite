@@ -79,3 +79,42 @@
 ### Completed SETUP-3
 - Copied baseline files into gamma_walo.
 - Date: 2025-07-26
+
+## Prescope: Verify gamma_walo structure
+- **Task ID**: SETUP-4
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Ensure gamma_walo directory mirrors the baseline paths enumerated from old_walo without extra files.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Simple file existence checks using generated list.
+
+### Scope & Context
+- Check all paths in docs/old_walo_files.txt exist under gamma_walo.
+- Confirm no extra files exist in gamma_walo.
+- Requires only filesystem operations, no engine hooks.
+
+### Dependencies
+- Completion of SETUP-3 to have copied baseline files.
+
+### Data Flow Analysis
+- **Input**: docs/old_walo_files.txt and gamma_walo directory.
+- **Output**: Test results verifying structure.
+- **Consumers**: Future diff analysis and merges rely on correct baseline clone.
+
+### Failure Cases
+- Missing or extra files would cause spec failures.
+
+### Test Plan
+- Add Busted test to compare file list from docs/old_walo_files.txt to actual gamma_walo files.
+
+### Rollback & Risk
+- Low risk: only test and documentation updates.
+
+### Definition of Done
+- Spec passes confirming structure.
+- Task marked complete and changelog updated.
+
+### Completed SETUP-4
+- Verified gamma_walo mirrors baseline file structure via new Busted spec.
+- Date: 2025-07-26
