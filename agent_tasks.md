@@ -31,10 +31,6 @@ Each task now has a **weight** in parentheses:
 Agents should calculate **weighted progress** for every PR:  
 Progress: 37% complete (weight done / total weight)
 
-markdown
-Copy
-Edit
-
 ---
 
 ## **0. Agent Workflow Rules (ALL AGENTS MUST FOLLOW)**  
