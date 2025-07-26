@@ -38,3 +38,44 @@
 ### Completed SETUP-2
 - Enumerated old_walo files and saved list to docs/old_walo_files.txt.
 - Date: 2025-07-26
+
+## Prescope: Clone baseline - Copy matching baseline files
+- **Task ID**: SETUP-3
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Copy baseline versions of all files listed in docs/old_walo_files.txt into gamma_walo, preserving directory structure.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Straightforward file operations with deterministic output.
+
+### Scope & Context
+- Read docs/old_walo_files.txt for list of paths.
+- Copy corresponding files from runtime files/ to gamma_walo/.
+
+### Dependencies
+- Requires completion of SETUP-2 (file list generated).
+- No engine hooks involved.
+
+### Data Flow Analysis
+- **Input**: Baseline files under runtime files/ matching paths in old_walo_files.txt.
+- **Output**: gamma_walo/ directory containing copied files.
+- **Consumers**: Future merge tasks and diff analysis.
+
+### Failure Cases
+- Missing baseline file -> task fails or file skipped.
+- Directory creation errors.
+
+### Test Plan
+- Verify gamma_walo mirrors baseline for listed files.
+- Busted test ensures one example file exists after copy.
+
+### Rollback & Risk
+- Delete gamma_walo directory to rollback. Minimal risk.
+
+### Definition of Done
+- All listed files copied to gamma_walo with original contents.
+- Task marked complete, changelog updated.
+
+### Completed SETUP-3
+- Copied baseline files into gamma_walo.
+- Date: 2025-07-26

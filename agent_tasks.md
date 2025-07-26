@@ -43,7 +43,7 @@ Progress: 37% complete (weight done / total weight)
 
 - [a] **SETUP-1** Clone baseline *(weight=800)* – Build `gamma_walo` structure from baseline files.
   - [x] **SETUP-2** Enumerate affected files from `old_walo` *(weight=400)* – Identify all scripts/configs in `old_walo` (ignore assets/binaries).
-  - [ ] **SETUP-3** Copy matching baseline files *(weight=300)* – For each file from above, copy its unmodified version from `runtime files` into `gamma_walo`.
+  - [x] **SETUP-3** Copy matching baseline files *(weight=300)* – For each file from above, copy its unmodified version from `runtime files` into `gamma_walo`.
   - [ ] **SETUP-4** Verify structure *(weight=100)* – Ensure `gamma_walo` mirrors baseline paths, only containing relevant files.
 - [ ] **SETUP-5** Run Analyzer profile *(weight=100)* – Generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
 - [ ] **SETUP-6** Generate API map *(weight=50)* – Scan baseline scripts and generate `docs/api_map.md`.
