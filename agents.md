@@ -1,4 +1,4 @@
-# **Agent Profiles for the G.A.M.M.A. Warfare Overhaul**
+**Agent Profiles for the G.A.M.M.A. Warfare Overhaul**
 
 This document defines the roles and operating procedures for the autonomous agents working on the **G.A.M.M.A. Warfare Overhaul**.  
 Agents must implement features, integrate systems, and maintain compatibility with STALKER Anomaly’s GAMMA runtime at all times.  
@@ -57,7 +57,10 @@ Each agent is a specialized "game-dev persona" that:
    - `CHANGELOG.md` (one-line summary)  
    - Any relevant `/docs` files  
 2. **Remove the completed child task from `agent_prio.md`.**
-3. If a parent task now has **no children left**, and it was marked `[a]`, revert it back to `[ ]`.
+3. If a parent [a] task has no children left, flip it to [ ] and continue execution as usual, if, for any reason -  this is not expected behavior - a child task left in agent_prio.md has '[x]' Status, investigate if either:
+    -task has actually been solved and can be removed (check DevDiary.md and Changelog.md and compare against Intent of subtask)
+    -task needs further development => write down tasks as children subtasks into agent_prio.md so we don't loose tasks and scope.
+4. When unblocking a Parent Task, by completing it's last child, note in DevDiary.md and Changelog.md that it happened
 
 > **Why:**  
 > This keeps `agent_prio.md` clean and enforces proper inheritance between parent/child tasks.
@@ -90,14 +93,33 @@ Each agent is a specialized "game-dev persona" that:
 - Integrate with engine hooks via `level.*`, `relation_registry.*`, etc.  
 - Maintain strict compatibility with GAMMA’s baseline runtime.
 
+---
+
+### **Task IDs & Cross-Linking**
+- Each task gets a unique Task ID `<TASKSET>-<NUMBER>`:
+  - `<TASKSET>` = the parent task label (e.g., WALO, LOG, DIPLO)
+  - `<NUMBER>` = incrementing number for that set.
+- Agents must:
+  1. Insert the Task ID at the start of every task/subtask line in `agent_tasks.md` and `agent_prio.md`.
+  2. When marking a task `[x]`, copy the line to `DevDiary.md`:
+     - Preserve indentation hierarchy from `agent_prio.md`.
+     - Add date and summary of what was done.
+  3. Add a one-line entry to `CHANGELOG.md` referencing the Task ID.
+
+---
+
 ### **Prescoping**
 - **Always follow `prescope_workflow.md` before touching code.**
 - If you can’t prescope, STOP and mark the task `[a]`.  
 
+---
+
 ### **Documentation & Testing**
 - Every function must be commented (purpose, params, return, side-effects).  
 - Maintain Busted specs for all modules.  
-- Update `DevDiary.md`, `CHANGELOG.md` and `/docs` for every task.  
+- Update `DevDiary.md`, `CHANGELOG.md` and `/docs` for every task completed or when splitting tasks into smaller tasks.  
+
+---
 
 ### **Crashes**
 - If a crash occurs:  
@@ -172,3 +194,4 @@ Each agent is a specialized "game-dev persona" that:
 - Parent tasks revert when all children are done.  
 - `agent_prio.md` is always sorted and clean.  
 - Large tasks are split automatically and tracked visually with indentation.
+"""
