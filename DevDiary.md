@@ -62,3 +62,30 @@ Cloned baseline scripts and configs from `runtime files` into the new `gamma_wal
 ### Rollback & Risk
 - Low risk; docs only. Delete docs to rollback.
 
+
+## Prescope: Summarize old_walo conflicts
+- **Task ID**: WALO port - Summarize conflicts
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Review `docs/runtime_vs_gamma_walo.md` for every `old_walo` file and summarise major differences vs baseline for merge planning.
+
+### Scope & Context
+- Affects documentation only.
+- Inputs: diff report under `docs/runtime_vs_gamma_walo.md`.
+- Output: new doc `docs/conflict_summary.md`.
+
+### Dependencies
+- None.
+
+### Data Flow Analysis
+- Read diff lines for each file.
+- Summarize conflicts and features to port.
+- No direct downstream yet but required for port tasks.
+
+### Failure Cases
+- Missing diff lines might lead to incomplete summary.
+
+### Test Plan
+- Ensure `docs/conflict_summary.md` contains a section per file listing key differences.
+
+### Rollback & Risk
+- Low risk: doc only. Delete file to rollback.
