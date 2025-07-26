@@ -315,3 +315,42 @@
 ### Completed WALO-4
 - Applied blacklist loop optimisation in game_relations.script and added tests.
 - Date: 2025-07-26
+## Prescope: Merge warfare tweak options in ui_options.script
+- **Task ID**: WALO-8
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Port old WALO UI option tweaks into gamma_walo to expose new gameplay sliders and limits while keeping MCM compatibility.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Straightforward text edits to an existing script with known diff.
+
+### Scope & Context
+- Modify `gamma_walo/gamedata/scripts/ui_options.script`.
+- No engine hooks affected; only menu option definitions.
+
+### Dependencies
+- None.
+
+### Data Flow Analysis
+- **Input**: Option definitions from old_walo version.
+- **Output**: Updated option table with new entries and tuned values.
+- **Consumers**: Options menu when loaded in-game.
+
+### Failure Cases
+- Syntax errors prevent options from loading.
+- Missing entries cause UI to misbehave.
+
+### Test Plan
+- Busted spec to check for new option entries (`thirst`, `sleep`).
+- Validate FOV maximum reduced to 140.
+
+### Rollback & Risk
+- Revert script if menu fails; minimal risk due to textual nature.
+
+### Definition of Done
+- `ui_options.script` contains new options and updated values.
+- Spec passes.
+- agent_prio updated and changelog entry written.
+### Completed WALO-8
+- Ported UI option tweaks from old_walo into gamma_walo/ui_options.script and added tests.
+- Date: 2025-07-26
