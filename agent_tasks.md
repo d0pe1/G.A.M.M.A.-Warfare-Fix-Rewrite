@@ -1,7 +1,52 @@
-# Agent Task Checklist
+# Agent Task Checklist  
 
 This checklist breaks down the implementation of the **G.A.M.M.A. Warfare Overhaul** into discrete, verifiable steps.  
-Each task should be assigned to an agent defined in `agents.md`. When a task is complete and its tests pass, mark the checkbox and append a note in `DevDiary.md`.
+Each task should be assigned to an agent defined in `agents.md`.  
+When a task is complete and its tests pass, mark the checkbox and append a note in `DevDiary.md`.  
+
+---
+
+## **0. Agent Workflow Rules (ALL AGENTS MUST FOLLOW)**  
+
+Every agent must follow this **pre-scoping, compatibility-aware, self-checking workflow** before touching any code:  
+
+1. **Read context first**  
+   - `README.md` → understand the purpose and architecture.  
+   - `agents.md` → understand your role.  
+   - `agent_tasks.md` → locate your assigned task(s).  
+   - `docs/` (`SystemsDesign.md`, `WorldDesign.md`, `api_map.md`) → study the design and engine hooks.  
+   - Inspect related code in `gamma_walo/`, `runtime files/`, `old_walo/`, and `gammas_patch/`.  
+
+2. **Pre-scope your task** *(write this in `DevDiary.md` before you code)*  
+   - Identify **dependencies**: which files, modules, and functions will be touched.  
+   - Identify **engine hooks**: confirm which calls into the Anomaly engine (e.g. `level.map_add_object_spot`, `spawn_item`).  
+   - Identify **side effects**: what downstream systems could break if you change this?  
+   - Identify **tests**: what automated tests will confirm the feature works? What edge cases must be handled?  
+
+3. **Check compatibility**  
+   - Use `runtime_vs_gamma_walo.md` to check for differences vs. baseline.  
+   - If you detect a conflict, create a **new subtask** in the appropriate section below.  
+
+4. **Implement iteratively**  
+   - Modify **only** files in `gamma_walo/`.  
+   - Comment every function, modernize Lua style when safe.  
+   - Integrate with other systems: no "islands of logic."  
+
+5. **Self-check your work**  
+   - Write or update **Busted specs** (`*.spec.script`) for every new or modified module.  
+   - Run tests in a mocked engine environment.  
+   - If the game crashes, log it in `runtime_crashes/` and create a new "Fix crash" subtask.  
+
+6. **Update the repo**  
+   - Mark the task `[x]` when tests pass and no crashes occur.  
+   - Update headers in modified source files.  
+   - Update `CHANGELOG.md` and append detailed notes to `DevDiary.md`.  
+
+7. **Never move on until your task is stable**  
+   - If tests fail or crashes persist, do **not** start a new task.  
+   - Fix or create subtasks to resolve issues.  
+
+---
 
 ---
 
