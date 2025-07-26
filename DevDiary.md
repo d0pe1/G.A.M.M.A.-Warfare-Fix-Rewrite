@@ -236,3 +236,44 @@
 ### Completed WALO-5
 - Applied cached lid_1 loops and removed squad cap debug block from sim_offline_combat.script. Added test.
 - Date: 2025-07-26
+
+## Prescope: Replace spawn chance formulas
+- **Task ID**: WALO-3
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Ensure faction_expansions.script uses simplified advanced/veteran spawn chance formulas from old_walo. Confirm no changes needed or port formulas if missing.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Only need to verify formulas or replace with known expressions; single file edit.
+
+### Scope & Context
+- Inspect gamma_walo/gamedata/scripts/faction_expansions.script compared to old_walo version.
+- Affects spawn chance calculation when sim squads spawn.
+- Hooks into warfare.spawn_squad, but no new hooks required.
+
+### Dependencies
+- None; baseline file already available.
+
+### Data Flow Analysis
+- **Input**: existing Lua file lines defining get_advanced_chance and get_veteran_chance.
+- **Output**: possibly modified functions using simplified formulas.
+- **Consumers**: Warfare squad spawning logic reading these functions.
+
+### Failure Cases
+- Leaving outdated formula would reduce high-level spawn rates.
+- Syntax errors if edit done wrong.
+
+### Test Plan
+- Add spec reading the file to ensure formulas match the simplified ones.
+
+### Rollback & Risk
+- Minimal; revert file if mis-edited.
+
+### Definition of Done
+- Functions confirmed or replaced with simplified formulas.
+- New spec passes.
+- agent_prio updated and changelog entry written.
+
+### Completed WALO-3
+- Verified spawn chance formulas already use simplified version; added tests to ensure correctness.
+- Date: 2025-07-26
