@@ -124,3 +124,34 @@ merge work for the WALO port task.
 
 ### Implementation Notes
 Added bullet for `ui_mm_faction_select.script` noting no functional differences.
+
+## Prescope: Plan merge strategy per file
+- **Task ID**: WALO port - Plan merge strategy per file
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Outline per-file approach for integrating features from `old_walo` and `gammas patch` into `gamma_walo`.
+
+### Scope & Context
+- Documentation only, no code changes yet.
+- Inputs: `docs/conflict_summary.md` and original diff reports.
+- Output: `docs/walo_merge_strategy.md` listing the merge approach for every conflicting script.
+
+### Dependencies
+- None. All diff data already generated.
+
+### Data Flow Analysis
+- **Input**: diff summaries -> analysis -> strategy table.
+- **Output**: merge strategy document.
+- **Downstream consumers**: future implementation subtasks for each file.
+
+### Failure Cases
+- Missing a file could lead to later confusion.
+- Over-general strategy might not clarify merge steps.
+
+### Test Plan
+- Review the new doc to ensure each script from the conflict summary is covered with planned actions.
+
+### Rollback & Risk
+- Low risk. Delete or amend the doc if strategy proves incorrect.
+
+### Implementation Notes
+Will create new Markdown file summarizing planned approach for every `old_walo` and `gammas patch` script. This completes the planning stage before actual code merges.
