@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+
+	<!-- mcm menu (mandatory) -->
+
+	<string id="ui_mcm_npe_module_welcome">
+		<text>NPE Welcome</text>
+	</string>
+	<string id="ui_mcm_npe_module_welcome_title">
+		<text>New Player Experience</text>
+	</string>
+	<string id="ui_mcm_npe_module_welcome_desc">
+		<text>A tutorial to introduce the player with NPE</text>
+	</string>	
+	<string id="ui_mcm_npe_module_welcome_introduction">
+		<text>Introduction</text>
+	</string>
+
+	<string id="ui_npe_welcome_set_title">
+		<text>New Player Experience Introduction</text>
+	</string>
+	<!-- deck_welcome -->
+
+	<string id="ui_npe_welcome_card_01_title">
+		<text>%c[d_cyan]Welcome to the New Player Experience</text>
+	</string>
+	<string id="ui_npe_welcome_card_01_description">
+		<text>You have installed the New Player Experience mod, NPE in brief. 
+		\n
+		\n
+		NPE framework is a tutorial system that aims to help new players to get started in the game. A Tutorial is the basic form of quest design for which this framework was created.
+		\n
+		\n
+		Mods makers that add tutorials using the NPE framework will be able to use this system to guide new players through their content. 
+		\n
+		\n
+		A deck of tutorials or simply deck, is a series of sets of cards (ui panels) that are displayed to player when specific conditions are met (contexts).
+		\n
+		\n
+		For example, starting the game, opening a stash, looting an item, or talking to an NPC, etc.
+		A deck can contain several sets about various topics.
+		\n
+		\n
+		Each card or ui panel displays a title, text, and an image. A set normally consist of a max of three cards that are enough to explain something to you.
+		The firt card usually presents the topic at hand, the second the explanation or action needed to be taken and the last card the conclusion or the results of the action.
+		\n
+		You can find more information about NPE on the mod page on the ModDb website.
+		</text>
+	</string>	
+	<string id="ui_npe_welcome_card_02_title">
+		<text>%c[d_cyan]Access the NPE MCM menu</text>
+	</string>
+	<string id="ui_npe_welcome_card_02_description">
+		<text>NPE has its own MCM menu where you can configure the NPE system to your liking.
+		\n
+		\n
+		Open the MCM menu and select the NPE tab on the left. From there you can navigate to the Logging and General pages to configure the NPE system.
+		\n
+		\n
+		The most important setting is Enable in the General page. If this is set to false (unchecked), the NPE system will not run.
+		\n
+		\n
+		You can change the ui sounds with different sound libraries and volule presets.
+		\n
+		\n
+		You can also configure the game to forcefully pause while a tutorial is shown. 
+		Normally modules tutorials can make this decision for you, pausing the game based on the specific event and sets. 
+		This setting instead ovverides that ensuring the action is paused the moment a tutorial pops up.
+		</text>
+	</string>	
+	<string id="ui_npe_welcome_card_03_title">
+		<text>%c[d_cyan]Check all the NPE Modules avaliable to you</text>
+	</string>
+	<string id="ui_npe_welcome_card_04_description">
+		<text>The NPE system is modular, meaning that you can add or remove modules that add tutorials to the game.
+		\n
+		\n
+		Mods can add their own tutorials using the NPE framework.
+		\n
+		\n
+		Open the MCM menu and select the NPE Modules tab on the left. This will list the setting's pages for all the modules currently installed. 
+		\n
+		\n
+		The module page will show you the sets that are added by the module. Each set's setting shows if the set has been played or not, already. They all start disabled.
+		\n
+		\n
+		An NPE module contains a deck (a series of tutorials about game topics) normally included with a mod or a modpack
+		Each deck contains several sets or tutorials (a series of cards about a specific topic).	
+		\n
+		\n		
+		If a set has been played to you, e.g. you have seen the tutorial, the setting will be enabled (checked)
+		\n
+		\n
+		You can uncheck already played sets to see them again. 
+		</text>
+	</string>	
+</string_table>

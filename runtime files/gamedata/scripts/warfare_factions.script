@@ -6,7 +6,8 @@
 	2020/11/07 - Vintar - Resurgence chance added to resurgence calculation
 	2021/02/19 - Vintar - stronger resurgence attempts, now uses fetch_smart_distance(), debug messages
 	2021/03/27 - Vintar - loners exempt from random patrol targeting. Random patrols no longer spawn too close to actor.
-	2021/11/22 - Vintar - slight change to resurgence base count
+        2021/11/22 - Vintar - slight change to resurgence base count
+        2025/07/24 - d0pe - added nil checks for faction lists
 
 	This file handles faction-level warfare stuff like random patrols, resurgences, etc.
 =======================================================================================
@@ -55,7 +56,7 @@ faction_information = {}
 faction_timers = {}
 
 for i=1,#factions do
-	factions_p[factions[i]] = true
+       factions_p[factions[i]] = true
 end
 
 --[[
@@ -82,6 +83,7 @@ function update()
 	end
 end
 
+-- Update timers and patrol logic for a single faction
 function update_faction(faction)
 	if (not faction or faction == "none") then
 		return

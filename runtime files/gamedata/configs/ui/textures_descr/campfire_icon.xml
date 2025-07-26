@@ -1,0 +1,6 @@
+<!--Custom HUD Indicator-->
+<w>
+    <file name="ui\campfire_buff">
+		<texture id="ui_campfire_buff" x="0" y="0" width="43" height="43" />
+	</file>
+</w>

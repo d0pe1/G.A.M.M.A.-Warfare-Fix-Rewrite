@@ -1,0 +1,99 @@
+#include "presets\trade_discounts.ltx"
+#include "presets\trade_presets.ltx"
+
+[trader]
+buy_condition = trade_generic_buy 
+sell_condition = trade_generic_sell
+buy_supplies = {=drugkit_task_done()} supplies_2, supplies_1
+buy_item_condition_factor = 0.05
+buy_item_exponent = 2.25
+sell_item_exponent = 0.75
+
+discounts = discount_medic
+
+[trade_generic_buy]:medic,furnitures_low
+itm_pda_common                           ;NO TRADE
+itm_pda_rare                             ;NO TRADE
+itm_pda_uncommon                         ;NO TRADE
+pri_a25_explosive_charge_item            ;NO TRADE
+itm_drugkit				= 2.0, 2.0
+
+[trade_generic_sell]:medic
+itm_drugkit				= 2.0, 2.0
+
+[supplies_1]:common_stock
+
+antibio_chlor			= 6, 1
+antibio_sulfad			= 6, 1
+antiemetic   			= 6, 1
+caffeine			    = 3, 1
+drug_coagulant			= 3, 1
+protein				    = 4, 1
+caffeine			    = 3, 1
+
+glucose_s			    = 2, 1
+drug_sleepingpills		= 1, 1
+bandage				    = 4, 1
+medkit			     	= 2, 1
+medkit_army			    = 1, 1
+stimpack			    = 1, 1
+drug_radioprotector		= 2, 1
+
+yadylin				    = 2, 1
+akvatab				    = 1, 1
+tetanus				    = 1, 1
+drug_antidot			= 1, 1
+antirad_kalium			= 2, 1
+
+analgetic			    = 2, 1
+salicidic_acid			= 2, 1
+morphine			    = 1, 1
+drug_anabiotic			= 1, 1
+drug_booster			= 2, 1
+drug_psy_blockade		= 1, 1
+
+;recipe_drug_1			= 1, 1
+;recipe_drug_2			= 1, 1
+;recipe_drug_3			= 1, 1
+;recipe_drug_4			= 1, 1
+
+[supplies_2]:supplies_1
+antibio_chlor			= 8, 1
+antibio_sulfad			= 8, 1
+antiemetic   			= 8, 1
+caffeine			    = 5, 1
+drug_coagulant			= 4, 1
+protein				    = 5, 1
+caffeine			    = 4, 1
+
+glucose_s			    = 3, 1
+glucose			        = 2, 1
+drug_sleepingpills		= 2, 1
+bandage				    = 6, 1
+jgut                    = 3, 1
+medkit			     	= 3, 1
+medkit_army			    = 2, 1
+medkit_scientic			= 1, 1
+stimpack			    = 2, 1
+stimpack_army           = 2, 1
+stimpack_scientic       = 1, 1
+drug_radioprotector		= 2, 1
+rebirth                 = 1, 1
+
+yadylin				    = 4, 1
+akvatab				    = 2, 1
+tetanus				    = 2, 1
+drug_antidot			= 2, 1
+antirad_kalium			= 3, 1
+
+cocaine                 = 2, 1
+adrenalin               = 1, 1
+
+analgetic			    = 3, 1
+salicidic_acid			= 3, 1
+morphine			    = 2, 1
+drug_anabiotic			= 2, 1
+drug_booster			= 4, 1
+drug_psy_blockade		= 2, 1
+
+

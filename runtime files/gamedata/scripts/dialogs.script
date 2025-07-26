@@ -32,6 +32,7 @@ function give_task_mysteries_of_the_zone(a,b)
 	task_manager.get_task_manager():give_task("mar_find_doctor_task")
 end
 
+-- Helper used in dialog preconditions to hide options when Warfare is active
 function warfare_disabled(a,b)
 	if _G.WARFARE then
 		return false
@@ -43,6 +44,7 @@ end
 -- Task stacking check
 -------------------------------------------
 local mark_task_per_npc = {}
+-- Returns the maximum simultaneous tasks an NPC can offer based on options
 function get_npc_task_limit()
 	return tonumber(ui_options.get("gameplay/general/max_tasks") or 2)
 end
@@ -1793,7 +1795,7 @@ end
 -----------------------------------------------------------------------------------
 -- TRADE
 -----------------------------------------------------------------------------------
---' ������������� ��������
+--'  
 function trade_init(seller, buyer)
 	db.storage[seller:id()].meet.begin_wait_to_see.begin = time_global()/1000
 	xr_position.setPosition(db.storage[seller:id()].meet.Seller,

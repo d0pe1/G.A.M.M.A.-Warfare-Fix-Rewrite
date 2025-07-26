@@ -1,0 +1,753 @@
+;-- Weapons shoot effects
+
+;-- s: effect power [1-5]
+;-- r,e: anim effects
+;-- p: ppe effects
+
+;--[wpn_yourgun]
+;--s = a
+;--r = b
+;--e = c
+;--p = d
+
+;--[s] is the FOV pull effect.
+;--It can be any integer number from 1 to 5, higher number means a stronger FOV pull obviously.
+;--It can also be a chain of effects linked together, e.g.: s = 1 ,2 ,3 ,4 ,5 NOTE THE " ," SEPARATION!
+;--This chain means that every subsequent shot will use it's respective index, e.g.: shot n°5 will use the 5th index in the chain.
+;--IF [r] is r = 1 then [s] is chosen at random.
+;--IF [r] is r = 2 then [s] is chosen at random but AFTER the first shot.
+
+;--[r] randomizes the FOV pull, explained above.
+
+;--[e] are the camera movement tricks.
+;--[e] needs to have 6 values registered, e.g.: e = 1.0 ,1.0 ,1.0 ,1.0 ,1.0 ,1.0 NOTE THE " ," SEPARATION!
+;--These values can be any float number from 0 into maybe positive infinite.
+;--Every value in [e] can be have an additional property appended to them with :, e.g.: 1.0:1
+;--This property can be either 0 or 1.
+;--Not specifying a :x thing tells the script to randomize between the two.
+;--First value is the horizontal shake. :0 moves the camera to the right, :1 moves it to the left.
+;--Second value is the vertical shake. :0 moves it up, :1 down.
+;--Third value is another sort of FOV pull, shakes the camera back and forth. :0 moves it forward, :1 moves it backwards.
+;--Fourth value turns the camera horizontally. :0 makes you look to the left, :1 to the right.
+;--Fifth value turns the camera vertically. :0 makes you look up, :1 down.
+;--Sixth value tilts the camera. :0 tilts it to the right, :1 to the left.
+
+[wpn_ash12]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.7, 1.2:0, 0.8:1, 1.3:0 ,2.1:0 ,0.6
+p = grey=0.02, duality_v=0.02
+
+[wpn_aps]
+s = 1 ;  1
+r = 1
+e = 0.8 ,0.25 ,0.4:1 ,1.45:0 ,1.1:0 ,0.1 
+p =
+
+[wpn_pb]
+s = 1 ;  1
+r = 0
+e = 1.7 ,0.6 ,0.8:1 ,3.7:0 ,2.1:0 ,0 
+p =
+
+[wpn_beretta]
+s = 1 ;  2
+r = 0
+e = 1.9 ,0.8 ,1:1 ,3.6 ,3.2:0 ,0.4 
+p = 
+
+[wpn_cz75]
+s = 1 ;  1
+r = 1
+e = 1.7 ,0.6 ,0.8:1 ,4:0 ,2.1:0 ,0 
+p =
+
+[wpn_hpsa]
+s = 1 ;  1
+r = 0
+e = 1.8 ,0.7 ,0.8:1 ,3.7:0 ,2.1:0 ,0 
+p =
+
+[wpn_mp5]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.4 ,0.2 ,0.8:1 ,1.3:0 ,1.3:0 ,0.4  
+p = 
+
+[wpn_mp5sd]
+s = 1 ;  1, 1, 2, 2, 3
+r = 0
+e = 0.3 ,0.1 ,0.5:1 ,0.7:0 ,0.7:0 ,0.3  
+p = 
+
+[wpn_desert_eagle]
+s = 1 ;  3
+r = 0
+e = 1.9 ,0.8:0 ,1:1 ,3.6 ,5.15:0 ,0.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_desert_eagle_custom]
+s = 1 ;  3
+r = 0
+e = 1.9 ,0.8:0 ,1:1 ,3.6 ,5.15:0 ,0.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_groza]
+s = 1 ;  3, 4, 3
+r = 0
+e = 0.5 ,1.2:1 ,0.9:1 ,1.2 ,4.0:0 ,0.6 
+p = grey=0.01, duality_v=0.01
+
+[wpn_9a91]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.1 ,1.2:1 ,1.0:1 ,1.0:0 ,1.0:0 ,0.6 
+p = 
+
+[wpn_vintorez]
+s = 1 ;  1, 1, 2, 2, 3
+r = 0
+e = 0 ,0.5:1 ,0.5:1 ,0.5:0 ,0.5:0 ,0.4
+p = 
+
+[wpn_9x39_lowest]
+s = 1 ;  1, 1, 2, 2, 3
+r = 0
+e = 0 ,0.3:1 ,0.3:1 ,0.3:0 ,0.3:0 ,0.3
+p = 
+
+[wpn_762x51_higher]
+s = 3
+r = 1
+e = 1.8 ,2.0:0 ,2.5:1 ,3.2 ,5.1:0 ,2.6
+p = grey=0.02, duality_v=0.01
+
+[wpn_762x51]
+s = 2 ;  3, 4, 3
+r = 1
+e = 1.75 ,1.90:0 ,1.75:1 ,1.45 ,4.3:0 ,2.2
+p = grey=0.01, duality_v=0.01
+
+[wpn_762x51_lower]
+s = 1 ;  3, 4, 3
+r = 1
+e = 1.95 ,1.95:0 ,1.95:1 ,1.45 ,4.8:0 ,1.6
+p = grey=0.01, duality_v=0.01
+
+[wpn_akm]
+s = 1 ;  3, 4, 3
+r = 1
+e = 1.65 ,1.55:1 ,1.45:1 ,1.25 ,3.9:0 ,0.9
+p = grey=0.01, duality_v=0.01
+
+[wpn_ak]
+s = 1 ;  3, 4, 3
+r = 1
+e = 1.3 ,1.3:1 ,1.1:1 ,1.2 ,3.4:0 ,0.6
+p = grey=0.01, duality_v=0.01
+
+[wpn_ak103]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.95, 0.95:1, 0.8:1, 1.6:0 ,2.1:0 ,0.6
+p = grey=0.01, duality_v=0.01
+
+[wpn_rpk]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.65, 0.65:1, 0.7:1, 1.2:0 ,1.8:0 ,0.5
+p = grey=0.01, duality_v=0.01
+
+[wpn_abakan]
+s = 1 ;  1, 3
+r = 1
+e = 0.5 ,0.7:1 ,0.7:1 ,1 ,3.5:0 ,0.2
+p = 
+
+[wpn_aug_low]
+s = 1 ;  2, 3, 3, 3
+r = 1
+e = 0.32, 0.32 ,0.45:1 ,1.2:0 ,1.2:0 ,0.6
+p = 
+
+[wpn_m4_ru556]
+s = 1 ;  1, 1, 2, 2, 3
+r = 1
+e = 0.18, 0.18, 0.20:1 ,1.0:0 ,1.0:0 ,0.5
+p = 
+
+
+[wpn_l96a1]
+s = 4, 5
+r = 1
+e = 2 ,2:0 ,3:1 ,5:1 ,7:0 ,5:1 
+p = blur=0, grey=0.02, duality_h=0.04
+
+[wpn_mosin]
+s = 3
+r = 1
+e = 1.8 ,2.0:0 ,2.5:1 ,4.5:0 ,5.1:0 ,4.2
+p = blur=0, grey=0.02, duality_h=0.03
+
+[wpn_sks_b]
+s = 3, 4
+r = 1
+e = 1.5 ,1.5:0 ,2.5:1 ,4.5:0 ,5.1:0 ,3.2
+p = blur=0, grey=0.02, duality_h=0.03
+
+[wpn_gauss]
+s = 2
+r = 1
+e = 0 ,1:0 ,1:0 ,1.2 ,1.5:0 ,0.2 
+p = grey=0.02, duality_v=0.02
+
+[wpn_bm16]
+s = 2 ;  4, 5
+r = 1
+e = 3.3 ,3.3 ,1.8:1 ,4.5 ,6.2:0 ,5.4 
+p = blur=0, grey=0.03, duality_v=0.05
+
+[wpn_bm16_full]
+s = 2 ;  4, 5
+r = 1
+e = 2.2 ,2.2 ,1.9:1 ,3.4 ,6.2:0 ,4.4 
+p = blur=0, grey=0.03, duality_v=0.04
+
+[wpn_mossberg590]
+s = 2 ;  3, 4
+r = 1
+e = 1.4 ,1.4 ,1.1:1 ,2.1 ,4.1:0 ,4.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_mossberg590_rail]
+s = 2 ;  3, 4
+r = 1
+e = 1.1 ,1.1 ,0.9:1 ,1.7 ,3.7:0 ,3.7 
+p = grey=0.02, duality_v=0.02
+
+[wpn_protecta]
+s = 2 ;  3, 4
+r = 1
+e = 1.4 ,1.4 ,1.1:1 ,2.1 ,4.1:0 ,4.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_saiga12s]
+s = 2 ;  3, 4
+r = 1
+e = 1.4 ,1.4 ,1.1:1 ,2.1 ,4.1:0 ,4.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_vepr]
+s = 1, 2 ;  3, 4
+r = 1
+e = 1.2 ,1.2 ,1.0:1 ,2.0 ,3.7:0 ,3.2 
+p = grey=0.01, duality_v=0.01
+
+[wpn_raptr]
+s = 1
+r = 1
+e = 1.2 ,1.2 ,1.0:1 ,2.0 ,2.7:0 ,2.2 
+p = grey=0.01, duality_v=0.01
+
+[wpn_wincheaster1300]
+s = 2 ;  4
+r = 1
+e = 1.4 ,1.4 ,1.1:1 ,2.1 ,4.1:0 ,4.4 
+p = grey=0.02, duality_v=0.02
+
+[wpn_m79]
+s = 2 ;  4
+r = 1
+e = 1.7 ,1.7 ,1.4:1 ,2.3 ,4.5:0,4.4 
+p = grey=0.05, duality_v=0.1
+
+[wpn_rpg7]
+s = 3 ;  4
+r = 1
+e = 0 ,2:1 ,3:1 ,0 ,4:0 ,0 
+p = grey=0.05, duality_v=0.1
+
+[wpn_p90]:wpn_vintorez
+[wpn_p90tac]:wpn_vintorez
+[wpn_p90gamma]:wpn_vintorez
+[wpn_p90_gs]:wpn_ak103
+[wpn_fort]:wpn_aps
+[wpn_fort_snag]:wpn_aps
+[wpn_kiparis]:wpn_aps
+[wpn_oc33]:wpn_aps
+[wpn_pb_custom]:wpn_pb
+[wpn_pm]:wpn_aps
+[wpn_pm_custom]:wpn_aps
+[wpn_pmm]:wpn_aps
+[wpn_pm_actor]:wpn_aps
+[wpn_pmm_bas]:wpn_aps
+[wpn_bizon]:wpn_mp5
+[wpn_aps_bas]:wpn_aps
+[wpn_aps_bas_apsabigo]:wpn_aps
+[wpn_pb_bas_custom]:wpn_aps
+[wpn_pl15_tan]:wpn_mp5
+[wpn_pl15_tan_pl15_scolaz]:wpn_mp5
+[wpn_pl15_pl15_scolaz]:wpn_mp5
+[wpn_pm_bas_actor]:wpn_aps
+[wpn_pm_bas_custom]:wpn_aps
+[wpn_kriss_vector]:wpn_vintorez
+;--
+;--	9x19mm
+;--
+[wpn_beretta_camo]:wpn_beretta	
+[wpn_beretta_modern]:wpn_beretta	
+[wpn_beretta_alt]:wpn_beretta	
+[wpn_cz75_auto]:wpn_cz75	
+[wpn_cz52]:wpn_cz75
+[wpn_glock]:wpn_cz75	
+[wpn_glock_custom]:wpn_cz75	
+[wpn_glock_modern]:wpn_aps	
+[wpn_mp443]:wpn_cz75	
+[wpn_gsh18]:wpn_beretta	
+[wpn_gsh18_custom]:wpn_beretta	
+[wpn_hpsa_alt]:wpn_hpsa	
+[wpn_usp_match]:wpn_hpsa	
+[wpn_usp_nimble]:wpn_hpsa	
+[wpn_mp5_custom]:wpn_mp5	
+[wpn_mp5_alt]:wpn_mp5	
+[wpn_mp5_nimble]:wpn_mp5
+[wpn_mp5sd_custom]:wpn_mp5sd
+[wpn_mp5sd_new]:wpn_mp5sd
+[wpn_pp2000]:wpn_aps
+[wpn_vityaz]:wpn_mp5
+[wpn_vz61]:wpn_aps
+[wpn_vz61_freedom]:wpn_aps
+[wpn_vz61_camo]:wpn_aps
+[wpn_vz61_alt]:wpn_aps
+[wpn_walther]:wpn_aps
+[wpn_walther_custom]:wpn_aps
+[wpn_walther_p99_mod9]:wpn_aps
+[wpn_mp7]:wpn_mp5
+;--
+;--	.45 ACP
+;--
+[wpn_colt1911]:wpn_beretta	
+[wpn_colt1911_duty]:wpn_beretta	
+[wpn_colt1911_merc]:wpn_beretta	
+[wpn_colt1911_camo]:wpn_bm16_full	
+[wpn_colt1911_custom]:wpn_beretta	
+[wpn_colt1911_modern]:wpn_beretta	
+[wpn_colt1911_alt]:wpn_beretta	
+[wpn_colt1911_new]:wpn_beretta	
+[wpn_colt_kimber]:wpn_beretta	
+[wpn_fnp45]:wpn_beretta	
+[wpn_fnp45_custom]:wpn_beretta	
+[wpn_fnx45]:wpn_beretta	
+[wpn_fnx45_custom]:wpn_beretta	
+[wpn_fnx45_alt]:wpn_beretta	
+[wpn_sig220]:wpn_beretta	
+[wpn_sig220_custom]:wpn_beretta	
+[wpn_sig220_nimble]:wpn_beretta	
+[wpn_ump45]:wpn_aps	
+[wpn_ump45_custom]:wpn_aps		
+[wpn_usp]:wpn_beretta	
+[wpn_usp_custom]:wpn_beretta	
+[wpn_thompson_m1a1]:wpn_akm
+[wpn_thompson_1921]:wpn_ak
+;--
+;--	7.62 Tokarev
+;--
+[wpn_tt33]:wpn_beretta	
+[wpn_tt33_modern]:wpn_beretta	
+[wpn_ppsh41]:wpn_aps
+[wpn_ppsh41_woodnew]:wpn_aps
+[wpn_ppsh41_woodworn]:wpn_aps
+[wpn_ppsh41_rednew]:wpn_aps
+[wpn_ppsh41_redworn]:wpn_aps
+;--
+;--	.357 Magnum
+;--
+[wpn_desert_eagle_modern]:wpn_desert_eagle_custom	
+[wpn_desert_eagle_nimble]:wpn_beretta	
+[wpn_mp412]:wpn_desert_eagle_custom	
+;--
+;--	9x39
+;--
+[wpn_groza_nimble]:wpn_m4_ru556
+[wpn_val]:wpn_vintorez	
+[wpn_val_modern]:wpn_vintorez	
+[wpn_vihr]:wpn_vintorez	
+[wpn_vintorez_nimble]:wpn_vintorez
+[wpn_vsk94]:wpn_9a91
+;--
+;--	5.45/5.56/7.62
+;--
+[wpn_abakan_camo]:wpn_abakan
+[wpn_aek]:wpn_rpk	
+[wpn_aek_camo]:wpn_rpk	
+[wpn_aks]:wpn_ak	
+[wpn_ak74]:wpn_ak103	
+[wpn_ak74_custom]:wpn_ak103	
+[wpn_ak74_modern]:wpn_ak103
+[wpn_ak74_alt]:wpn_ak103	
+[wpn_ak74_old]:wpn_ak103	
+[wpn_ak74_rpk]:wpn_rpk	
+[wpn_ak74m]:wpn_ak103	
+[wpn_ak74m_duty]:wpn_ak103	
+[wpn_ak74m_camo]:wpn_ak103	
+[wpn_ak74m_custom]:wpn_ak103	
+[wpn_ak74m_alt]:wpn_ak103	
+[wpn_ak74m_pka]:wpn_ak103	
+[wpn_ak101]:wpn_aug_low
+[wpn_ak101_camo]:wpn_aug_low	
+[wpn_ak102]:wpn_aug_low	
+[wpn_aek_duty]:wpn_rpk	
+[wpn_ak103_camo]:wpn_ak103
+[wpn_ak104]:wpn_ak103
+[wpn_ak105]:wpn_ak103
+[wpn_akms]:wpn_akm	
+[wpn_akms_alt]:wpn_akm
+[wpn_aks74]:wpn_ak	
+[wpn_aks74_new]:wpn_ak
+[wpn_ak74u]:wpn_groza	
+[wpn_ak74u_camo]:wpn_groza	
+[wpn_ak74u_custom]:wpn_groza	
+[wpn_ak74u_old]:wpn_groza	
+[wpn_ak74u_snag]:wpn_groza	
+[wpn_aug]:wpn_ak103
+[wpn_aug_freedom]:wpn_mp5
+[wpn_aug_merc]:wpn_ak103
+[wpn_aug_custom]:wpn_ak103
+[wpn_aug_modern]:wpn_ak103
+[wpn_fn2000]:wpn_vintorez
+[wpn_fn2000_camo]:wpn_vintorez
+[wpn_fn2000_custom]:wpn_vintorez
+[wpn_fn2000_nimble]:wpn_vintorez
+[wpn_famas3]:wpn_aug_low						   
+[wpn_g3]:wpn_ak	
+[wpn_g3sg1]:wpn_aug_low	
+[wpn_g36]:wpn_aug_low	
+[wpn_g36_camo]:wpn_aug_low
+[wpn_g36k]:wpn_aug_low
+[wpn_g36_nimble]:wpn_aug_low	
+[wpn_g36v_rwap]:wpn_rpk
+[wpn_g36ka4_rwap]:wpn_rpk
+[wpn_g36nimble_rwap]:wpn_rpk
+[wpn_hk416]:wpn_aug_low
+[wpn_l85]:wpn_ak103
+[wpn_l85_custom]:wpn_ak103
+[wpn_l85_modern]:wpn_ak103
+[wpn_l85_alt]:wpn_ak103
+[wpn_l85a2]:wpn_ak103
+[wpn_l85a2_custom]:wpn_ak103
+[wpn_l85a2_modern]:wpn_ak103
+[wpn_l85a2_alt]:wpn_ak103
+[wpn_l96a1m]:wpn_l96a1
+[wpn_steyr_scout_big]:wpn_l96a1
+[wpn_steyr_scout]:wpn_l96a1
+[wpn_lr300]:wpn_ak103
+[wpn_lr300_camo]:wpn_ak103
+[wpn_lr300_custom]:wpn_ak103
+[wpn_m4]:wpn_aug_low
+[wpn_m4a1]:wpn_aug_low
+[wpn_m4a1_freedom]:wpn_aug_low
+[wpn_m4a1_camo]:wpn_aug_low
+[wpn_m4a1_custom]:wpn_aug_low
+[wpn_m16]:wpn_groza
+[wpn_m16a2]:wpn_aug_low
+[wpn_pkm]:wpn_ak
+[wpn_pkm_siber]:wpn_ak
+[wpn_pkp]:wpn_rpk
+[wpn_pkp_siber]:wpn_rpk
+[wpn_pkm_zenit_siber]:wpn_rpk
+[wpn_pkm_zulus]:wpn_ak
+[wpn_rpd]:wpn_rpk
+[wpn_rpk74]:wpn_rpk
+[wpn_ak12]:wpn_aug_low	
+[wpn_m249]:wpn_aug_low
+[wpn_m60]:wpn_groza
+[wpn_scar]:wpn_ak	
+[wpn_scar_custom]:wpn_ak	
+[wpn_scar_new]:wpn_ak	
+[wpn_sig550]:wpn_ak	
+[wpn_sig550_camo]:wpn_ak	
+[wpn_sig550_custom]:wpn_ak103	
+[wpn_sig550_sniper]:wpn_aug_low	
+[wpn_sig550_luckygun]:wpn_rpk	
+[wpn_sig552]:wpn_ak	
+[wpn_ace21]:wpn_groza	
+[wpn_ace52]:wpn_762x51_lower
+[wpn_sv98]:wpn_saiga12s	
+[wpn_sv98_custom]:wpn_saiga12s	
+[wpn_svd]:wpn_mosin	
+[wpn_svd_custom]:wpn_mosin	
+[wpn_svd_nimble]:wpn_mosin	
+[wpn_svt40]:wpn_l96a1	
+[wpn_svt40_modern]:wpn_l96a1
+[wpn_svu]:wpn_mosin	
+[wpn_svu_alt]:wpn_mosin	
+[wpn_svu_nimble]:wpn_mosin	
+[wpn_sks]:wpn_762x51	
+[wpn_sks_modern]:wpn_762x51	
+[wpn_k98]:wpn_l96a1	
+[wpn_g43]:wpn_l96a1	
+[wpn_type63]:wpn_l96a1
+[wpn_remington700]:wpn_l96a1
+[wpn_wa2000]:wpn_mosin
+[wpn_m82]:wpn_mosin
+[wpn_fnfal]:wpn_ak
+[wpn_fal]:wpn_762x51_higher
+[wpn_mk14]:wpn_akm
+[wpn_hk417]:wpn_aug_low
+[wpn_fnc]:wpn_aug_low
+[wpn_aug_a3]:wpn_aug_low
+[wpn_galil]:wpn_ak	
+[wpn_galil_custom]:wpn_ak	
+[wpn_galil_modern]:wpn_ak	
+[wpn_xm8]:wpn_aug_low
+[wpn_xm4]:wpn_ak103
+[wpn_adar2_15]:wpn_762x51
+;--
+;--	.338 magnum/12.7/gauss
+;--
+[wpn_m98b]:wpn_l96a1	
+[wpn_m24]:wpn_l96a1	
+[wpn_trg]:wpn_l96a1	
+[wpn_vssk]:wpn_mosin
+[wpn_ash12_sup]:wpn_ash12
+;--
+;--	12x70_buck/12x76_zhekan
+;--		
+[wpn_bm16_alt]:wpn_bm16
+[wpn_bm16_full_alt]:wpn_bm16_full
+[wpn_bm16_full_alt_23]:wpn_bm16_full
+[wpn_mp133]:wpn_mossberg590	
+[wpn_mp153]:wpn_mossberg590	
+[wpn_ithacam37_trench]:wpn_vepr
+[wpn_ithacam37_stakeout]:wpn_bm16_full
+[wpn_ithacam37_mag]:wpn_vepr
+[wpn_protecta_camo]:wpn_protecta	
+[wpn_protecta_custom]:wpn_protecta	
+[wpn_protecta_aim]:wpn_protecta	
+[wpn_protecta_nimble]:wpn_protecta	
+[wpn_spas12]:wpn_saiga12s	
+[wpn_spas12_custom]:wpn_saiga12s	
+[wpn_spas12_nimble]:wpn_saiga12s	
+[wpn_toz34]:wpn_bm16_full	
+[wpn_toz34_decor]:wpn_bm16_full	
+[wpn_toz34_custom]:wpn_bm16_full	
+[wpn_toz34_mark4]:wpn_bm16_full	
+[wpn_toz34_mark4_23]:wpn_saiga12s
+[wpn_toz34_obrez]:wpn_bm16	
+[wpn_toz34_obrez_decor]:wpn_bm16	
+[wpn_toz34_obrez_custom]:wpn_bm16	
+[wpn_toz34_bull]:wpn_bm16	
+[wpn_usas12]:wpn_protecta	
+[wpn_wincheaster1300_trapper]:wpn_wincheaster1300
+[wpn_remington870]:wpn_saiga12s
+[wpn_fort500]:wpn_saiga12s
+[wpn_gauss_quest]:wpn_rpk
+[wpn_rg-6]:wpn_rpk
+
+;---
+;---	BAS
+;---
+[wpn_vintorez_isg]:wpn_vintorez  
+[wpn_vintorez_m2]:wpn_9x39_lowest
+[wpn_vintorez_m1]:wpn_vintorez   
+[wpn_vintorez_n1]:wpn_vintorez
+[wpn_val_tac]:wpn_vintorez   
+[wpn_vintorez_1pn93]:wpn_9a91  
+[wpn_vintorez_alt]:wpn_9a91  
+[wpn_toz106]:wpn_mosin
+[wpn_toz106_m1]:wpn_mosin
+[wpn_dvl10_m1]:wpn_l96a1
+[wpn_dvl10]:wpn_l96a1  
+[wpn_remington700_archangel]:wpn_mosin
+[wpn_remington700_mod_x_gen3]:wpn_mosin
+[wpn_remington700_magpul_pro]:wpn_mosin
+[wpn_remington700_lapua700]:wpn_l96a1
+[wpn_svds]:wpn_mossberg590_rail
+[wpn_svds_pmc]:wpn_762x51
+[wpn_svd_m1]:wpn_mosin
+[wpn_sks_tac]:wpn_protecta
+[wpn_sks_molot]:wpn_protecta
+[wpn_k98_mod]:wpn_l96a1   
+[wpn_k98_mod_silen98]:wpn_l96a1
+[bwpn_k98_mauser_kit]:wpn_l96a1
+[wpn_m4_butcher]:wpn_rpk 
+[wpn_m4_tac]:wpn_rpk   
+[wpn_m4a1_siber]:wpn_ak
+[wpn_mp153_m1]:wpn_bm16      
+[wpn_ks23_kaban]:wpn_l96a1  
+[wpn_ks23_ecolog]:wpn_l96a1
+[wpn_ks23_kaban_kab_up]:wpn_l96a1
+[wpn_ks23]:wpn_l96a1
+[wpn_ksg23]:wpn_bm16_full
+[wpn_ks23_23_up]:wpn_l96a1
+[wpn_saiga12s_isg]:wpn_vepr
+[wpn_saiga12s_m2]:wpn_mossberg590
+[wpn_saiga12s_m1]:wpn_bm16_full
+[wpn_ak74u_m1_isg]:wpn_rpk  
+[wpn_ak74u_isg]:wpn_rpk 
+[wpn_ak74u_tac]:wpn_ak103 
+[wpn_ak74u_n1]:wpn_ak  
+[wpn_ak74_isg]:wpn_vintorez
+[wpn_ak74_pmc]:wpn_abakan
+[wpn_ak74_n]:wpn_ak 
+[wpn_ak74m_n]:wpn_ak103  
+[wpn_ak74m_beard]:wpn_rpk                           
+[wpn_ak12_custom]:wpn_abakan
+[wpn_ak12_m1]:wpn_abakan
+[wpn_ak12_custom_mono_kit]:wpn_abakan
+[wpn_ak105_sp]:wpn_ak103 
+[wpn_ak105_swamp]:wpn_abakan 
+[wpn_ak105_shakal]:wpn_abakan 
+[wpn_ak104_alfa]:wpn_rpk              
+[wpn_akm_isg]:wpn_rpk
+[wpn_akm_alfa]:wpn_9a91
+[wpn_akm_bas]:wpn_akm
+[wpn_akms_bas]:wpn_akm
+[wpn_aug_a1_bas]:wpn_ak103
+[wpn_aug_a1_custom_bas]:wpn_ak103
+[wpn_aug_a3_bas]:wpn_ak103
+[wpn_aug_a3_custom_bas]:wpn_ak103
+[wpn_fal_aus]:wpn_762x51_higher
+[wpn_fal_sa58_osw]:wpn_762x51
+[wpn_rpk74_16]:wpn_rpk  
+[wpn_abakan_n]:wpn_abakan   
+[wpn_usp_tac]:wpn_beretta
+[wpn_usp_tac_45]:wpn_pb
+[wpn_glock17]:wpn_cz75       
+[wpn_glock17_m1]:wpn_aps
+[wpn_colt1911_n]:wpn_beretta  
+[wpn_walther_p99]:wpn_beretta   
+[wpn_sig220_n]:wpn_beretta     
+[wpn_sig220_n_up2g0r]:wpn_mp5
+[wpn_sig220_n_u2p2g0r]:wpn_mp5
+[wpn_sig220_n_upg220]:wpn_mp5
+[wpn_sig226]:wpn_beretta
+[wpn_sig226_226sig_kit]:wpn_mp5
+[wpn_pl15]:wpn_mp5
+[wpn_sr1m]:wpn_abakan
+[wpn_sr1m_gurza_up]:wpn_abakan
+[wpn_sr1m_sr1upgr1]:wpn_abakan
+[wpn_sr2_veresk]:wpn_mp5
+[wpn_sr2_veresk_sr2_upkit]:wpn_vintorez
+[wpn_sr2_m1]:wpn_vintorez
+[wpn_rg6]:wpn_m79
+[wpn_fn57]:wpn_cz75	
+[wpn_sr25]:wpn_ak103
+[wpn_ak5c_bas]:wpn_aug_low 
+[wpn_ak5c_isg]:wpn_aug_low 
+[wpn_ak5c_bas_5c_tik]:wpn_aug_low 
+[pri_a17_gauss_rifle]:wpn_gauss
+[wpn_howa20]:wpn_m4_ru556
+[wpn_korth]:wpn_beretta
+[wpn_korth_custom]:wpn_aps
+[wpn_l85_m1]:wpn_akm
+[wpn_l85_m2]:wpn_ak
+[wpn_l85_m3]:wpn_rpk
+[wpn_pb_bas]:wpn_pb
+[wpn_pm_bas]:wpn_aps
+[wpn_scar_siber]:wpn_762x51_higher
+[wpn_scar_siber_black]:wpn_762x51_higher
+[wpn_scar_siber_m1]:wpn_762x51
+[wpn_scar_siber_m1_black]:wpn_762x51
+[wpn_scar_siber_m2]:wpn_ak103
+[wpn_scar_siber_m2_custom]:wpn_ak103
+[wpn_ar15_freedom]:wpn_m4_ru556
+
+
+;---
+;-- CW Pack
+;---
+[wpn_p90_cw]:wpn_aug_low
+[wpn_rg6_cw]:wpn_m79
+[wpn_sr2m_cw]:wpn_cz75
+[wpn_thor_cw]:wpn_m79
+[wpn_p90dev_cw]:wpn_aug_low
+[wpn_fn57_cw]:wpn_cz75	
+[wpn_spas12_cw]:wpn_saiga12s
+[wpn_saiga_cw]:wpn_saiga12s
+[wpn_fabarm_cw]:wpn_saiga12s
+[wpn_ksg_cw]:wpn_mossberg590
+[wpn_m1014_cw]:wpn_mossberg590
+[wpn_mp133_cw]:wpn_mossberg590	
+[wpn_izh43_cw]:wpn_bm16_full
+[wpn_tkpd_cw]:wpn_l96a1
+[wpn_tkpds_cw]:wpn_l96a1
+[wpn_tac50_cw]:wpn_m79
+[wpn_mosin_cw]:wpn_mosin
+[wpn_isr_cw]:wpn_l96a1
+[wpn_m40_cw]:wpn_l96a1
+[wpn_vssk_cw]:wpn_l96a1
+[wpn_awp_cw]:wpn_l96a1
+[wpn_qbu_cw]:wpn_ak
+[wpn_rfb_cw]:wpn_ak
+[wpn_x95_cw]:wpn_aug_low
+[wpn_pdrc_cw]:wpn_aug_low	
+[wpn_mdrc_cw]:wpn_aug_low
+[wpn_akmsgold_cw]:wpn_ak
+[wpn_ebrmarksman_cw]:wpn_aug_low
+[wpn_sks_cw]:wpn_mosin	
+[wpn_svd_cw]:wpn_mosin	
+[wpn_sv98_cw]:wpn_l96a1	
+[wpn_scarl_cw]:wpn_aug_low
+[wpn_sa58_cw]:wpn_ak	
+[wpn_rpkt_cw]:wpn_ak
+[wpn_rpk_cw]:wpn_groza	
+[wpn_rpd_cw]:wpn_rpk	
+[wpn_m60_cw]:wpn_ak	
+[wpn_m4_cw]:wpn_aug_low
+[wpn_hk416c_cw]:wpn_groza
+[wpn_hk417_cw]:wpn_groza
+[wpn_hk243_cw]:wpn_groza
+[wpn_kac_cw]:wpn_groza	
+[wpn_g36c_cw]:wpn_groza	
+[wpn_hcar_cw]:wpn_ak
+[wpn_ebr_cw]:wpn_ak
+[wpn_aug_cw]:wpn_aug_low
+[wpn_aksu_cw]:wpn_groza	
+[wpn_akms_cw]:wpn_ak
+[wpn_ace31_cw]:wpn_groza	
+[wpn_ak74_cw]:wpn_groza	
+[wpn_ak12_cw]:wpn_abakan
+[wpn_abakan_cw]:wpn_abakan
+[wpn_9a91_cw]:wpn_9a91
+[wpn_asvalmod_cw]:wpn_9a91
+[wpn_val_cw]:wpn_9a91
+[wpn_vihr_cw]:wpn_9a91
+[wpn_vss_cw]:wpn_vintorez
+[wpn_coltpython_cw]:wpn_desert_eagle_custom
+[wpn_deagle_cw]:wpn_desert_eagle_custom
+[wpn_sw_cw]:wpn_desert_eagle_custom
+[wpn_p226_cw]:wpn_beretta
+[wpn_ppsh41_cw]:wpn_ak103
+[wpn_coltgold_cw]:wpn_beretta	
+[wpn_kriss_cw]:wpn_mp5
+[wpn_usp_cw]:wpn_beretta
+[wpn_uspm_cw]:wpn_beretta
+[wpn_ump45_cw]:wpn_mp5	
+[wpn_fnp45_cw]:wpn_beretta	
+[wpn_colt_cw]:wpn_beretta
+[wpn_trp_cw]:wpn_beretta
+[wpn_vityaz_cw]:wpn_aug_low
+[wpn_glock18_cw]:wpn_aps
+[wpn_mp5sdx5_cw]:wpn_aug_low
+[wpn_evo_cw]:wpn_aug_low
+[wpn_mp5sd_cw]:wpn_aug_low
+[wpn_mp5sd_sk1_cw]:wpn_aug_low
+[wpn_mp7_cw]:wpn_aug_low
+[wpn_mpx_cw]:wpn_aug_low
+[wpn_uzi_pro]:wpn_aug_low
+[wpn_beretta_cw]:wpn_beretta
+[wpn_enforcer_cw]:wpn_beretta
+[wpn_bizon_cw]:wpn_mp5
+[wpn_kedr_cw]:wpn_aps
+[wpn_pm_cw]:wpn_aps
+[wpn_oc33_cw]:wpn_aps
+[wpn_aps_cw]:wpn_aps
+
+
+;---
+;-- GAMMA Weapon Pack
+;---
+
+
+

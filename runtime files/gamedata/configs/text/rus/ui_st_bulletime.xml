@@ -1,0 +1,48 @@
+<!-- 
+	Anomaly Modconfiguration Menu strings
+	
+-->
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+
+
+	<string id="ui_mcm_title_bullettime">
+		<text>Bullet Time 2</text>
+	</string>
+
+	<string id="ui_mcm_menu_bullettime">
+		<text>Bullet Time 2</text>
+	</string>
+	<string id="ui_mcm_bullettime_screenfx">
+		<text>ScreenFX</text>
+	</string>
+	<string id="ui_mcm_bullettime_screenfx_desc">
+		<text>Включает экранный эффект во время использования Bullet Time.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_drainrate">
+		<text>Расход выносливости</text>
+	</string>
+	<string id="ui_mcm_bullettime_drainrate_desc">
+		<text>Влияет на затраты выносливости при использовании Bullet Time.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_mintime">
+		<text>Фактор времени (0.4 Лучше не менять)</text>
+	</string>
+	<string id="ui_mcm_bullettime_mintime_desc">
+		<text>Изменяет фактор замедления времени.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_dodge">
+		<text>Уклон</text>
+	</string>
+	<string id="ui_mcm_bullettime_dodge_desc">
+		<text>Выполнить уклон при использовании Bullet Time.</text>
+	</string>
+	
+	<string id="kb_bullet_time">
+		<text>Bullet Time</text>
+	</string>
+
+</string_table>

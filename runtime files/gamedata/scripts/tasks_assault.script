@@ -1,6 +1,10 @@
 --[[
 - Remade by Tronex
 - 2019/4/23
+
+	Edit Log:
+	2020/5/29 - Vintar - added Warfare compatibility
+	
 - Global functions for assault tasks, with support for pre-info before accepting
 	
 	Parameters for precondition
@@ -71,6 +75,7 @@ local blacklisted_maps = { -- List of maps to skip in scans
 
 
 ---------------------------< Utility >---------------------------
+-- Verify squad section name is not a low-tier mutant used for tasks
 function is_legit_mutant_squad(squad)
 	local section = squad and squad:section_name()
 	return squad and (not sfind(section,"tushkano")) and (not sfind(section,"rat")) and true or false
@@ -97,15 +102,17 @@ function evaluate_smarts_squads(task_id, tbl, smart, squad_def, faction_def)
 	for sq_id,_ in pairs(smrt.squads) do
 		--printf("# %s | found squad (%s) in smart: %s", task_id, sq_id, smrt_name)
 		
+		-- if warfare, override checks on stay time, default squad stuff
 		-- if smart's squad is on its level + they are targeting it
 		local squad = alife_object(sq_id)
 		if squad and simulation_objects.is_on_the_same_level(squad, smart)
 		and squad.current_target_id and (squad.current_target_id == smrt_id)
 		and (squad.current_action == 1)
-		and (squad:npc_count() >= squad_def.num)
+		and (((squad:npc_count() >= squad_def.num)
 		and squad.stay_time
 		and ((not squad_def.stay_time) or (squad_def.stay_time and (game.get_game_time():diffSec(squad.stay_time) <= tonumber(squad_def.stay_time))))
-		and (squad_def.scripted or (not squad:get_script_target()))
+		and (squad_def.scripted or (not squad:get_script_target())))
+		or (_G.WARFARE and not squad:get_script_target()))
 		then
 			--printf("# %s | smart (%s) [%s] w/ squad (%s) [%s] = Checking", task_id, smrt_id, smrt_name, sq_id, squad.player_id)
 			
@@ -133,15 +140,15 @@ function evaluate_squads_smarts(task_id, var, squad, smart)
 		and (squad.current_target_id and squad.current_target_id == smart.id and squad.current_action == 1) 
 		then
 			--printf("- %s | squad (%s) [%s] is targeting smart (%s)", task_id, squad.id, squad.player_id, smart.id)
-			for i = 1, #cache_assault_func[task_id] do
-				local fac = cache_assault_func[task_id][i]
-				if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
+                       for i = 1, #cache_assault_func[task_id] do
+                               local fac = cache_assault_func[task_id][i]
+                               if (is_legit_mutant_squad(squad) and squad.player_id == fac) then
 					-- updating data
 					var.squad_id = squad.id
 					save_var( db.actor, task_id, var )
 					
 					-- reset gametime so they don't leave
-					squad.stay_time = game.get_game_time() 
+                                        squad.stay_time = game.get_game_time()
 					squad.force_online = true
 					--printf("- %s | squad (%s) [%s] is saved", task_id, squad.id, squad.player_id)
 					return true
@@ -273,22 +280,25 @@ task_status_functor.assault_task_status_functor = function (tsk,task_id)
 	if (not cache_assault_func[task_id]) then
 		cache_assault_func[task_id] = {}
 		local params = parse_list(task_manager.task_ini,task_id,"status_functor_params")
-		if var.is_enemy then
-			for i=1,#params do
-				if is_squad_monster[params[i]] or factions_list[params[i]] then
-					cache_assault_func[task_id][i] = params[i]
-					printf("/ %s | Faction [%s] is re-added to cache_assault_func table", task_id, params[i])
-				end
-			end
+               if var.is_enemy then
+                       for i=1,#params do
+                               local param = params[i]
+                               if is_squad_monster[param] or factions_list[param] then
+                                       local idx = #cache_assault_func[task_id] + 1
+                                       cache_assault_func[task_id][idx] = param
+                                        printf("/ %s | Faction [%s] is re-added to cache_assault_func table", task_id, param)
+                                end
+                        end
 		elseif (not is_squad_monster[params[1]]) then
-			for fac,_ in pairs(factions_list) do
-				local cnt = 0
-				local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
-				for i=1,#params do
-					if (fac ~= params[i]) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, params[i]) then
-						cnt = cnt + 1
-					end
-				end
+                       for fac,_ in pairs(factions_list) do
+                               local cnt = 0
+                               local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
+                               for i=1,#params do
+                                       local param = params[i]
+                                       if (fac ~= param) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, param) then
+                                               cnt = cnt + 1
+                                       end
+                                end
 				if (cnt == #params) then
 					local idx = #cache_assault_func[task_id] + 1
 					cache_assault_func[task_id][idx] = fac
@@ -298,6 +308,10 @@ task_status_functor.assault_task_status_functor = function (tsk,task_id)
 		end
 		if (#cache_assault_func[task_id] == 0) then
 			printe("! %s | no enemy factions found",task_id)
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
 			return "fail"
 		end
 	end
@@ -393,23 +407,25 @@ xr_conditions.validate_assault_task = function(actor, npc, p)
 	
 	--// Collect enemy factions
 	if def.is_enemy then -- if faction parameters are enemies
-		for i=1,#p_status do
-			if is_squad_monster[p_status[i]] or factions_list[p_status[i]] then
-				--printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, p_status[i])
-				enemy_faction_list[p_status[i]] = true
-			end
-		end
+               for i=1,#p_status do
+                       local status = p_status[i]
+                       if is_squad_monster[status] or factions_list[status] then
+                               --printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, status)
+                               enemy_faction_list[status] = true
+                       end
+               end
 		
 	elseif (not is_squad_monster[p_status[1]]) then -- if faction parameters are matutal factions
 		for fac,_ in pairs(factions_list) do
 			local cnt = 0
 			local is_enemy_to_actor = true --game_relations.is_factions_enemies(fac, get_actor_true_community())
-			for i=1,#p_status do
-				if (fac ~= p_status[i]) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, p_status[i]) then
-					cnt = cnt + 1
-				end
-			end
-			if (cnt == #p_status) then
+               for i=1,#p_status do
+                       local status = p_status[i]
+                               if (fac ~= status) and is_enemy_to_actor and game_relations.is_factions_enemies(fac, status) then
+                                       cnt = cnt + 1
+                               end
+                       end
+                        if (cnt == #p_status) then
 				enemy_faction_list[fac] = true
 				--printf("/ %s | Faction [%s] is added to enemy_faction_list table", task_id, fac)
 			end
@@ -418,30 +434,30 @@ xr_conditions.validate_assault_task = function(actor, npc, p)
 	
 	if is_empty(enemy_faction_list) then
 		printe("! %s | no enemy factions found", task_id)
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
+        local additionalBlacklist = {}
+        local mcm_scanMode = blacklist_helper.GetMcmDropdownValue()
+        local northernMaps = blacklist_helper.GetNorthernMaps()
+
+        if mcm_scanMode and mcm_scanMode > 0  then
+                def.scan = mcm_scanMode
+        end
+
+        if blacklist_helper.ShouldBlacklistNorth() then
+                additionalBlacklist = northernMaps
+        elseif northernMaps[level.name()] then -- Player is in the Northern region and rightfully so
+                additionalBlacklist = blacklist_helper.GetSouthernMaps()
+        end
+--[[
+        SERIOUS NO NORTH TASKS BEFORE BS
+        AND THE NORTHERN JOB
+--]]
 		return false
 	end
 	
---[[
-	SERIOUS NO NORTH TASKS BEFORE BS
-	AND THE NORTHERN JOB
---]]
-	local additionalBlacklist = {}
-	local mcm_scanMode = blacklist_helper.GetMcmDropdownValue()
-	local northernMaps = blacklist_helper.GetNorthernMaps()
-
-	if mcm_scanMode and mcm_scanMode > 0  then
-		def.scan = mcm_scanMode
-	end
-
-	if blacklist_helper.ShouldBlacklistNorth() then
-		additionalBlacklist = northernMaps
-	elseif northernMaps[level.name()] then -- Player is in the Northern region and rightfully so
-		additionalBlacklist = blacklist_helper.GetSouthernMaps()
-	end
---[[
-	SERIOUS NO NORTH TASKS BEFORE BS
-	AND THE NORTHERN JOB
---]]
 	
 	--// Search all smarts
 	local targets = {} -- target[squad_id] = smart_id
@@ -459,7 +475,8 @@ xr_conditions.validate_assault_task = function(actor, npc, p)
 			
 				-- if smart is not in blacklisted location
 				local smart_level = sim:level_name(gg:vertex(v.m_game_vertex_id):level_id())
-				if (not blacklisted_maps[smart_level] and not additionalBlacklist[smart_level]) then
+				if (not blacklisted_maps[smart_level]) then
+				
 					-- if smart location is proper to the parameter
 					local is_online = v.online
 					local is_nearby = sfind(simulation_objects.config:r_value(actor_level, "target_maps", 0, ""), smart_level)

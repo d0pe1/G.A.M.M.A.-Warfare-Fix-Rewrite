@@ -1,0 +1,26 @@
+[anomalous_backpack]:itm_backpack
+$spawn                                   = "equipments\backpack"
+description                              = st_anombp_desc
+inv_weight                               = 15
+inv_name                                 = st_anombp_name
+inv_name_short                           = st_anombp_name
+icons_texture							 = ui\ui_icon_anom_backpack
+inv_grid_x								 = 0
+inv_grid_y								 = 0
+inv_grid_height							 = 2
+inv_grid_width							 = 2
+cost                                     = 9800
+additional_inventory_weight				 = 100
+additional_inventory_weight2			 = 100
+use1_functor                             = anomalous_stash.menu_stash
+use1_action_functor                      = anomalous_stash.func_stash
+
+[anom_inv_stash]:inventory_box
+;visual                                             = dynamics\devices\anom_stash\anom_stash.ogf
+visual                                             = dynamics\devices\anom_stash\anom_backpack.ogf
+custom_data                                        = scripts\treasure_inventory_box.ltx
+radius                                             = 1
+
+[hidden_anom_stash]:hidden_box
+capacity                                           = 10000
+placeable_type                                     = stash

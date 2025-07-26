@@ -1,0 +1,290 @@
+#include "presets\trade_discounts.ltx"
+#include "presets\trade_presets.ltx"
+#include "presets\gamma_wp_preset.ltx"
+
+[trader]
+buy_condition = trade_generic_buy
+sell_condition = trade_generic_sell
+buy_supplies = {=actor_goodwill_ge(stalker:2000)} supplies_5, {=heavy_pockets_functor()} supplies_5, {=actor_goodwill_ge(stalker:1500)} supplies_4, {=actor_goodwill_ge(stalker:1000)} supplies_3, {=actor_goodwill_ge(stalker:500)} supplies_2,  supplies_1
+buy_item_condition_factor = 0.05
+buy_item_exponent = 2.25
+sell_item_exponent = 0.75
+
+discounts = discount_trasher
+
+[trade_generic_buy]:trasher,furnitures_low
+
+[trade_generic_sell]:trasher
+adrenalin                            = 0.83,0.83
+akvatab                              = 0.83,0.83
+analgetic                            = 0.83,0.83
+antibio_chlor                        = 0.83,0.83
+antibio_sulfad                       = 0.83,0.83
+antiemetic                           = 0.83,0.83
+antirad                              = 0.83,0.83
+antirad_cystamine                    = 0.83,0.83
+antirad_kalium                       = 0.83,0.83
+bandage                              = 0.83,0.83
+caffeine                             = 0.83,0.83
+cocaine                              = 0.83,0.83
+drug_anabiotic                       = 0.83,0.83
+drug_antidot                         = 0.83,0.83
+drug_booster                         = 0.83,0.83
+drug_coagulant                       = 0.83,0.83
+drug_psy_blockade                    = 0.83,0.83
+drug_radioprotector                  = 0.83,0.83
+drug_sleepingpills                   = 0.83,0.83
+glucose                              = 0.83,0.83
+glucose_s                            = 0.83,0.83
+jgut                                 = 0.83,0.83
+medkit                               = 0.83,0.83
+medkit_ai1                           = 0.83,0.83
+medkit_ai2                           = 0.83,0.83
+medkit_ai3                           = 0.83,0.83
+medkit_army                          = 0.83,0.83
+medkit_scientic                      = 0.83,0.83
+morphine                             = 0.83,0.83
+salicidic_acid                       = 0.83,0.83
+stimpack                             = 0.83,0.83
+stimpack_army                        = 0.83,0.83
+stimpack_scientic                    = 0.83,0.83
+tetanus                              = 0.83,0.83
+yadylin                              = 0.83,0.83
+ammo_7.62x25_ps                      = 0.75,0.75
+ammo_pkm_100                         = 0.75,0.75
+
+
+[supplies_1]:common_stock,supply_1_wp
+
+wpn_binoc_inv                        = 1, 1
+
+;[Ammo]
+ammo_11.43x23_fmj              = 8, 1
+ammo_11.43x23_hydro            = 8, 1
+ammo_9x18_ap                   = 8, 1
+ammo_9x18_fmj                  = 8, 1
+ammo_9x18_pmm                  = 7, 1
+ammo_9x19_fmj                  = 8, 1
+ammo_9x19_pbp                  = 7, 1
+ammo_7.62x39_fmj               = 5, 1
+ammo_7.92x33_fmj               = 2, 1
+ammo_12x70_buck                = 8, 1
+ammo_7.62x25_p                 = 10, 1
+ammo_7.62x25_ps                = 10, 1
+ammo_20x70_buck                = 8, 1
+
+;[Melee]
+wpn_knife                            = 1, 1
+wpn_knife2                           = 1, 1
+
+;[Backpacks]
+itm_backpack                         = 1, 1
+kit_hunt                             = 1, 1
+
+;[Drugs/Medicine]
+akvatab                              = 1, 1
+analgetic                            = 2, 1
+antibio_chlor                        = 1, 1
+antibio_sulfad                       = 1, 1
+antiemetic                           = 1, 1
+antirad                              = 1, 1
+antirad_cystamine                    = 1, 1
+antirad_kalium                       = 1, 1
+bandage                              = 3, 1
+caffeine                             = 1, 1
+drug_anabiotic                       = 1, 1
+drug_antidot                         = 1, 1
+drug_booster                         = 2, 1
+drug_coagulant                       = 1, 1
+drug_psy_blockade                    = 1, 1
+drug_radioprotector                  = 1, 1
+drug_sleepingpills                   = 1, 1
+glucose                              = 1, 1
+glucose_s                            = 1, 1
+jgut                                 = 1, 1
+medkit                               = 2, 1
+medkit_army                          = 2, 1
+salicidic_acid                       = 1, 1
+stimpack                             = 2, 1
+stimpack_army                        = 1, 1
+tetanus                              = 1, 1
+yadylin                              = 2, 1
+
+;[Cigs/Food/Drinks]
+beans                                = 2, 1
+bread                                = 4, 1
+breadold                             = 6, 1
+chili                                = 2, 1
+chocolate                            = 2, 1
+conserva                             = 4, 1
+corn                                 = 2, 1
+kolbasa                              = 4, 1
+mre                                  = 1, 1
+nuts                                 = 2, 1
+protein                              = 2, 1
+raisins                              = 2, 1
+ration_ru                            = 1, 1
+ration_ukr                           = 1, 1
+salmon                               = 2, 1
+sausage                              = 2, 1
+tomato                               = 2, 1
+tushonka                             = 4, 1
+;---
+beer                                 = 3, 1
+bottle_metal                         = 2, 1
+drink_crow                           = 2, 1
+energy_drink                         = 3, 1
+flask                                = 2, 1
+mineral_water                        = 2, 1
+tea                                  = 2, 1
+vodka                                = 1, 1
+vodka2                               = 1, 1
+vodka_quality                        = 1, 1
+water_drink                          = 2, 1
+;---
+cigar                                = 2, 1
+cigar1                               = 2, 1
+cigar2                               = 2, 1
+cigar3                               = 2, 1
+cigarettes                           = 4, 1
+cigarettes_lucky                     = 3, 1
+cigarettes_russian                   = 3, 1
+tobacco                              = 2, 1
+hand_rolling_tobacco                 = 2, 1
+box_matches                          = 3, 1
+
+;[Fuels]
+kerosene                             = 2, 1
+charcoal                             = 2, 1
+explo_jerrycan_fuel                  = 1, 1
+explo_balon_gas                      = 1, 1
+
+;[Devices]
+batteries_dead                       = 5, 1
+detector_geiger                      = 2, 1
+detector_radio                       = 2, 1
+detector_simple                      = 2, 1
+device_flashlight                    = 1, 1
+device_pda_1                         = 1, 1
+device_torch_dummy                   = 1, 1
+;lead_box                             = 2, 1
+
+;[Trash]
+cards                                = 2, 1
+guitar_a                             = 1, 1
+harmonica_a                          = 1, 1
+;---
+ball_hammer                          = 2, 1
+beadspread                           = 1, 1
+boots                                = 1, 1
+broken_detector                      = 1, 1
+cards                                = 2, 1
+flashlight_broken                    = 1, 1
+gloves                               = 1, 1
+hand_watch                           = 1, 1
+headlamp                             = 1, 1
+mirror                               = 2, 1
+porn                                 = 1, 1
+porn2                                = 1, 1
+radio                                = 1, 1
+radio2                               = 2, 1
+rope                                 = 1, 1
+shovel_mili                          = 1, 1
+shovel_old                           = 1, 1
+synthrope                            = 2, 1
+tarpaulin                            = 1, 1
+underwear                            = 1, 1
+walkie                               = 2, 1
+welding_goggles                      = 1, 1
+
+;[Camping]
+cooking                              = 1, 1
+
+fieldcooker                          = 1, 1
+bolts_pack                           = 4, 1
+compression_bag                      = 1, 1
+itm_actor_backpack                   = 1, 1
+itm_sleepbag                         = 1, 1
+itm_tent                             = 1, 1
+
+[supplies_2]:supplies_1,supply_2_wp
+
+af_camelbak                          = 1, 1
+af_cooler                            = 1, 1
+af_frames                            = 1, 1
+af_freon                             = 1, 1
+af_grid                              = 1, 1
+af_surge                             = 1, 1
+
+;[Ammo]
+ammo_9x19_ap                         = 7, 1
+ammo_12x76_zhekan                    = 7, 1
+ammo_357_hp_mag                      = 8, 1
+ammo_7.92x33_ap                      = 4, 1
+ammo_9x21_sp10                       = 6, 1
+ammo_12.7x55_fmj                     = 4, 1
+
+;[Melee]
+wpn_knife3                           = 1, 1
+wpn_axe                              = 1, 1
+
+;[Backpacks]
+
+;[Devices]
+
+rakurs                     = 1, 1     ;BaS
+upg220                     = 1, 1     ;BaS
+
+[supplies_3]:supplies_2,supply_3_wp
+
+;af_aac                               = 1, 1
+
+;[Ammo]
+ammo_9x21_sp10                       = 10, 1
+ammo_5.45x39_ep                      = 6, 1
+ammo_5.45x39_fmj                     = 8, 1
+ammo_7.62x54_7h1                     = 4, 1
+ammo_23x75_shrapnel                  = 5, 1
+ammo_12.7x55_fmj                     = 6, 1
+grenade_rgd5                         = 1, 1
+ied_rpg_new                          = 1, 1
+
+;[Melee]
+wpn_knife4                           = 1, 1
+
+;[Backpacks]
+
+;[Devices]
+
+[supplies_4]:supplies_3,supply_4_wp
+
+wpn_axe3                             = 1, 1
+;[Ammo]
+ammo_5.45x39_ap                      = 7, 1
+ammo_9x39_pab9                       = 10, 1
+ammo_7.62x54_7h14                    = 4, 1
+ammo_pkm_100                         = 16, 1
+ammo_og-7b                           = 1, 1
+ammo_vog-25                          = 1, 1
+ammo_vog-30                          = 1, 1
+
+;[Melee]
+wpn_knife5                           = 1, 1
+
+;[Backpacks]
+
+;[Devices]
+
+[supplies_5]:supplies_4,supply_5_wp
+
+batteries_exo = 4,1
+;af_aam                               = 1, 1
+
+;[Ammo]
+ammo_12.7x55_ap                      = 5, 1
+ammo_7.62x39_ap                      = 7, 1
+ammo_9x39_ap                       = 9, 1
+ammo_7.62x54_ap                      = 3, 1
+ammo_23x75_barrikada                 = 5, 1
+
+;[Backpacks]

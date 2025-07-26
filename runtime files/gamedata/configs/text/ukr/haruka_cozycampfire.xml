@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+	<string id="ui_mcm_menu_cozy_campfire">
+		<text>Campfire Regens</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_health">
+		<text>Швидкість відновлення здоров'я</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_rad">
+		<text>Швидкість зникнення радіації</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_psy">
+		<text>Швидкість відновлення пси здоров'я</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_enablegrokbhssystem">
+		<text>Увімкнути Grok`s Body System</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_enablegrokbhssystem_desc">
+		<text>Тільки якщо використовуєте аддон Grok`s Body System</text>
+	</string>
+	<string id="ui_mcm_cozy_campfire_bodypart">
+		<text>Швидкість загоєння частин тіла</text>
+	</string>
+</string_table>

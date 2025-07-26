@@ -4,7 +4,8 @@
     Runs the daily simulation cycle for Warfare overhaul. This ties together
     resource production, base consumption, transport task generation and squad
     spawning. Called once per in-game day by an external scheduler.
-    Last edit: 2025-07-26
+    Last edit: 2025-08-30
+    -- Modified by Codex: Implement Squad Loot Recovery integration
 ]]
 
 local node_system  = require 'node_system'
@@ -13,6 +14,7 @@ local resource_pool = require 'resource_pool'
 local base_logic    = require 'base_node_logic'
 local coordinator   = require 'hq_coordinator'
 local spawn_system  = require 'squad_spawn_system'
+local loot_recovery = require 'squad_loot_recovery'
 local diplomacy     = require 'diplomacy_core'
 local faction_state = require 'faction_state'
 

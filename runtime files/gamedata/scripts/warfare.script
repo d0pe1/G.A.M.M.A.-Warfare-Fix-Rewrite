@@ -7,13 +7,27 @@
 	2020/10/22 - Vintar - fixed vanilla bug where random patrols were unmarked as random patrols upon game save/load
 	2021/02/16 - Vintar - allowed loner random patrols to be unmarked on game save, so that process_loners() can handle them, saved calculated distances between smart terrains
 	2021/02/22 - Vintar - added initial mutant spawns to non-random start. Random start mutants now spawn on lairs. Under attack status saved
-	2021/03/19 - Vintar - fix for lower population factor initial spawns
+        2021/03/19 - Vintar - fix for lower population factor initial spawns
+        2025/07/24 - d0pe - added verbose logger and helper utilities
 
 	This file deals with warfare's essential data, such as squad registration with warfare,
 	and saving/loading important parameters like respawn timers, squad targets, faction info
 =======================================================================================
 
 --]]
+
+-- Enable verbose debug tracing when requested
+if _G.verbose_logs == 1 then
+    -- Load logger from the same directory as this script so it works both
+    -- when installed under gamedata/ and when running from the repo.
+    local dir = debug.getinfo(1, "S").source
+    dir = dir and dir:gsub("@", ""):match("^(.*[\\/])") or ""
+    local path = dir .. "verbose_logger.script"
+    local ok, err = pcall(dofile, path)
+    if not ok then
+        printf("[VERBOSE] Failed to load logger: %s", tostring(err))
+    end
+end
 
 --_G.DEACTIVATE_SIM_ON_NON_LINKED_LEVELS = false
 --_G.ProcessEventQueueState = function() return end
@@ -478,6 +492,7 @@ warfare_positions_filled = false
 
 FACTION_TERRITORY_RADIUS = 100
 
+-- Fisher-Yates shuffle used for randomizing squad lists
 function shuffleTable( t )
     local rand = math.random 
     local iterations = #t
@@ -911,7 +926,15 @@ function squad_on_unregister(squad,type_name)
 end
 
 function on_game_start()
-	printd(0, "on_game_start")
+        printd(0, "on_game_start")
+
+        -- added require path for .script modules
+        if not package.path:find('gamedata/scripts/%.script', 1, true) then
+                package.path = 'gamedata/scripts/?.script;' .. package.path
+        end
+        if not package.path:find('gamedata/scripts/%.lua', 1, true) then
+                package.path = 'gamedata/scripts/?.lua;' .. package.path
+        end
 	--_G.WARFARE = false
 	warfare_options.update_settings()
 	
@@ -978,6 +1001,7 @@ function sort_priority_table(tbl)
 	end) return tbl
 end
 
+-- 2D squared distance ignoring Y axis used by AI distance checks
 function distance_to_xz_sqr(a, b)
 	return math.pow(b.x - a.x, 2) + math.pow(b.z - a.z, 2)
 end

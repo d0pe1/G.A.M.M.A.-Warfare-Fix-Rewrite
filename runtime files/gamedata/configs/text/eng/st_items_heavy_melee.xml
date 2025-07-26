@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+
+	<string id="st_sledge_hammer">
+		<text>Sledgehammer</text>
+	</string>
+	<string id="st_sledge_hammer_descr">
+		<text>A heavy, two-handed striking tool designed for powerful impact, often used for demolition, breaching, and melee combat in extreme situations. Its massive weight and solid construction allow it to break through obstacles, making it a formidable weapon or tool in survival and tactical scenarios.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Melee Weapon\n
+		%c[d_cyan] • %c[pda_white] Light Attack Power: 120\n
+		%c[d_cyan] • %c[pda_white] Heavy Attack Power: 170\n
+		%c[d_cyan] • %c[pda_white] Armor Penetration: 45\n
+		%c[d_green] • %c[pda_white] Increased Range\n
+		</text>
+	</string>
+
+</string_table>

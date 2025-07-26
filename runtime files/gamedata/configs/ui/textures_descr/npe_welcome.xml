@@ -1,0 +1,11 @@
+<w>
+	<file name="ui\npe\welcome\card_01">
+		<texture id="ui_npe_welcome_card_01" x="0" y="0" width="1024" height="576" />
+	</file>	
+	<file name="ui\npe\welcome\card_02">
+		<texture id="ui_npe_welcome_card_02" x="0" y="0" width="1024" height="576" />
+	</file>	
+	<file name="ui\npe\welcome\card_03">
+		<texture id="ui_npe_welcome_card_03" x="0" y="0" width="1024" height="576" />
+	</file>			
+</w>

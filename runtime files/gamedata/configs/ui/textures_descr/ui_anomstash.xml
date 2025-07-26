@@ -1,0 +1,6 @@
+<w>
+	<file name = "ui\ui_icon_anom_backpack">
+		<!-- <texture id = "ui_anomstash_map_icon"	x="101"	y="0"	width="27"	height="27" /> --> <!-- Simplified Vision UI -->
+		<texture id = "ui_anomstash_map_icon"	x="101"	y="27"	width="27"	height="27" /> <!-- Vanilla -->
+	</file>
+</w>

@@ -8,7 +8,8 @@
 	2021/02/13 - Vintar - reads in overflow override, loner fog of war
 	2021/02/16 - Vintar - added min smart targets per base
 	2021/11/09 - Vintar - added goodwill on kill options, added back "hide all smarts" option, added 'old autocapture' option
-	2022/02/26 - Vintar - added main base attack deprioritization option
+        2022/02/26 - Vintar - added main base attack deprioritization option
+        2025/07/24 - d0pe - added random start helper
 
 	This file reads the main menu options for warfare so that script functions can access them.
 =======================================================================================
@@ -228,6 +229,7 @@ function override_functions()
 	sim_squad_scripted.sim_squad_scripted.specific_update = function(self, script_target_id) end
 end
 
+-- Pick a random start location from faction lists
 function get_random_start_location()
 	warfare.printd(0, "get_random_start_location")
 

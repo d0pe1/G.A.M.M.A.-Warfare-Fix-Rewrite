@@ -1,0 +1,68 @@
+#include "presets\trade_discounts.ltx"
+#include "presets\trade_presets.ltx"
+#include "presets\gamma_nato_preset.ltx"
+
+[trader]
+buy_condition = trade_generic_buy
+sell_condition = trade_generic_sell
+buy_supplies = {+task_find_inf_inx_8_mlr_2} supplies_2, supplies_1
+buy_item_condition_factor = 0.05
+buy_item_exponent = 2.25
+sell_item_exponent = 0.75
+
+discounts = discount_supplier
+
+[trade_generic_buy]:trasher,furnitures_low
+
+[trade_generic_sell]:trasher
+ammo_5.7x28_ss195                    = 0.75,0.75
+ammo_5.7x28_ss190                    = 0.75,0.75
+
+[supplies_1]:supply_1_nato,supply_2_nato,supply_3_nato
+
+wpn_binoc_inv                        = 1, 1
+
+;[Ammo]
+
+ammo_5.45x39_ap                      = 4, 1
+ammo_5.56x45_ap                      = 4, 1
+ammo_9x39_pab9                       = 5, 1
+ammo_11.43x23_hydro                  = 5, 1
+ammo_9x18_ap                         = 5, 1
+ammo_9x19_ap                         = 5, 1
+ammo_7.62x25_ps                      = 5, 1
+ammo_7.62x51_fmj                     = 2, 1
+ammo_5.7x28_ss190                    = 5, 1
+ammo_357_hp_mag                      = 4, 1
+grenade_f1                           = 1, 1
+ied_new                              = 1, 1
+mine _new                            = 1, 1
+ammo_pkm_100                         = 1, 1
+ammo_12x76_zhekan                    = 3, 1
+ammo_9x21_sp10                       = 4, 1
+
+batteries_exo = 1,1
+
+cooking                              = 1, 1
+fieldcooker                          = 1, 1
+
+;[Drugs/Medicine]
+bandage                              = 4, 1
+antirad                              = 2, 1
+medkit                               = 2, 1
+
+;[Cigs/Food/Drinks]
+bread                                = 2, 1
+kolbasa                              = 2, 1
+conserva                             = 2, 1
+flask                                = 3, 1
+bottle_metal                         = 2, 1
+energy_drink                         = 2, 1
+cigar1                               = 2, 1
+cigar2                               = 2, 1
+cigar3                               = 2, 1
+box_matches                          = 4, 1
+
+[supplies_2]:supplies_1,supply_4_nato,supply_5_nato
+
+;[Ammo]

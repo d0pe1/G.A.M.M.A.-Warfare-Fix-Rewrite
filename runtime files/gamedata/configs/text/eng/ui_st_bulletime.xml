@@ -1,0 +1,48 @@
+<!-- 
+	Anomaly Modconfiguration Menu strings
+	
+-->
+
+<string_table>
+
+
+	<string id="ui_mcm_title_bullettime">
+		<text>Bullet Time 2</text>
+	</string>
+
+	<string id="ui_mcm_menu_bullettime">
+		<text>Bullet Time 2</text>
+	</string>
+	<string id="ui_mcm_bullettime_screenfx">
+		<text>Toggle ScreenFX</text>
+	</string>
+	<string id="ui_mcm_bullettime_screenfx_desc">
+		<text>Enable screen effects while bullettime is active.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_drainrate">
+		<text>Stamina drain rate</text>
+	</string>
+	<string id="ui_mcm_bullettime_drainrate_desc">
+		<text>How fast is stamina drained during usage.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_mintime">
+		<text>Time Factor (Not change. Only 0.4 time_factor support)</text>
+	</string>
+	<string id="ui_mcm_bullettime_mintime_desc">
+		<text>Minimum time factor.</text>
+	</string>
+
+    <string id="ui_mcm_bullettime_dodge">
+		<text>Dodge</text>
+	</string>
+	<string id="ui_mcm_bullettime_dodge_desc">
+		<text>Perform a dodge when activating bullet time.</text>
+	</string>
+	
+	<string id="kb_bullet_time">
+		<text>Bullet Time</text>
+	</string>
+
+</string_table>

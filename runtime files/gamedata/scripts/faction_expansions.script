@@ -7,7 +7,8 @@
 	2020/05/25 - Vintar
 	2020/05/31 - Vintar - lowered loner veteran chance
 	2021/02/27 - Vintar - lowered loner advanced/veteran chance again, removed rats from spawn
-	2021/03/02 - Vintar - removed black smoke poltergeist
+        2021/03/02 - Vintar - removed black smoke poltergeist
+        2025/07/24 - d0pe - documented spawn chance formulas
 
 	This file provides the chance for advanced/veteran squads to spawn instead of novice
 	squads, or picks a normal/rare mutant spawn section.
@@ -132,11 +133,13 @@ local random_zombies = {
 
 -- old functions were overly complicated and had a weird minimum at 80% resource ownership where your squads would be worse on average
 -- new functions are monotonically increasing so that each point of resource is always a sizeable benefit
+-- Chance percentage for an advanced squad spawn given owned resources
 function get_advanced_chance(resource)
 --	return -1 * (100 * (1 / math.pow(warfare.resource_count / 2, 2))) * math.pow((resource - (warfare.resource_count / 2)), 2) + 100
 	return 150 * (math.pow((resource / warfare.resource_count), 0.8))
 end
 
+-- Chance percentage for a veteran squad spawn given owned resources
 function get_veteran_chance(resource)
 --	return -100 + (100 / (warfare.resource_count / 2)) * resource
 	return 100 * (math.pow((resource / warfare.resource_count), 2))

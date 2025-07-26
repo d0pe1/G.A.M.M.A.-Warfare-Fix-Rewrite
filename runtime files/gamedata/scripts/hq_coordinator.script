@@ -24,6 +24,17 @@ function coordinator.register_base(faction, base_id)
     table.insert(coordinator.bases_by_faction[faction], base_id)
 end
 
+--- Return an alternate base for fallback logistics.
+function coordinator.get_fallback_base(faction, exclude)
+    local bases = coordinator.bases_by_faction[faction] or {}
+    for _, id in ipairs(bases) do
+        if id ~= exclude then
+            return id
+        end
+    end
+    return nil
+end
+
 --- Schedule transports for under-supplied bases.
 function coordinator.evaluate(faction)
     local bases = coordinator.bases_by_faction[faction] or {}

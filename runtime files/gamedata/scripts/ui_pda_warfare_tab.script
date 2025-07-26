@@ -3,7 +3,8 @@
 =======================================================================================
 	Original creator: Tronex
 	Edit log: 
-	2020/05/24 - Vintar
+        2020/05/24 - Vintar
+        2025/07/24 - d0pe - clarified tab overview
 
 	New PDA tab for Warfare mode: faction war
 	This file converts the 'contacts' tab into a faction ranking info tab. Faction squad
@@ -17,6 +18,7 @@
 local clr_w,clr_gr
 
 local SINGLETON = nil
+local node_system = require 'node_system'
 function get_ui()
 	SINGLETON = SINGLETON or pda_warfare_tab()
 	SINGLETON:Reset()
@@ -330,5 +332,13 @@ function pda_warfare_tab:btn_map()
 		self.btn:TextControl():SetText(game.translate_string("pda_all_levels"))
 	end
 	
-	self:Reset()
+        self:Reset()
+end
+
+--- Placeholder callback to upgrade a selected node.
+-- UI integration pending.
+function pda_warfare_tab:upgrade_selected_node(node_id)
+        printf("[PDA] request upgrade for %s", tostring(node_id))
+        -- actual upgrade logic handled in node_system
+        node_system.upgrade_node(node_id)
 end

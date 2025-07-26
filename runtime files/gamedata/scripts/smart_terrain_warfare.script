@@ -26,7 +26,8 @@
 	2022/03/06 - Vintar - monster spawn numbers based on level lair capacity
 	2022/04/15 - Ace - Fix for crash when dead allied defenders try to send a message after invasion force is defeated
 	2022/04/22 - Vintar - Mutants from X8 and Pripyat Underpass can no longer transition out
-	2022/04/30 - Vintar - Main base attack prevention also applies to mutants
+        2022/04/30 - Vintar - Main base attack prevention also applies to mutants
+        2025/07/24 - d0pe - added nil checks for target selection
 	
 	This file handles the majority of warfare-related script tasks, such as squad behavior,
 	targeting, smart terrain updates, ownership checks, patrol behavior, etc.
@@ -1121,9 +1122,10 @@ function process_targets(smart)
 	if ((pda_actor.manual_control and smart.owning_faction ~= warfare.actor_faction) or (not pda_actor.manual_control)) then
 		local targets = find_targets(smart)
 			
-		if (#targets > 0) then
-			for i=1,#targets do
-				if not (smart.target_smarts[targets[i][2]]) then
+               if (#targets > 0) then
+                       for i=1,#targets do
+                               local target = targets[i]
+                               if not (smart.target_smarts[target[2]]) then
 					local target_delta = target_smart_count - invading_faction_props.min_smart_targets_per_base
 					if (target_delta < 0) then
 						local other = alife_object(targets[i][2])
@@ -4378,9 +4380,9 @@ function find_targets(smart, faction_override, overflow_squad)
 	local targets = {}
 	local mainbase_targets = {}  -- backup array if targets array is empty
 	
-	if (faction == "monster") then
-		return
-	end
+       if (faction == "monster") then
+               return {}
+       end
 	
 	for i=1,#smartCollection do
 		-- Do not even factor in which level this base is on. We want to have fluid borders at this point.
@@ -4600,9 +4602,9 @@ function find_targets_for_overflow(smart, faction, search_all_levels)
 		end
 	end
 
-	if (faction == "monster") then
-		return
-	end
+       if (faction == "monster") then
+               return {}
+       end
 
 	for i=1,#smartCollection do
 		local other = smartCollection[i] and alife_object(smartCollection[i])		

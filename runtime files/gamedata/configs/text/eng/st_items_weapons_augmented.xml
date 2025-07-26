@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<string_table>
+
+	<string id="st_wpn_aug_a1">
+		<text>Steyr AUG A1</text>
+	</string>
+	<string id="st_wpn_aug_a1_descr">
+		<text>The AUG (Armee-Universal-Gewehr) is a bullpup assault rifle with an integrated optic, designed for compact handling and superior accuracy. Its futuristic design and durable polymer construction make it a lightweight yet powerful option for modern combat. With its modular design, it can be adapted for various roles, from standard infantry use to specialized operations. The A1 variant is fitted with an integrated 1.5x scope.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Austria\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Steyr Arms\n
+		</text>
+	</string>
+
+	<string id="st_wpn_aug_a2">
+		<text>Steyr AUG A2</text>
+	</string>
+	<string id="st_wpn_aug_a2_descr">
+		<text>The AUG (Armee-Universal-Gewehr) is a modernized bullpup assault rifle known for its compact design, durability, and modular capabilities. Unlike its predecessor, it features a Picatinny rail in place of the fixed optic, allowing users to customize their sighting systems for various combat scenarios. Retaining the smooth handling and reliability of the AUG platform, it remains a versatile choice for military and law enforcement forces worldwide.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Austria\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Steyr Arms\n
+		</text>
+	</string>
+
+	<string id="st_wpn_aug_a3">
+		<text>Steyr AUG A3</text>
+	</string>
+	<string id="st_wpn_aug_a3_descr">
+		<text>The AUG (Armee-Universal-Gewehr) is an upgraded version of a bullpup rifle, featuring a full-length rail system for optics and attachments. It improves on the original with enhanced modularity, better ergonomics, and increased adaptability for modern combat needs. Retaining its compact and lightweight design, it remains a popular choice for military and law enforcement worldwide.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Austria\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Steyr Arms\n
+		</text>
+	</string>
+
+	<string id="st_wpn_aug_thales">
+		<text>Thales EF88</text>
+	</string>
+	<string id="st_wpn_aug_thales_descr">
+		<text>Developed as an improvement of the Australian F88 Austeyr, the EF88 is the most modern AUG on the market. Featuring better ergonomics and increased reliability, recoil control and accuracy, the EF88 is an incredibly unique and rare weapon.\n \n
+		%c[pda_white]CHARACTERISTICS:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Austria\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Thales Australia\n
+		</text>
+	</string>
+
+	<string id="st_wpn_aug_9mm">
+		<text>Steyr AUG A3 9mm</text>
+	</string>
+	<string id="st_wpn_aug_9mm_descr">
+		<text>The AUG (Armee-Universal-Gewehr) is the standard small arm of many Armed Forces and Special Units all over the world since 1977. It is famous for its modular concept “Bullpup“ design, making it a short, well-balanced rifle with high accuracy and reliability. The A3 9mm variant features a Picatinny rail on top of the receiver, an external bolt release and has been rechambered for use with 9mm Parabellum.\n \n
+		%c[pda_white]PROPERTIES:\n
+		%c[d_cyan] • %c[pda_white] Origin: %c[ui_gray_2]Austria\n
+		%c[d_cyan] • %c[pda_white] Manufacturer: %c[ui_gray_2]Steyr Arms\n
+		</text>
+	</string>
+
+</string_table>

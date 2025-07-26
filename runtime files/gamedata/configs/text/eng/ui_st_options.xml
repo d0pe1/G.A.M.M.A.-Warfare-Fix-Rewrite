@@ -930,9 +930,9 @@
 		<text>PDA Simple Mode</text>
 	</string>
 	<string id="ui_mm_control_general_simple_pda_mode_desc">
-		<text>%c[ui_gray_2]•%c[ui_gray_2]Enabled: Simple Mode.\n
+		<text>%c[ui_gray_2]%c[ui_gray_2]Enabled: Simple Mode.\n
 		The PDA will enter focus (Interface) mode only when pressing 'Reload keybind' to hold it close.\n\n
-		%c[ui_gray_2]•%c[ui_gray_2]Disabled: Advanced Mode.\n
+		%c[ui_gray_2]%c[ui_gray_2]Disabled: Advanced Mode.\n
 		The player can switch between focus/movement modes by pressing 'Grenade Launcher keybind', regardless of whether the PDA is held close or far from the view point.
 		</text>
 	</string>
@@ -1478,9 +1478,9 @@
 	<string id="ui_mm_alife_general_offline_combat_desc">
 		<text>This option adds to the dynamic aspects of the A-Life simulation by allowing squads in distant parts of the Zone to fight against their enemies. This can impact factions and mutant populations, depending on the outcome of these battles.\n\n
 		%c[pda_white]Note:%\n
-		•%c[ui_gray_2] When the dynamic relations option is enabled, offline combat will play a large role in relation changes, due to running battles between factions.\n
-		%c[pda_white]•%c[ui_gray_2] This feature works for all game modes, including Warfare.\n
-		%c[pda_white]•%c[ui_gray_2] Be aware that this feature can reduce the overall stalker population. Do not enable this option if you want a more populated zone.
+		%c[ui_gray_2] When the dynamic relations option is enabled, offline combat will play a large role in relation changes, due to running battles between factions.\n
+		%c[pda_white]%c[ui_gray_2] This feature works for all game modes, including Warfare.\n
+		%c[pda_white]%c[ui_gray_2] Be aware that this feature can reduce the overall stalker population. Do not enable this option if you want a more populated zone.
 		</text>
 	</string>
 	<string id="ui_mm_alife_general_excl_dist">
@@ -1860,13 +1860,13 @@
 		<text>Minimum Respawn Time</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_min_faction_respawn_desc">
-		<text>The minimum amount of time that must pass for a base to spawn a defense squad. This along with the base's available resources determines the base’s defense respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's respawn time is determined by choosing a value between the minimum and maximum faction respawn time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_faction_respawn + (owned_resource_percentage * max_faction_respawn.</text>
+		<text>The minimum amount of time that must pass for a base to spawn a defense squad. This along with the base's available resources determines the bases defense respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's respawn time is determined by choosing a value between the minimum and maximum faction respawn time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_faction_respawn + (owned_resource_percentage * max_faction_respawn.</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_max_faction_respawn">
 		<text>Maximum Respawn Time</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_max_faction_respawn_desc">
-		<text>The maximum amount of time that must pass for a base to spawn a defense squad. This along with the base's available resources determines the base’s defense respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's respawn time is determined by choosing a value between min_faction_respawn and max_faction_respawn with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_faction_respawn + (owned_resource_percentage * max_faction_respawn.</text>
+		<text>The maximum amount of time that must pass for a base to spawn a defense squad. This along with the base's available resources determines the bases defense respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's respawn time is determined by choosing a value between min_faction_respawn and max_faction_respawn with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_faction_respawn + (owned_resource_percentage * max_faction_respawn.</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_keep_last_base">
 		<text>Keep Last Base</text>
@@ -1907,13 +1907,13 @@
 		<text>Minimum Patrol Time</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_min_patrol_time_desc">
-		<text>The minimum amount of time that must pass for a base to spawn a patrol squad. This along with the base's available resources determines the base’s patrol respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's patrol respawn time is determined by choosing a value between min_patrol_time and max_patrol_time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_patrol_time + (owned_resource_percentage * max_patrol_time.</text>
+		<text>The minimum amount of time that must pass for a base to spawn a patrol squad. This along with the base's available resources determines the bases patrol respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's patrol respawn time is determined by choosing a value between min_patrol_time and max_patrol_time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_patrol_time + (owned_resource_percentage * max_patrol_time.</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_max_patrol_time">
 		<text>Maximum Patrol Time</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_max_patrol_time_desc">
-		<text>The maximum amount of time that must pass for a base to spawn a patrol squad. This along with the base's available resources determines the base’s patrol respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's patrol respawn time is determined by choosing a value between min_patrol_time and max_patrol_time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_patrol_time + (owned_resource_percentage * max_patrol_time.</text>
+		<text>The maximum amount of time that must pass for a base to spawn a patrol squad. This along with the base's available resources determines the bases patrol respawn time. A base's available resources is determined by the following: total_resources = global_resources + (regional_resources * 2) + (local_resources * 3). The base's patrol respawn time is determined by choosing a value between min_patrol_time and max_patrol_time with a factor of resource_count / warfare.resource_count. respawn time = (100% - owned_resource_percentage) * min_patrol_time + (owned_resource_percentage * max_patrol_time.</text>
 	</string>
 	<string id="ui_mm_alife_warfare_faction_patrol_hunt_chance">
 		<text>Patrol Hunt Chance</text>

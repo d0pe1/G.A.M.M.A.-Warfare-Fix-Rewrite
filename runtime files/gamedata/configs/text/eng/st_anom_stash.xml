@@ -1,0 +1,34 @@
+<string_table>
+    <string id="st_anombp_desc">
+		<text>A strange backpack that emits energies similar to an anomaly field. It's textiles have been morphed by artifacts making it supernaturally heavy.\nA scientist told you that using backpacks like this as stashes let's you see the same items inside, no matter where you are.\n \n
+			%c[ui_gray_1]PROPERTIES:\n
+			%c[d_blue] • %c[ui_gray_2] mysterious item\n
+			%c[d_blue] • %c[ui_gray_2] item storage\n
+			%c[0,100,255,150] • %c[ui_gray_2] usable as stash\n
+			</text>
+	</string>
+    <string id="st_anombp_name">
+        <text>Anomalous Backpack</text>
+    </string>
+	<string id="st_anombp_stash">
+        <text>Anomalous Stash</text>
+    </string>
+	<string id="st_anombp_pickup">
+        <text>Pick up</text>
+    </string>
+	<string id="st_anombp_cantsprint">
+        <text>You cannot sprint while carrying an Anomalous Backpack</text>
+    </string>
+	<string id="ui_st_anom_pickup_hit">
+		<text>Pick up the stash</text>
+	</string>
+	<string id="ui_st_anom_pickup_warning">
+		<text>This is the last Anomalous Stash. Remove its contents before you can pick it up!</text>
+	</string>
+	<string id="st_fetch_count_in_anom_stash">
+        <text>%sYou have %sx%s %sin your Anomalous Stash</text>
+    </string>
+
+
+
+</string_table>
