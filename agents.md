@@ -12,53 +12,74 @@ Each agent is a specialized "game-dev persona" that:
 
 ---
 
-## **Task Selection Workflow (Priority + Recursive Splitting)**
+## **Task Selection Workflow (Priority + Recursive Splitting + Indentation)**
 
 ### **Step 1: Scan `agent_tasks.md`**
 1. Look for any `[a]` (blocked) task.  
    - If **none exist**, pick a `[ ]` (not started) task with the **highest weight** and start from there.  
    - If **one exists**, this is a blocking task → jump into `agent_prio.md`.
 
+---
+
 ### **Step 2: Scan `agent_prio.md` (only if a `[a]` task exists in agent_tasks.md)**
+
 1. Find the corresponding `[a]` parent task from `agent_tasks.md`.  
-2. Take its **direct child subtasks** that are `[ ]` (not started).  
-3. Pick the child task with the **highest weight**.
+2. Sort all tasks **by indentation depth (deepest first)**:
+   - Tasks with more indentation are children → **process these before shallower ones**.  
+3. If any child task is `[x]`, investigate:
+   - If work is complete and notes exist in `DevDiary.md`/`CHANGELOG.md`, **remove it from `agent_prio.md`**.
+   - If work is incomplete, revert it to `[ ]`.  
+4. From remaining tasks at the deepest indentation level:
+   - Pick the `[ ]` task with the **highest weight**.
+
+---
 
 ### **Step 3: If the selected task in `agent_prio.md` is also `[a]`**
-1. Look at its direct children subtasks.  
+1. Look at its direct children (one indentation level deeper).  
 2. Pick one `[ ]` subtask with the highest weight.  
 3. Repeat this process recursively until you reach a `[ ]` task that can be executed.  
+
+---
 
 ### **Step 4: If a task explodes in scope**
 1. Mark the current task `[a]` (blocked).  
    - This applies also to child tasks in `agent_prio.md`.  
-   - Should a child task be too complex, also mark it `[a]` and add new `[ ]` subtasks directly below it.  
-2. Split it into **multiple `[ ]` subtasks directly below it** in the same file (`agent_prio.md`).  
-3. Assign each subtask a weight and document the dependencies.  
-4. STOP. Future runs will pick the new subtasks.  
+2. Split it into **multiple `[ ]` subtasks** directly below it:  
+   - **Indent each subtask one level deeper (two spaces)** than the parent.  
+3. Assign each subtask a weight and document dependencies.  
+4. STOP. Future runs will pick the new subtasks.
 
 ---
 
-### ⚠️ **Step 5: When finishing a child task**
+### **Step 5: When finishing a child task**
 1. Note its completion in:
-   - `DevDiary.md` (with a short description)
-   - `CHANGELOG.md` (with a one-line summary)
-   - Any relevant docs in `/docs/`
+   - `DevDiary.md` (short description)  
+   - `CHANGELOG.md` (one-line summary)  
+   - Any relevant `/docs` files  
 2. **Remove the completed child task from `agent_prio.md`.**
+3. If a parent task now has **no children left**, and it was marked `[a]`, revert it back to `[ ]`.
 
-> **Why?**  
-> This keeps `agent_prio.md` clean and prevents agents from re-running already completed subtasks.
+> **Why:**  
+> This keeps `agent_prio.md` clean and enforces proper inheritance between parent/child tasks.
 
 ---
 
-### **Weighting System**
+### **Weighting + Indentation Rules**
 - **Weight 1–1000:** Represents importance and complexity.
   - **1000:** Foundational systems required by many downstream tasks  
   - **500:** Mid-tier core systems  
   - **100:** Features or append-only integrations  
   - **10:** P-complete (tiny) tasks, bug fixes, one-liners  
 
-> **Agents always pick the highest-weight `[ ]` task available at their current level.**
+- **Indentation:**  
+  - 0 spaces = top-level task from `agent_tasks.md`  
+  - 2 spaces = child subtask  
+  - 4 spaces = sub-subtask, and so on  
+
+> **Agents always:**  
+> - Process **deepest** (most-indented) tasks first.  
+> - Pick the highest-weight `[ ]` task at that depth.  
+> - Clean up `[x]` tasks immediately.
 
 ---
 
@@ -121,47 +142,44 @@ Each agent is a specialized "game-dev persona" that:
 
 ---
 
-### **Example: Priority Cascade**
+### **Example: Priority Cascade with Indentation**
 
 **agent_tasks.md**
-```
 [a] Implement Logistics System
-```
+
+Copy
+Edit
 
 **agent_prio.md**
-```
 [a] Implement Logistics System
 [ ] Find hooks into gamma runtime files (weight: 800)
 [ ] Implement hook-compatible APIs for transport squads (weight: 600)
-```
+
+csharp
+Copy
+Edit
 
 **agent_prio.md** (if one of the above is `[a]`)
-```
 [a] Find hooks into gamma runtime files
 [ ] Locate capture event hooks (weight: 500)
 [ ] Locate simulation scheduler hooks (weight: 400)
-```
+
+markdown
+Copy
+Edit
 
 **Workflow:**  
-1. Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
-2. They jump into `agent_prio.md` and pick the highest-weight child (`Find hooks`).  
-3. If that child is `[a]`, they go deeper and pick the highest-weight subchild (`Locate capture event hooks`).  
-4. If a task explodes in scope, it is split further.  
-
-**After finishing `Locate capture event hooks`:**
-- It is **removed** from `agent_prio.md`.  
-- A note is added to `DevDiary.md` and `CHANGELOG.md`.
-
-**agent_prio.md (after cleanup)**
-```
-[a] Find hooks into gamma runtime files
-[ ] Locate simulation scheduler hooks (weight: 400)
-```
+- Agents first see `[a] Implement Logistics System` in `agent_tasks.md`.  
+- They jump into `agent_prio.md` and pick the deepest, highest-weight task:  
+  `Locate capture event hooks (weight: 500)`.  
+- After finishing it:  
+  - Remove it from `agent_prio.md`.  
+  - If no siblings remain, revert the parent `[a]` to `[ ]`.
 
 ---
 
 **This ensures:**  
-- Agents never skip blockers.  
-- Large tasks are split automatically.  
-- Completed child tasks don’t pollute `agent_prio.md`.  
-- We always work from the most foundational (highest-weight) tasks downward.  
+- Agents always process deepest → shallowest tasks.  
+- Parent tasks revert when all children are done.  
+- `agent_prio.md` is always sorted and clean.  
+- Large tasks are split automatically and tracked visually with indentation.
