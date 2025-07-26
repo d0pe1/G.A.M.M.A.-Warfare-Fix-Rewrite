@@ -41,10 +41,10 @@ Progress: 37% complete (weight done / total weight)
 
 ## **1. Setup & Diff Analysis**
 
-- [a] **Clone baseline** *(weight=800)* – Build `gamma_walo` structure from baseline files. 
-    [ ] Enumerate affected files from `old_walo` *(weight=400)* – Identify all scripts/configs in `old_walo` (ignore assets/binaries).
-    [ ] Copy matching baseline files *(weight=300)* – For each file from above, copy its unmodified version from `runtime files` into `gamma_walo`.
-    [ ] Verify structure *(weight=100)* – Ensure `gamma_walo` mirrors baseline paths, only containing relevant files.    
+- [a] **Clone baseline** *(weight=800)* – Build `gamma_walo` structure from baseline files.  
+  - [ ] **Enumerate affected files from `old_walo`** *(weight=400)* – Identify all scripts/configs in `old_walo` (ignore assets/binaries).  
+  - [ ] **Copy matching baseline files** *(weight=300)* – For each file from above, copy its unmodified version from `runtime files` into `gamma_walo`.  
+  - [ ] **Verify structure** *(weight=100)* – Ensure `gamma_walo` mirrors baseline paths, only containing relevant files.  
 - [ ] **Run Analyzer profile** *(weight=100)* – Generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
 - [ ] **Generate API map** *(weight=50)* – Scan baseline scripts and generate `docs/api_map.md`.
 - [ ] **Identify conflicts** *(weight=300)* – Summarise changes for every `old_walo` and `gammas patch` file vs baseline and plan merge strategies.
