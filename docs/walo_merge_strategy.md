@@ -10,7 +10,8 @@ This document defines how features from **old_walo** and **gammas patch** should
 - **faction_expansions.script**
   - Replace advanced/veteran spawn chance functions with the simplified formulas from old_walo.
 - **game_fast_travel.script**
-  - Keep GAMMA baseline fast-travel stub; document Fair Fast Travel as optional addon.
+  - Retain the Fair Fast Travel system shipped with GAMMA.
+  - Ensure any WALO hooks or tweaks remain compatible with this addon.
 - **game_relations.script**
   - Apply blacklist loop optimisations and maintain existing relation checks.
 - **sim_offline_combat.script**
