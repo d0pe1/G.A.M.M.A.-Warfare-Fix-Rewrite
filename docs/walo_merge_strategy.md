@@ -12,6 +12,7 @@ This document defines how features from **old_walo** and **gammas patch** should
 - **game_fast_travel.script**
   - Retain the Fair Fast Travel system shipped with GAMMA.
   - Ensure any WALO hooks or tweaks remain compatible with this addon.
+  - Do this by merging functionalities or writing helpers to make sure all downstream/upstream calling functions get the same data structures they expect.
 - **game_relations.script**
   - Apply blacklist loop optimisations and maintain existing relation checks.
 - **sim_offline_combat.script**
