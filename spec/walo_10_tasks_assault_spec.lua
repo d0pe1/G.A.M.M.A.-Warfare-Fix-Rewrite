@@ -1,0 +1,12 @@
+local f = assert(io.open('gamma_walo/gamedata/scripts/tasks_assault.script', 'r'))
+local data = f:read('*all')
+f:close()
+
+describe('WALO-10 tasks_assault cleanup', function()
+  it('uses params[i] indexing', function()
+    assert.is_not_nil(string.find(data, 'params%[i%]'))
+  end)
+  it('does not contain additionalBlacklist logic', function()
+    assert.is_nil(string.find(data, 'additionalBlacklist'))
+  end)
+end)

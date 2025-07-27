@@ -431,3 +431,43 @@
 ### Completed WALO-9
 - Ported scripted squad target validation fix.
 - Date: 2025-07-26
+
+## Prescope: Review remaining warfare scripts and merge functional changes
+- **Task ID**: WALO-10
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Finalise WALO port by cleaning up leftover debug code in `tasks_assault.script` and aligning loops with old_walo version.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Small code edits with clear diff.
+
+### Scope & Context
+- Modify `gamma_walo/gamedata/scripts/tasks_assault.script` to remove obsolete blacklist logic and use direct parameter indexing.
+
+### Dependencies
+- Completion of previous WALO subtasks.
+
+### Data Flow Analysis
+- **Input**: Task parameters from config.
+- **Output**: Updated assault evaluation logic without redundant checks.
+- **Consumers**: Assault task precondition and evaluation functions.
+
+### Failure Cases
+- Syntax errors breaking assault tasks.
+
+### Test Plan
+- Busted spec verifying removal of `additionalBlacklist` block and presence of `params[i]` usage.
+
+### Rollback & Risk
+- Revert script if assault tasks fail; minimal risk.
+
+### Definition of Done
+- Spec passes and agent_prio WALO tasks cleared.
+
+### Completed WALO-10
+- Cleaned tasks_assault script loops and removed blacklist block.
+- Date: 2025-07-27
+
+### Unblocked WALO-1
+- All old_walo features merged; parent task closed.
+- Date: 2025-07-27
