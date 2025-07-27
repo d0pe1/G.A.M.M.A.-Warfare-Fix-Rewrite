@@ -54,7 +54,7 @@ Progress: 37% complete (weight done / total weight)
 
 ## **2. Integration of Existing Mods**
 
-- [a] **WALO-1** WALO port *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
+ - [x] **WALO-1** WALO port *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
 - [ ] **Gamma patch port** *(weight=700)* – Integrate fixes/features from `gammas patch` into `gamma_walo`.
 - [ ] **Modernise code** *(weight=150)* – Update outdated Lua idioms where safe.
 - [ ] **Merge important_docs table** *(weight=100)* – Integrate document reward table from `dialogs.script`.

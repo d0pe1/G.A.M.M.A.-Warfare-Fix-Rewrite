@@ -12,3 +12,4 @@
 - WALO-6: Added nil checks in smart_terrain_warfare.script
 - WALO-7: Adopted stability fixes from old_walo in tasks_assault.script
 - WALO-9: Ported scripted squad target validation fix
+- WALO-10: Cleaned leftover debug logic in tasks_assault.script
