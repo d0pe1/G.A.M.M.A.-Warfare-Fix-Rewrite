@@ -54,14 +54,14 @@ Progress: 37% complete (weight done / total weight)
 
 ## **2. Integration of Existing Mods**
 
-- [a] **WALO-1** WALO port *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
+- [x] **WALO-1** WALO port *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
 - [ ] **Gamma patch port** *(weight=700)* – Integrate fixes/features from `gammas patch` into `gamma_walo`.
 - [ ] **Modernise code** *(weight=150)* – Update outdated Lua idioms where safe.
-- [ ] **Merge important_docs table** *(weight=100)* – Integrate document reward table from `dialogs.script`.
-- [ ] **Apply spawn chance formulas** *(weight=100)* – Port revised `get_advanced_chance` and `get_veteran_chance`.
-- [ ] **Integrate dynamic relations** *(weight=150)* – Add blacklist checks from `game_relations.script`.
-- [ ] **Fix scripted squad targets** *(weight=50)* – Apply `sim_squad_scripted.script` fixes.
-- [ ] **Add smart_terrain update helper** *(weight=100)* – Merge `sim_offline_combat.script` helper function.
+- [x] **Merge important_docs table** *(weight=100)* – Integrate document reward table from `dialogs.script`.
+- [x] **Apply spawn chance formulas** *(weight=100)* – Port revised `get_advanced_chance` and `get_veteran_chance`.
+- [x] **Integrate dynamic relations** *(weight=150)* – Add blacklist checks from `game_relations.script`.
+- [x] **Fix scripted squad targets** *(weight=50)* – Apply `sim_squad_scripted.script` fixes.
+- [x] **Add smart_terrain update helper** *(weight=100)* – Merge `sim_offline_combat.script` helper function.
 
 ---
 

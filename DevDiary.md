@@ -431,3 +431,40 @@
 ### Completed WALO-9
 - Ported scripted squad target validation fix.
 - Date: 2025-07-26
+\n## Prescope: Review remaining warfare scripts
+- **Task ID**: WALO-10
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Confirm no remaining functional changes are required from old_walo scripts.
+
+### Complexity Classification
+- **Complexity**: [P-complete]
+- **Justification**: Simple diff review across remaining warfare scripts.
+
+### Scope & Context
+- Inspected game_fast_travel.script, warfare.script, warfare_factions.script, warfare_options.script and tasks_smart_control.script.
+- All differences were comments or logging helpers already handled.
+
+### Dependencies
+- Prior WALO tasks completed, baseline scripts present.
+
+### Data Flow Analysis
+- **Input**: Diff between old_walo and gamma_walo for remaining files.
+- **Output**: Confirmation that baseline implementations are sufficient.
+- **Consumers**: Documentation only.
+
+### Failure Cases
+- Missed functional changes causing behaviour deviations.
+
+### Test Plan
+- Run full spec suite to confirm existing tests still pass.
+
+### Rollback & Risk
+- None; purely verification.
+
+### Definition of Done
+- Document diff results and update agent files.
+
+### Completed WALO-10
+- Reviewed remaining warfare scripts; no functional merges needed.
+- Unblocked parent task WALO-1.
+- Date: 2025-07-27
