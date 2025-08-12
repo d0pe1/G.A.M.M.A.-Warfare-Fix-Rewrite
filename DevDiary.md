@@ -468,3 +468,39 @@
 - Reviewed remaining warfare scripts; no functional merges needed.
 - Unblocked parent task WALO-1.
 - Date: 2025-07-27
+
+## Prescope: Run Analyzer profile
+- **Task ID**: SETUP-5
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Generate a diff report between baseline runtime files, old_walo and gammas patch.
+
+### Completed SETUP-5
+- Generated docs/runtime_vs_gamma_walo.md.
+- Date: 2025-07-27
+
+## Prescope: Generate API map
+- **Task ID**: SETUP-6
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Enumerate global functions and their callers across baseline scripts.
+
+### Completed SETUP-6
+- Produced docs/api_map.md from scan of runtime scripts.
+- Date: 2025-07-27
+
+## Prescope: Identify conflicts
+- **Task ID**: SETUP-7
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Summarise differences in old_walo and gammas patch against baseline.
+
+### Completed SETUP-7
+- Added docs/conflict_summary.md and walo_merge_strategy.md.
+- Date: 2025-07-27
+
+## Prescope: Update agent tasks
+- **Task ID**: SETUP-8
+- **Agent**: DiffAnalysisAgent
+- **Summary**: Incorporate new findings from diff analysis into task list.
+
+### Completed SETUP-8
+- Marked diff analysis tasks complete in agent_tasks.md.
+- Date: 2025-07-27

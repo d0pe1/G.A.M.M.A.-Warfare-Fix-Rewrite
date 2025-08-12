@@ -45,10 +45,10 @@ Progress: 37% complete (weight done / total weight)
   - [x] **SETUP-2** Enumerate affected files from `old_walo` *(weight=400)* – Identify all scripts/configs in `old_walo` (ignore assets/binaries).
   - [x] **SETUP-3** Copy matching baseline files *(weight=300)* – For each file from above, copy its unmodified version from `runtime files` into `gamma_walo`.
   - [x] **SETUP-4** Verify structure *(weight=100)* – Ensure `gamma_walo` mirrors baseline paths, only containing relevant files.
-- [ ] **SETUP-5** Run Analyzer profile *(weight=100)* – Generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
-- [ ] **SETUP-6** Generate API map *(weight=50)* – Scan baseline scripts and generate `docs/api_map.md`.
-- [ ] **SETUP-7** Identify conflicts *(weight=300)* – Summarise changes for every `old_walo` and `gammas patch` file vs baseline and plan merge strategies.
-- [ ] **SETUP-8** Update agent tasks *(weight=100)* – Add missing tasks discovered during diff analysis.
+- [x] **SETUP-5** Run Analyzer profile *(weight=100)* – Generate `docs/runtime_vs_gamma_walo.md` comparing `runtime files`, `old_walo` and `gammas patch`.
+- [x] **SETUP-6** Generate API map *(weight=50)* – Scan baseline scripts and generate `docs/api_map.md`.
+- [x] **SETUP-7** Identify conflicts *(weight=300)* – Summarise changes for every `old_walo` and `gammas patch` file vs baseline and plan merge strategies.
+- [x] **SETUP-8** Update agent tasks *(weight=100)* – Add missing tasks discovered during diff analysis.
 
 ---
 
