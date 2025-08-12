@@ -17,3 +17,4 @@
 - SETUP-6: Produced API map of baseline scripts
 - SETUP-7: Added conflict_summary and merge strategy docs
 - SETUP-8: Updated agent task list after diff analysis
+- MODERNIZE-1: Replaced deprecated Lua `unpack` with `table.unpack` in `ui_options.script` -- UUID: 926ab720-bae1-424a-84f3-f8132a019894

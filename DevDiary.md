@@ -504,3 +504,12 @@
 ### Completed SETUP-8
 - Marked diff analysis tasks complete in agent_tasks.md.
 - Date: 2025-07-27
+
+## Implementation: Modernise code
+- **Task ID**: MODERNIZE-1
+- **Agent**: CodeModernizer
+- **Summary**: Replace deprecated Lua `unpack` with `table.unpack` in `ui_options.script`.
+
+### Completed MODERNIZE-1
+- Updated `ui_options.script` to use `table.unpack` and annotated changes. -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+- Date: 2025-08-12

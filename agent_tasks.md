@@ -29,7 +29,7 @@ Each task now has a **weight** in parentheses:
 > 3. If a task has weight ≥ `500`, **break it into subtasks** in `agent_prio.md` before working.  
 
 Agents should calculate **weighted progress** for every PR:  
-Progress: 37% complete (weight done / total weight)
+Progress: 30% complete (weight done / total weight) -- Updated after MODERNIZE-1
 
 ---
 
@@ -56,7 +56,7 @@ Progress: 37% complete (weight done / total weight)
 
 - [x] **WALO-1** WALO port *(weight=800)* – Integrate beneficial features from `old_walo` into `gamma_walo`.
 - [ ] **Gamma patch port** *(weight=700)* – Integrate fixes/features from `gammas patch` into `gamma_walo`.
-- [ ] **Modernise code** *(weight=150)* – Update outdated Lua idioms where safe.
+- [x] **Modernise code** *(weight=150)* – Update outdated Lua idioms where safe. -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 - [x] **Merge important_docs table** *(weight=100)* – Integrate document reward table from `dialogs.script`.
 - [x] **Apply spawn chance formulas** *(weight=100)* – Port revised `get_advanced_chance` and `get_veteran_chance`.
 - [x] **Integrate dynamic relations** *(weight=150)* – Add blacklist checks from `game_relations.script`.
