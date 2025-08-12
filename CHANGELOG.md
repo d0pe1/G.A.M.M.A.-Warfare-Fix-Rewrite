@@ -13,3 +13,7 @@
 - WALO-7: Adopted stability fixes from old_walo in tasks_assault.script
 - WALO-9: Ported scripted squad target validation fix
 - WALO-10: Reviewed remaining warfare scripts; no merges required
+- SETUP-5: Generated runtime_vs_gamma_walo diff documentation
+- SETUP-6: Produced API map of baseline scripts
+- SETUP-7: Added conflict_summary and merge strategy docs
+- SETUP-8: Updated agent task list after diff analysis

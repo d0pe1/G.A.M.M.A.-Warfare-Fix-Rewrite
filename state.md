@@ -2,9 +2,12 @@
 
 ## Completed Tasks
 - WALO-1 port from old_walo complete (all subtasks).
+- SETUP-5 Analyzer profile run.
+- SETUP-6 API map generated.
+- SETUP-7 Conflict summary prepared.
+- SETUP-8 Agent tasks updated after diff analysis.
 
 ## Remaining Tasks
-- Setup-5 through Setup-8 (diff analysis automation)
 - Gamma patch port
 - Modernise code
 - Resource Infrastructure System
@@ -17,4 +20,4 @@
 - Documentation & Logging
 
 
-Progress: 24% complete
+Progress: 29% complete
