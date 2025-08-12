@@ -6,10 +6,10 @@
 - SETUP-6 API map generated.
 - SETUP-7 Conflict summary prepared.
 - SETUP-8 Agent tasks updated after diff analysis.
+- Modernise code completed in ui_options.script. -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 
 ## Remaining Tasks
 - Gamma patch port
-- Modernise code
 - Resource Infrastructure System
 - Logistics System
 - Squad Progression
@@ -20,4 +20,4 @@
 - Documentation & Logging
 
 
-Progress: 29% complete
+Progress: 30% complete

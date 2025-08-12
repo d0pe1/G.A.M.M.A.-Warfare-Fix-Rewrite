@@ -1147,9 +1147,9 @@ function get(id)
 			value = round_idp(value, v.prec or precision)
 		end
 	elseif (type(v.def) == "table") then
-		value = exec(unpack(v.def))
-		axr_main.config:w_value(opt_section, id, value)
-		axr_main.config:save()
+value = exec(table.unpack(v.def)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+axr_main.config:w_value(opt_section, id, value)
+axr_main.config:save()
 	else
 		value = v.def
 		axr_main.config:w_value(opt_section, id, value)
@@ -1321,7 +1321,7 @@ function UIOptions:Reset_opt(curr_tree, path, flags)
 	self.scroll_opt:Clear()
 	
 	-- If options tree has a precondition that must be met, don't show it if it returns false
-	if curr_tree.precondition and (not exec(unpack(curr_tree.precondition))) then
+if curr_tree.precondition and (not exec(table.unpack(curr_tree.precondition))) then -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 		if curr_tree.output then
 			local _txt = xml:InitTextWnd("elements:block", nil)
 			_txt:SetText( game.translate_string(curr_tree.output) )
@@ -1370,11 +1370,11 @@ function UIOptions:Reset_opt(curr_tree, path, flags)
 		
 		for i=1,#curr_tree.gr do
 			-- Check preconditions
-			local to_hide = curr_tree.gr[i].precondition and (not exec(unpack(curr_tree.gr[i].precondition)))
+local to_hide = curr_tree.gr[i].precondition and (not exec(table.unpack(curr_tree.gr[i].precondition))) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 			for j=1,10 do -- support for 10 preconditions
 				if (not curr_tree.gr[i]["precondition_" .. j]) then
 					break
-				elseif (not exec(unpack(curr_tree.gr[i]["precondition_" .. j]))) then
+elseif (not exec(table.unpack(curr_tree.gr[i]["precondition_" .. j]))) then -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 					to_hide = true
 					break
 				end
@@ -1607,13 +1607,13 @@ end
 function UIOptions:Callback_Button(ctrl, path, opt, v)
 	if v.functor_ui then
 		local id = cc(path , opt)
-		print_dbg("- Executing functor_ui of [%s]",id)
-		exec(unpack(v.functor_ui),self)
+print_dbg("- Executing functor_ui of [%s]",id)
+exec(table.unpack(v.functor_ui),self) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 	end
 	if v.functor then
 		local id = cc(path , opt)
-		print_dbg("- Executing functor of [%s]",id)
-		exec(unpack(v.functor))
+print_dbg("- Executing functor of [%s]",id)
+exec(table.unpack(v.functor)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 	end
 end
 
@@ -1961,7 +1961,7 @@ function UIOptions:Callback_Preset()
 			if v and v.type then
 			
 				-- No need to modify options that can't be seen
-				local to_hide = v.precondition and (not exec(unpack(v.precondition)))
+local to_hide = v.precondition and (not exec(table.unpack(v.precondition))) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
 				if (not to_hide) then
 				
 					-- Get proper value
@@ -2138,11 +2138,11 @@ function UIOptions:GetDefaultValue(path, opt, v)
 	local id = cc(path , opt)
 	local value
 	
-	if (type(v.def) == "table") then
-		value = exec(unpack(v.def))
-	else
-		value = v.def
-	end
+if (type(v.def) == "table") then
+value = exec(table.unpack(v.def)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+else
+value = v.def
+end
 	
 	-- We cache default values for the first time, so current values rely on them up later
 	-- because some default values are randomized and player might not touch them, thus causing randomized effects where they are used in-game
@@ -2167,9 +2167,9 @@ function UIOptions:GetCurrentValue(path, opt, v)
 	end
 	
 	local value
-	if v.curr then
-		value = exec(unpack(v.curr))
-	elseif v.cmd then
+if v.curr then
+value = exec(table.unpack(v.curr)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+elseif v.cmd then
 		if v.val == 0 then
 			value = get_console_cmd(0, v.cmd)
 		elseif v.val == 1 then
@@ -2207,11 +2207,11 @@ function UIOptions:GetContent(path, opt, v)
 		end
 		return {{value,tostring(value)}}
 		
-	elseif (type(v.content[1]) == "function") then
-		return exec(unpack(v.content))
-	else
-		return v.content
-	end
+elseif (type(v.content[1]) == "function") then
+return exec(table.unpack(v.content)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+else
+return v.content
+end
 end
 
 function UIOptions:GetOption(id)
@@ -2366,15 +2366,15 @@ function UIOptions:On_Accept()
 		
 		-- Execute functors if found
 		if v.functor then
-			if v.postcondition then
-				if exec(unpack(v.postcondition))then
-					print_dbg("- Executing postcondition functor of [%s]",id)
-					exec(unpack(v.functor))
-				end
-			else
-				print_dbg("- Executing functor of [%s]",id)
-				exec(unpack(v.functor))
-			end
+if v.postcondition then
+if exec(table.unpack(v.postcondition))then -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+print_dbg("- Executing postcondition functor of [%s]",id)
+exec(table.unpack(v.functor)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+end
+else
+print_dbg("- Executing functor of [%s]",id)
+exec(table.unpack(v.functor)) -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
+end
 		end
 		
 		-- See if it needs restart

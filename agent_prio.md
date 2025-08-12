@@ -1,1 +1,1 @@
-
+- [x] **MODERNIZE-1** Replace deprecated Lua `unpack` with `table.unpack` in `gamma_walo/gamedata/scripts/ui_options.script` *(weight=150)* -- UUID: 926ab720-bae1-424a-84f3-f8132a019894
